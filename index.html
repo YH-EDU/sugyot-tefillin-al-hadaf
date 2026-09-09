@@ -1448,7 +1448,8 @@
       <p>שתי דרכים לראות את הסוגיא: הדף עצמו, כמו בבית המדרש; ולחיצה על האזור — לשון הגמרא מנוקדת ומחולקת לשלבים.</p>
       <ul class="welcome-list">
         <li>רשימת הסוגיות א–יג נפתחת מהלשונית למעלה. הדף עצמו נשאר נקי לקריאה</li>
-        <li>לחיצה על האזור בגמרא או על סוגיא מהרשימה פותחת את התרשים המנוקד, ומשם לשונית שאלות על הפשט ורש״י</li>
+        <li>לחיצה על האזור בגמרא או על סוגיא מהרשימה פותחת את התרשים המנוקד, ומשם לשוניות רש״י ותוספות, ארמית ושאלות</li>
+        <li>בלשון הגמרא — ריחוף או לחיצה על מילה מסומנת מראה את התרגום שלה</li>
         <li>הסרגל למעלה מופיע כשמעבירים את העכבר. במיקוד אזורים הוא נעלם לגמרי</li>
       </ul>
       <button class="start-btn" id="startBtn" type="button">בואו נתחיל</button>
@@ -5503,6 +5504,18 @@ document.getElementById("tabGemara").addEventListener("click", function () { set
 document.getElementById("tabMefarshim").addEventListener("click", function () { setSugyaTab("mefarshim"); });
 document.getElementById("tabAramaic").addEventListener("click", function () { setSugyaTab("aramaic"); });
 document.getElementById("tabQuiz").addEventListener("click", function () { setSugyaTab("quiz"); });
+// חיצים מדלגים בין שאלות, כל עוד לא כותבים בתיבת טקסט.
+document.addEventListener("keydown", function (e) {
+  if (!sugyaOverlay.classList.contains("is-open")) return;
+  if (document.getElementById("sugyaQuiz").hidden) return;
+  const tag = (e.target.tagName || "").toLowerCase();
+  if (tag === "input" || tag === "textarea") return;
+  const list = quizList();
+  if (e.key === "ArrowLeft" && quizIndex < list.length - 1) { quizIndex += 1; renderQuiz(); playTap(); }
+  else if (e.key === "ArrowRight" && quizIndex > 0) { quizIndex -= 1; renderQuiz(); playTap(); }
+  else return;
+  e.preventDefault();
+});
 document.getElementById("soundToggle").addEventListener("click", function () {
   setSoundOn(!soundOn);
   if (soundOn) playTap();
