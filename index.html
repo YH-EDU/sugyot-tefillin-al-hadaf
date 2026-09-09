@@ -1148,6 +1148,14 @@
     }
     .editor-card-head strong { color: var(--navy); }
     .editor-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+    .edit-cap {
+      display: block; font-size: 0.8rem; font-weight: 800;
+      color: #6b6460; margin: 8px 0 6px;
+    }
+    .pick-edit {
+      border: 1px dashed #ddd6cc; border-radius: 10px;
+      padding: 10px 12px 2px; margin-bottom: 10px;
+    }
     .editor-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
     .editor-field span { font-size: 0.8rem; font-weight: 800; color: #6b6460; }
     .editor-field input, .editor-field textarea, .editor-field select {
@@ -4756,6 +4764,20 @@ function renderEditorMefarshim() {
   });
   host.appendChild(add);
 }
+// שדה טקסט קצר עם תווית, לעריכת השאלות.
+function simpleField(label, value, onInput) {
+  const wrap = document.createElement("label");
+  wrap.className = "editor-field";
+  const cap = document.createElement("span");
+  cap.textContent = label;
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = value || "";
+  input.addEventListener("input", function () { onInput(input.value); persistAndRefresh(); });
+  wrap.appendChild(cap);
+  wrap.appendChild(input);
+  return wrap;
+}
 function renderEditorQuiz() {
   const host = document.getElementById("editorQuiz");
   host.innerHTML = "";
@@ -4764,7 +4786,7 @@ function renderEditorQuiz() {
   const intro = document.createElement("p");
   intro.className = "hint";
   intro.style.margin = "0 0 12px";
-  intro.textContent = "השאלות מסודרות לפי מהלך הסוגיא. תבניות: רב־ברירה, נכון/לא נכון, התאמת מושגים, השלמת משפט, וטבלה עם מאגר.";
+  intro.textContent = "השאלות מסודרות לפי מהלך הסוגיא. תבניות: רב־ברירה, נכון/לא נכון, התאמת מושגים, השלמת משפט, טבלה ותרשים עם מאגר, סידור לפי הסדר, בחירה בתוך המשפט, סימון כל הנכונות, זיהוי שלב וכתיבת תשובה.";
   host.appendChild(intro);
 
   list.forEach(function (item, index) {
@@ -4928,23 +4950,27 @@ function renderEditorQuiz() {
         line.appendChild(inp);
         card.appendChild(line);
       });
-    } else if (item.type === "table") {
-      if (!Array.isArray(item.headers) || item.headers.length < 2) item.headers = ["", ""];
+    } else if (item.type === "table" || item.type === "flow") {
       if (!Array.isArray(item.rows) || !item.rows.length) item.rows = [{ label: "", answer: "" }];
       if (!Array.isArray(item.bank)) item.bank = [];
-      const hField = document.createElement("div");
-      hField.className = "pair-row";
-      item.headers.slice(0, 2).forEach(function (h, i) {
-        const inp = document.createElement("input");
-        inp.type = "text";
-        inp.placeholder = i ? "כותרת עמודה ימין" : "כותרת עמודה שמאל";
-        inp.value = h || "";
-        inp.addEventListener("input", function () { item.headers[i] = inp.value; persistAndRefresh(); });
-        hField.appendChild(inp);
-      });
-      card.appendChild(hField);
+      if (item.type === "table") {
+        if (!Array.isArray(item.headers) || item.headers.length < 2) item.headers = ["", ""];
+        const hField = document.createElement("div");
+        hField.className = "pair-row";
+        item.headers.slice(0, 2).forEach(function (h, i) {
+          const inp = document.createElement("input");
+          inp.type = "text";
+          inp.placeholder = i ? "כותרת עמודה ימין" : "כותרת עמודה שמאל";
+          inp.value = h || "";
+          inp.addEventListener("input", function () { item.headers[i] = inp.value; persistAndRefresh(); });
+          hField.appendChild(inp);
+        });
+        card.appendChild(hField);
+      }
       const cap = document.createElement("span");
-      cap.textContent = "שורות: נתון קבוע ← מה למלא מהמאגר";
+      cap.textContent = item.type === "flow"
+        ? "שלבי התרשים: כותרת השלב ← מה למלא מתחתיו"
+        : "שורות: נתון קבוע ← מה למלא מהמאגר";
       cap.style.display = "block";
       cap.style.fontSize = "0.8rem";
       cap.style.fontWeight = "800";
@@ -4989,14 +5015,125 @@ function renderEditorQuiz() {
       });
       bField.appendChild(bInput);
       card.appendChild(bField);
-    } else {
-      if (!Array.isArray(item.choices) || item.choices.length !== 4) {
-        item.choices = (item.choices || []).slice(0, 4);
-        while (item.choices.length < 4) item.choices.push("");
-      }
-      if (typeof item.answer !== "number" || item.answer < 0 || item.answer > 3) item.answer = 0;
+    } else if (item.type === "order") {
+      if (!Array.isArray(item.items)) item.items = ["", "", ""];
+      const oField = document.createElement("label");
+      oField.className = "editor-field";
+      oField.innerHTML = "<span>הפריטים — שורה לכל אחד, לפי הסדר הנכון</span>";
+      const oInput = document.createElement("textarea");
+      oInput.value = item.items.join("\n");
+      oInput.addEventListener("input", function () {
+        item.items = oInput.value.split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+        persistAndRefresh();
+      });
+      oField.appendChild(oInput);
+      card.appendChild(oField);
+      card.appendChild(simpleField("כותרת מטרה (רשות)", item.goal, function (v) { item.goal = v; }));
+    } else if (item.type === "multi") {
+      if (!Array.isArray(item.rows) || !item.rows.length) item.rows = [{ text: "", ok: true }, { text: "", ok: false }, { text: "", ok: false }];
       const cap = document.createElement("span");
-      cap.textContent = "ארבע תשובות — סמנו את הנכונה";
+      cap.className = "edit-cap";
+      cap.textContent = "משפטים — סמנו ✓ ליד הנכונים";
+      card.appendChild(cap);
+      item.rows.forEach(function (row) {
+        const line = document.createElement("div");
+        line.className = "choice-row";
+        const lab = document.createElement("label");
+        const box = document.createElement("input");
+        box.type = "checkbox";
+        box.checked = !!row.ok;
+        box.addEventListener("change", function () { row.ok = box.checked; persistAndRefresh(); });
+        lab.appendChild(box);
+        lab.appendChild(document.createTextNode(" נכון"));
+        const inp = document.createElement("input");
+        inp.type = "text";
+        inp.value = row.text || "";
+        inp.placeholder = "לשון המשפט";
+        inp.addEventListener("input", function () { row.text = inp.value; persistAndRefresh(); });
+        line.appendChild(lab);
+        line.appendChild(inp);
+        card.appendChild(line);
+      });
+      const addStmt = document.createElement("button");
+      addStmt.type = "button";
+      addStmt.className = "edit-btn";
+      addStmt.textContent = "הוספת משפט";
+      addStmt.addEventListener("click", function () {
+        item.rows.push({ text: "", ok: false });
+        persistAndRefresh();
+        renderEditorQuiz();
+      });
+      card.appendChild(addStmt);
+    } else if (item.type === "pick") {
+      if (!Array.isArray(item.lines) || !item.lines.length) item.lines = [{ before: "", choices: ["", ""], answer: 0, after: "" }];
+      const cap = document.createElement("span");
+      cap.className = "edit-cap";
+      cap.textContent = "שורות: פתיחה · שתי אפשרויות · סיום. סמנו את הנכונה";
+      card.appendChild(cap);
+      item.lines.forEach(function (line, li) {
+        const box = document.createElement("div");
+        box.className = "pick-edit";
+        box.appendChild(simpleField("פתיחת המשפט", line.before, function (v) { line.before = v; }));
+        (line.choices || ["", ""]).forEach(function (c, ci) {
+          const row = document.createElement("div");
+          row.className = "choice-row";
+          const lab = document.createElement("label");
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = "pick-" + editSugyaId + "-" + index + "-" + li;
+          radio.checked = line.answer === ci;
+          radio.addEventListener("change", function () { line.answer = ci; persistAndRefresh(); });
+          lab.appendChild(radio);
+          lab.appendChild(document.createTextNode(" נכונה"));
+          const inp = document.createElement("input");
+          inp.type = "text";
+          inp.value = c || "";
+          inp.placeholder = "אפשרות " + (ci + 1);
+          inp.addEventListener("input", function () { line.choices[ci] = inp.value; persistAndRefresh(); });
+          row.appendChild(lab);
+          row.appendChild(inp);
+          box.appendChild(row);
+        });
+        box.appendChild(simpleField("סיום המשפט", line.after, function (v) { line.after = v; }));
+        card.appendChild(box);
+      });
+      const addLine = document.createElement("button");
+      addLine.type = "button";
+      addLine.className = "edit-btn";
+      addLine.textContent = "הוספת שורה";
+      addLine.addEventListener("click", function () {
+        item.lines.push({ before: "", choices: ["", ""], answer: 0, after: "" });
+        persistAndRefresh();
+        renderEditorQuiz();
+      });
+      card.appendChild(addLine);
+    } else if (item.type === "typein") {
+      card.appendChild(simpleField("משפט מעל תיבת הכתיבה (רשות)", item.sentence, function (v) { item.sentence = v; }));
+      card.appendChild(simpleField("התשובה הנכונה", item.answer, function (v) { item.answer = v; }));
+      const aField = document.createElement("label");
+      aField.className = "editor-field";
+      aField.innerHTML = "<span>ניסוחים נוספים שיתקבלו — שורה לכל אחד</span>";
+      const aInput = document.createElement("textarea");
+      aInput.value = (item.accept || []).join("\n");
+      aInput.addEventListener("input", function () {
+        item.accept = aInput.value.split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+        persistAndRefresh();
+      });
+      aField.appendChild(aInput);
+      card.appendChild(aField);
+    } else {
+      if (item.type === "stage") {
+        card.appendChild(simpleField("לשון הגמרא שמציגים", item.phrase, function (v) { item.phrase = v; }));
+      }
+      // ״זיהוי שלב״ עובד עם שלוש אפשרויות; רב־ברירה עם ארבע.
+      const want = item.type === "stage" ? Math.max(2, (item.choices || []).length) : 4;
+      if (!Array.isArray(item.choices) || item.choices.length !== want) {
+        item.choices = (item.choices || []).slice(0, want);
+        while (item.choices.length < want) item.choices.push("");
+      }
+      if (typeof item.answer !== "number" || item.answer < 0 || item.answer >= want) item.answer = 0;
+      const cap = document.createElement("span");
+      cap.textContent = item.choices.length + " תשובות — סמנו את הנכונה";
       cap.style.display = "block";
       cap.style.fontSize = "0.8rem";
       cap.style.fontWeight = "800";
@@ -5071,7 +5208,13 @@ function renderEditorQuiz() {
   [
     ["הוספת התאמת מושגים", { type: "match", kind: "concepts", q: "התאימו מושגים מהסוגיא", leftLabel: "מושג", rightLabel: "משמעות", arFont: false, pairs: [{ ar: "", he: "" }, { ar: "", he: "" }, { ar: "", he: "" }, { ar: "", he: "" }], note: "" }],
     ["הוספת השלמת משפט", { type: "cloze", q: "השלימו את המשפט", sentence: "___", choices: ["", "", "", ""], answer: 0, note: "" }],
-    ["הוספת טבלה עם מאגר", { type: "table", q: "מלאו את הטבלה מהמאגר", headers: ["", ""], rows: [{ label: "", answer: "" }, { label: "", answer: "" }], bank: ["", ""], note: "" }]
+    ["הוספת טבלה עם מאגר", { type: "table", q: "מלאו את הטבלה מהמאגר", headers: ["", ""], rows: [{ label: "", answer: "" }, { label: "", answer: "" }], bank: ["", ""], note: "" }],
+    ["הוספת תרשים מהלך", { type: "flow", q: "בנו את מהלך הסוגיא", rows: [{ label: "", answer: "" }, { label: "", answer: "" }, { label: "", answer: "" }], bank: ["", "", ""], note: "" }],
+    ["הוספת סידור לפי הסדר", { type: "order", q: "סדרו לפי הסדר", goal: "", items: ["", "", ""], note: "" }],
+    ["הוספת בחירה בתוך המשפט", { type: "pick", q: "בחרו את המילה הנכונה בכל שורה", lines: [{ before: "", choices: ["", ""], answer: 0, after: "" }, { before: "", choices: ["", ""], answer: 0, after: "" }], note: "" }],
+    ["הוספת סימון כל הנכונות", { type: "multi", q: "סמנו את כל המשפטים הנכונים", rows: [{ text: "", ok: true }, { text: "", ok: false }, { text: "", ok: false }, { text: "", ok: false }], note: "" }],
+    ["הוספת זיהוי שלב הסוגיא", { type: "stage", q: "זהו את שלב הסוגיא", phrase: "", choices: ["דין", "קושיה", "תירוץ"], answer: 1, note: "" }],
+    ["הוספת כתיבת תשובה", { type: "typein", q: "כתבו את התשובה", sentence: "", answer: "", accept: [], note: "" }]
   ].forEach(function (pair) {
     const btn = document.createElement("button");
     btn.type = "button";
