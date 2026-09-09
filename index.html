@@ -669,7 +669,17 @@
     .match-card.is-right { background: #dcfce7; border-color: #166534; color: #166534; cursor: default; }
     .match-card.is-wrong { background: #ffedd5; border-color: #9a3412; animation: quiz-shake 0.35s; }
     .bank-row {
-      display: flex; flex-wrap: wrap; gap: 8px;
+      display: flex; flex-wrap: wrap; gap: 12px;
+      justify-content: center;
+      width: min(92vw, 64rem);
+      margin-inline: auto;
+    }
+    .bank-caption {
+      margin: 4px 0 0;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #6b6460;
+      text-align: center;
     }
     .bank-chip {
       appearance: none;
@@ -678,47 +688,368 @@
       color: #854d0e;
       font-family: inherit;
       font-weight: 800;
-      font-size: clamp(0.95rem, 1.4vw, 1.15rem);
-      padding: 8px 14px;
-      border-radius: 999px;
-      cursor: pointer;
+      font-size: clamp(1.05rem, 1.7vw, 1.32rem);
+      padding: 14px 18px;
+      border-radius: 14px;
+      cursor: grab;
+      min-width: 8.2em;
+      min-height: 3.4rem;
+      line-height: 1.35;
+      text-align: center;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      box-shadow: 0 3px 0 #e4c25c;
     }
-    .bank-chip.is-on { background: var(--navy); color: #fff; border-color: var(--navy); }
-    .bank-chip.is-used { opacity: 0.35; cursor: default; }
+    .bank-chip.is-on {
+      background: var(--navy); color: #fff; border-color: var(--navy);
+      box-shadow: 0 4px 12px rgba(30, 58, 95, 0.28);
+      transform: translateY(-2px);
+    }
+    .bank-chip.is-used { opacity: 0.35; cursor: default; box-shadow: none; }
+    .bank-chip.is-dragging { opacity: 0.32; cursor: grabbing; }
     .bank-chip.is-right { background: #dcfce7; border-color: #166534; color: #166534; }
     .bank-chip.is-wrong { background: #ffedd5; border-color: #9a3412; color: #9a3412; }
+    .bank-chip-ghost {
+      position: fixed;
+      z-index: 4000;
+      pointer-events: none;
+      border: 2px solid var(--navy);
+      background: var(--navy);
+      color: #fff;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: clamp(1.05rem, 1.7vw, 1.32rem);
+      padding: 14px 18px;
+      border-radius: 14px;
+      min-width: 8.2em;
+      min-height: 3.4rem;
+      line-height: 1.35;
+      text-align: center;
+      box-shadow: 0 12px 28px rgba(30, 58, 95, 0.32);
+    }
+    .quiz-table-wrap {
+      width: min(92vw, 64rem);
+      margin: 0 auto;
+      border: 2px solid #e4dccf;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(28, 20, 12, 0.06);
+    }
     .quiz-table {
       width: 100%;
       border-collapse: collapse;
+      table-layout: fixed;
       background: #fff;
     }
+    .quiz-table .quiz-col-label { width: 46%; }
+    .quiz-table .quiz-col-slot { width: 54%; }
     .quiz-table th, .quiz-table td {
-      border: 1px solid #e4dccf;
-      padding: 10px 12px;
+      border: 0;
+      border-inline-end: 1px solid #efe8dc;
+      padding: 16px 18px;
       text-align: right;
-      font-weight: 700;
+      font-weight: 800;
+      vertical-align: middle;
     }
-    .quiz-table th { background: #faf6ee; color: #6b6460; font-size: 0.85rem; }
+    .quiz-table th:last-child, .quiz-table td:last-child { border-inline-end: 0; }
+    .quiz-table thead th {
+      background: #f4eee4;
+      color: var(--navy);
+      font-size: clamp(1.02rem, 1.6vw, 1.22rem);
+      border-bottom: 2px solid #e4dccf;
+    }
+    .quiz-table tbody td {
+      border-bottom: 1px solid #efe8dc;
+      font-size: clamp(1.12rem, 1.9vw, 1.42rem);
+      line-height: 1.45;
+      color: var(--navy);
+    }
+    .quiz-table tbody tr:last-child td { border-bottom: none; }
+    .quiz-table tbody tr:nth-child(even) td { background: #fffdf8; }
     .quiz-slot {
-      min-height: 2.4em;
-      border: 2px dashed #d8cfc0;
-      border-radius: 10px;
-      background: #fffdf8;
+      appearance: none;
+      width: 100%;
+      min-height: 4.8rem;
+      border: 2.5px dashed #c9bd9a;
+      border-radius: 14px;
+      background: rgba(255, 253, 248, 0.9);
+      color: inherit;
+      font-family: inherit;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 8px 10px;
+      padding: 14px 16px;
       font-weight: 800;
+      font-size: clamp(1.08rem, 1.7vw, 1.32rem);
+      line-height: 1.4;
+      text-align: center;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.15s;
     }
-    .quiz-slot.is-on { border-color: var(--navy); background: #e7eef6; }
+    .quiz-slot.is-empty { color: #b3a48c; font-size: 1.05rem; font-weight: 800; }
+    .quiz-slot.is-on { border-color: var(--navy); background: #e7eef6; color: var(--navy); font-size: clamp(1.08rem, 1.7vw, 1.32rem); }
+    .quiz-slot.is-hover {
+      border-style: solid;
+      border-color: var(--navy);
+      background: #fff;
+      box-shadow: 0 0 0 5px rgba(30, 58, 95, 0.14);
+      transform: scale(1.02);
+    }
     .quiz-slot.is-right { border-style: solid; border-color: #166534; background: #dcfce7; color: #166534; }
     .quiz-slot.is-wrong { border-style: solid; border-color: #9a3412; background: #ffedd5; animation: quiz-shake 0.35s; }
+    @media (max-width: 640px) {
+      .quiz-table .quiz-col-label, .quiz-table .quiz-col-slot { width: auto; }
+      .quiz-table thead { display: none; }
+      .quiz-table, .quiz-table tbody, .quiz-table tr, .quiz-table th, .quiz-table td {
+        display: block; width: 100%;
+      }
+      .quiz-table tbody td {
+        border-inline-end: 0;
+        padding: 10px 14px;
+      }
+      .quiz-table tbody td:first-child { padding-bottom: 4px; }
+      .quiz-table tbody td:last-child { padding-top: 4px; padding-bottom: 16px; }
+      .quiz-table tbody tr { border-bottom: 1px solid #efe8dc; }
+      .quiz-table tbody tr:last-child { border-bottom: 0; }
+    }
     @keyframes quiz-shake {
       0%, 100% { transform: translateX(0); }
       25% { transform: translateX(-4px); }
       75% { transform: translateX(4px); }
     }
+    @keyframes pop-in {
+      0% { transform: scale(0.7); opacity: 0; }
+      70% { transform: scale(1.06); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes float-up {
+      from { transform: translateY(14px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .pop-in { animation: pop-in 0.35s ease both; }
+    .float-up { animation: float-up 0.4s ease both; }
+    .shake { animation: quiz-shake 0.35s; }
+    .quiz-opt.is-wrong, .stage-btn.is-wrong, .pick-opt.is-wrong,
+    .multi-row.is-wrong, .type-in.is-wrong, .bank-chip.is-wrong { animation: quiz-shake 0.35s; }
+    .quiz-opt.is-right, .stage-btn.is-right, .quiz-blank.is-right { animation: pop-in 0.35s ease both; }
+    .quiz-note { animation: float-up 0.4s ease both; }
+    @media (prefers-reduced-motion: reduce) {
+      .pop-in, .float-up, .shake { animation: none; }
+    }
+
+    .quiz-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .dots { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+    .dots button {
+      appearance: none; border: 0; padding: 0; cursor: pointer;
+      width: 13px; height: 13px; border-radius: 50%;
+      background: #e2ddd3;
+      transition: background 0.25s, transform 0.15s, box-shadow 0.2s;
+    }
+    .dots button:hover { transform: scale(1.25); }
+    .dots button.is-right { background: #16a34a; }
+    .dots button.is-wrong { background: #ea922c; }
+    .dots button.is-now {
+      background: var(--navy);
+      box-shadow: 0 0 0 4px rgba(30, 58, 95, 0.16);
+      transform: scale(1.18);
+    }
+    .quiz-kinds { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    [hidden] { display: none !important; }
+    .quiz-src {
+      display: inline-block; font-size: 0.85rem; font-weight: 800;
+      padding: 4px 10px; border-radius: 999px;
+      background: #ede9fe; color: #5b21b6;
+    }
+    .quiz-src.is-rashi { background: #dbeafe; color: #1e40af; }
+    .sugya-tab.tab-sound {
+      margin-inline-start: auto; padding: 8px 12px; font-size: 1.05rem; line-height: 1;
+    }
+    .sugya-tab.tab-sound[aria-pressed="false"] { opacity: 0.45; }
+
+    .gw { position: relative; cursor: help; border-bottom: 2px dotted rgba(30, 58, 95, 0.42); }
+    .gw > i {
+      position: absolute; bottom: 118%; inset-inline-start: 50%;
+      transform: translateX(50%) translateY(6px);
+      opacity: 0; pointer-events: none; visibility: hidden;
+      white-space: nowrap; font-style: normal;
+      font-family: "Assistant", system-ui, sans-serif;
+      font-size: 0.92rem; font-weight: 700; line-height: 1.3;
+      background: #fff; color: #166534;
+      border: 1.5px solid #16a34a; border-radius: 9px;
+      padding: 5px 11px; box-shadow: 0 6px 18px rgba(28, 20, 12, 0.16);
+      z-index: 6;
+      transition: opacity 0.22s, transform 0.22s;
+    }
+    .gw:hover > i, .gw.is-open > i, .gw:focus-within > i {
+      opacity: 1; visibility: visible; transform: translateX(50%) translateY(0);
+    }
+    .gemara.gloss-open .gw > i {
+      position: static; opacity: 1; visibility: visible; transform: none;
+      display: inline-block; margin-inline-start: 6px; white-space: normal;
+      box-shadow: none; padding: 1px 8px; font-size: 0.86rem;
+    }
+    .gemara.gloss-open .gw { border-bottom: 0; }
+
+    .mefarshim { display: grid; gap: 14px; }
+    .mef-card {
+      background: linear-gradient(160deg, #fffdf5, #fdf6e3);
+      border: 2px solid #e7d9b0; border-radius: 18px;
+      padding: 16px 18px 14px;
+      box-shadow: 0 6px 18px rgba(28, 20, 12, 0.07);
+    }
+    .mef-card.is-rashi { border-color: #cfd9ea; background: linear-gradient(160deg, #fbfdff, #eef3fa); }
+    .mef-top { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 8px; }
+    .mef-who {
+      font-size: 0.85rem; font-weight: 800; padding: 4px 12px; border-radius: 999px;
+      background: #ede9fe; color: #5b21b6;
+    }
+    .mef-card.is-rashi .mef-who { background: #dbeafe; color: #1e40af; }
+    .mef-daf { font-size: 0.85rem; font-weight: 700; color: #6b6460; }
+    .mef-title { margin: 0; font-size: clamp(1.1rem, 1.8vw, 1.4rem); font-weight: 800; color: var(--navy); }
+    .mef-dh {
+      font-family: "Frank Ruhl Libre", serif; font-weight: 800; color: var(--gold-deep);
+      font-size: clamp(1rem, 1.5vw, 1.18rem); margin: 2px 0 8px;
+    }
+    .mef-text {
+      font-family: "Frank Ruhl Libre", serif;
+      font-size: clamp(1.02rem, 1.6vw, 1.22rem); line-height: 1.85;
+      color: #2b2118; margin: 0 0 10px;
+      background: rgba(255, 255, 255, 0.66);
+      border-inline-start: 4px solid var(--gold); border-radius: 10px;
+      padding: 10px 14px;
+    }
+    .mef-explain { margin: 0 0 8px; font-size: clamp(1rem, 1.5vw, 1.16rem); line-height: 1.65; font-weight: 600; }
+    .mef-points { margin: 0 0 8px; padding: 0; list-style: none; display: grid; gap: 6px; }
+    .mef-points li {
+      background: rgba(255, 255, 255, 0.8); border: 1px solid #e4dccf; border-radius: 10px;
+      padding: 8px 12px; font-weight: 700; font-size: clamp(0.98rem, 1.4vw, 1.12rem);
+    }
+    .mef-take {
+      margin: 0; font-weight: 800; color: #166534;
+      background: #dcfce7; border-radius: 10px; padding: 8px 12px;
+      font-size: clamp(0.98rem, 1.4vw, 1.12rem);
+    }
+    .mef-empty { color: #6b6460; font-weight: 700; }
+
+    .order-goal { margin: 0; font-weight: 700; color: #6b6460; font-size: 0.98rem; }
+    .order-strip {
+      display: grid; gap: 8px; min-height: 3rem;
+      border: 2.5px dashed #c9bd9a; border-radius: 14px; padding: 12px;
+      background: rgba(255, 253, 248, 0.9);
+    }
+    .order-strip.is-full { border-style: solid; border-color: #166534; background: #f0fdf4; }
+    .order-slot {
+      display: flex; align-items: center; gap: 12px;
+      background: #fff; border: 2px solid #bbf7d0; border-radius: 12px;
+      padding: 10px 14px; font-weight: 800;
+      font-size: clamp(1.02rem, 1.6vw, 1.24rem);
+    }
+    .order-slot b {
+      width: 2rem; height: 2rem; border-radius: 50%; flex-shrink: 0;
+      background: #16a34a; color: #fff;
+      display: flex; align-items: center; justify-content: center; font-size: 0.98rem;
+    }
+    .order-pool { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .order-pool .bank-chip { min-width: 10rem; }
+
+    .flow { display: grid; gap: 0; justify-items: stretch; width: min(92vw, 44rem); margin-inline: auto; }
+    .flow-step {
+      background: #fff; border: 2px solid #e4dccf; border-radius: 14px;
+      padding: 13px 16px; font-weight: 800; text-align: center;
+      font-size: clamp(1.02rem, 1.6vw, 1.22rem); color: var(--navy);
+    }
+    .flow-arrow { justify-self: center; color: #c9bd9a; font-size: 1.5rem; line-height: 1.1; }
+
+    .pick-list { display: grid; gap: 12px; }
+    .pick-line {
+      background: #fff; border: 2px solid #e4dccf; border-radius: 14px;
+      padding: 14px 16px; font-weight: 700; line-height: 2.1;
+      font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+    }
+    .pick-opt {
+      appearance: none; font-family: inherit; cursor: pointer;
+      border: 2px dashed #c9bd9a; background: #fffdf8; color: var(--navy);
+      font-weight: 800; font-size: inherit;
+      border-radius: 10px; padding: 4px 12px; margin: 0 3px;
+      transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    }
+    .pick-opt:hover:not(:disabled) { border-color: var(--navy); background: #eef3fa; }
+    .pick-opt.is-right { border-style: solid; border-color: #166534; background: #dcfce7; color: #166534; }
+    .pick-opt.is-wrong { border-style: solid; border-color: #9a3412; background: #ffedd5; color: #9a3412; }
+    .pick-sep { color: #b3a48c; font-weight: 800; margin: 0 2px; }
+
+    .multi-list { display: grid; gap: 10px; }
+    .multi-row {
+      appearance: none; width: 100%; text-align: right; font-family: inherit; cursor: pointer;
+      display: flex; align-items: center; gap: 12px;
+      background: #fff; border: 2px solid #ddd6cc; border-radius: 14px;
+      padding: 13px 16px; font-weight: 700;
+      font-size: clamp(1.02rem, 1.6vw, 1.22rem); color: #1c140c;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .multi-row:hover:not(:disabled) { border-color: var(--gold); background: #fffaf0; }
+    .multi-row .box {
+      width: 1.9rem; height: 1.9rem; border-radius: 8px; flex-shrink: 0;
+      border: 2px solid #c9bd9a; background: #fffdf8;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 800; color: transparent;
+    }
+    .multi-row.is-on .box { border-color: var(--navy); background: var(--navy); color: #fff; }
+    .multi-row.is-right { border-color: #166534; background: #dcfce7; }
+    .multi-row.is-right .box { border-color: #166534; background: #16a34a; color: #fff; }
+    .multi-row.is-miss { border-color: #166534; border-style: dashed; background: #f0fdf4; }
+    .multi-row.is-miss .box { border-color: #16a34a; color: #16a34a; background: #fff; }
+    .multi-row.is-wrong { border-color: #9a3412; background: #ffedd5; }
+    .multi-row.is-wrong .box { border-color: #9a3412; background: #ea922c; color: #fff; }
+    .quiz-check {
+      appearance: none; align-self: center; font-family: inherit; cursor: pointer;
+      border: 0; border-radius: 999px; padding: 12px 34px;
+      background: var(--navy); color: #fff; font-weight: 800;
+      font-size: clamp(1rem, 1.5vw, 1.15rem);
+    }
+    .quiz-check:disabled { opacity: 0.4; cursor: default; }
+
+    .stage-phrase {
+      font-family: "Frank Ruhl Libre", serif;
+      font-size: clamp(1.3rem, 2.3vw, 1.85rem); font-weight: 800; line-height: 1.7;
+      color: var(--navy); text-align: center;
+      background: linear-gradient(160deg, #fffdf5, #fdf6e3);
+      border: 2px solid #e7d9b0; border-radius: 16px; padding: 18px 20px;
+      margin: 0;
+    }
+    .stage-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .stage-btn {
+      appearance: none; font-family: inherit; cursor: pointer;
+      border: 2px solid #ddd6cc; background: #fff; color: #1c140c;
+      font-weight: 800; font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+      border-radius: 999px; padding: 12px 30px;
+      transition: transform 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .stage-btn:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--gold); }
+    .stage-btn.is-right { border-color: #166534; background: #dcfce7; color: #166534; }
+    .stage-btn.is-wrong { border-color: #9a3412; background: #ffedd5; color: #9a3412; }
+
+    .type-wrap { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
+    .type-in {
+      font-family: "Frank Ruhl Libre", serif; direction: rtl; text-align: center;
+      font-size: clamp(1.15rem, 1.9vw, 1.45rem); font-weight: 800;
+      border: 2.5px dashed #c9bd9a; border-radius: 14px;
+      padding: 12px 18px; min-width: min(88vw, 20rem);
+      background: #fffdf8; color: var(--navy);
+    }
+    .type-in:focus { outline: none; border-color: var(--navy); border-style: solid; background: #fff; }
+    .type-in.is-right { border-style: solid; border-color: #166534; background: #dcfce7; color: #166534; }
+    .type-in.is-wrong { border-style: solid; border-color: #9a3412; background: #ffedd5; }
+    .type-in:disabled { opacity: 1; }
+    .type-answer { margin: 0; text-align: center; font-weight: 800; color: #166534; }
+
+    .mastery-bar {
+      height: 6px; border-radius: 99px; margin-top: 6px;
+      background: rgba(255, 255, 255, 0.14); overflow: hidden;
+    }
+    .mastery-bar i { display: block; height: 100%; border-radius: 99px; }
     .pair-row, .table-edit-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1129,8 +1460,10 @@
       </div>
       <div class="sugya-tabs" role="tablist">
         <button type="button" class="sugya-tab is-on" id="tabGemara" role="tab" aria-selected="true">לשון הגמרא</button>
+        <button type="button" class="sugya-tab" id="tabMefarshim" role="tab" aria-selected="false">רש״י ותוספות</button>
         <button type="button" class="sugya-tab" id="tabAramaic" role="tab" aria-selected="false">ארמית</button>
         <button type="button" class="sugya-tab" id="tabQuiz" role="tab" aria-selected="false">שאלות</button>
+        <button type="button" class="sugya-tab tab-sound" id="soundToggle" title="צלילים" aria-pressed="true">🔊</button>
       </div>
       <div class="tag-legend" id="tagLegend">
         <i class="tag">דין</i>
@@ -1142,9 +1475,16 @@
         <i class="tag halacha">הלכה</i>
       </div>
       <div class="gemara" id="sugyaGemara"></div>
+      <div class="quiz" id="sugyaMefarshim" hidden></div>
       <div class="quiz" id="sugyaQuiz" hidden>
-        <div class="quiz-progress" id="quizProgress"></div>
-        <span class="quiz-kind" id="quizKind"></span>
+        <div class="quiz-head">
+          <div class="dots" id="quizDots"></div>
+          <span class="quiz-progress" id="quizProgress"></span>
+        </div>
+        <div class="quiz-kinds">
+          <span class="quiz-kind" id="quizKind"></span>
+          <span class="quiz-src" id="quizSrc" hidden></span>
+        </div>
         <p class="quiz-q" id="quizQ"></p>
         <div class="quiz-options" id="quizOptions"></div>
         <p class="quiz-note" id="quizNote" hidden></p>
@@ -1181,12 +1521,14 @@
         </label>
         <div class="editor-tabs" role="tablist">
           <button type="button" class="sugya-tab is-on" id="editTabParts" role="tab" aria-selected="true">חלוקת הסוגיא</button>
+          <button type="button" class="sugya-tab" id="editTabMefarshim" role="tab" aria-selected="false">רש״י ותוספות</button>
           <button type="button" class="sugya-tab" id="editTabAramaic" role="tab" aria-selected="false">ארמית</button>
           <button type="button" class="sugya-tab" id="editTabQuiz" role="tab" aria-selected="false">שאלות</button>
         </div>
         <button type="button" class="edit-btn" id="editorClose">סגור</button>
       </div>
       <div class="editor-body" id="editorParts"></div>
+      <div class="editor-body" id="editorMefarshim" hidden></div>
       <div class="editor-body" id="editorAramaic" hidden></div>
       <div class="editor-body" id="editorQuiz" hidden></div>
       <div class="editor-foot">
@@ -1209,12 +1551,25 @@ const PAGES = [
 const QUESTIONS = {
   a: [
     { type: "mc", q: "לפי הדין ״משעת הנחתן״ במבט ראשון — מתי מברכים על התפילין?", choices: ["לפני שמוציאים אותן מהתיק", "אחרי שהניח אותן על הגוף", "רק אחרי שחלץ אותן", "רק בלילה"], answer: 1, note: "כך נשמע לשון הדין: משעת הנחתן — משעה שכבר הניח." },
+    { type: "stage", q: "זהו את שלב הסוגיא", phrase: "אִינִי? וְהָא אָמַר רַב יְהוּדָה אָמַר שְׁמוּאֵל: כׇּל הַמִּצְוֹת כּוּלָּן מְבָרֵךְ עֲלֵיהֶן עוֹבֵר לַעֲשִׂיָּיתָן!", choices: ["דין", "קושיה", "תירוץ"], answer: 1, hint: "המילה ״אִינִי?״ פותחת שלב מסוים בגמרא. איזה?", note: "״אִינִי?״ = וכי כך? זו תמיד פתיחה של קושיה. הגמרא מקשה על הדין מכלל אחר." },
+    { type: "typein", q: "מהו הכלל של רב יהודה אמר שמואל בכל המצוות?", sentence: "כל המצוות כולן מברך עליהן ______.", answer: "עובר לעשייתן", accept: ["עובר לעשייתן", "עובר לעשיתן"], hint: "שתי מילים מלשון הגמרא. אין צורך בניקוד.", note: "עובר = קודם. מברכים לפני עשיית המצווה." },
     { type: "table", q: "זו הקושיה: מלאו מתי מברכים לפי כל צד", headers: ["מי אמר", "מתי מברכים"], rows: [
       { label: "כל המצוות — רב יהודה אמר שמואל", answer: "לפני שעושים (עובר לעשייתן)" },
       { label: "תפילין — לפי הדין ״משעת הנחתן״", answer: "אחרי ההנחה (משעת הנחתן)" }
     ], bank: ["לפני שעושים (עובר לעשייתן)", "אחרי ההנחה (משעת הנחתן)", "רק בלילה"], note: "הכלל אומר לפני העשייה; הדין נשמע אחרי ההנחה. רש״י: עובר = קודם." },
     { type: "mc", q: "לפי אביי ורבא, למה הברכה בין הנחה לקשירה עדיין נחשבת ״עובר לעשייתן״?", choices: ["כי כבר חלץ לפני הברכה", "כי הקשירה עוד לא נגמרה — המצווה עדיין לא נשלמה", "כי מברכים רק בלילה", "כי של ראש קודם לשל יד"], answer: 1, note: "רש״י: עובר לעשייתן = קודם לגמר העשייה. מברך אחרי שהניח על הזרוע ולפני שקשר." },
-    { type: "tf", q: "אביי ורבא חולקים זה על זה בתירוץ של הסוגיא.", answer: false, note: "״דאמרי תרווייהו״ — שניהם אומרים אותו דבר: משעת הנחה ועד שעת קשירה." }
+    { type: "tf", q: "אביי ורבא חולקים זה על זה בתירוץ של הסוגיא.", answer: false, note: "״דאמרי תרווייהו״ — שניהם אומרים אותו דבר: משעת הנחה ועד שעת קשירה." },
+    { type: "flow", q: "בנו את מהלך הסוגיא", hint: "גררו לכל שלב את מה שנאמר בו.", rows: [
+      { label: "דין", answer: "מברך משעת הנחתן" },
+      { label: "קושיה", answer: "והרי כל המצוות — עובר לעשייתן" },
+      { label: "תירוץ", answer: "משעת הנחה ועד שעת קשירה" }
+    ], bank: ["מברך משעת הנחתן", "והרי כל המצוות — עובר לעשייתן", "משעת הנחה ועד שעת קשירה", "אין מברכים כלל"], note: "זהו השלד של כל הסוגיא: דין קצר, קושיה מכלל, ותירוץ שמצמצם את הזמן לחלון שבין ההנחה לקשירה." },
+    { type: "mc", src: "tosafot", q: "תוספות: האם צריך לקשור את התפילין מחדש בכל יום?", choices: ["רבינו אליהו וגם ר״ת אומרים שכן", "רבינו אליהו — כן; ר״ת — לא, כי הקשר הוא ״קשר של קיימא״", "שניהם אומרים שלא", "תוספות לא דנים בזה"], answer: 1, note: "תוס׳ לה: ד״ה משעת הנחה. ר״ת מוכיח מכך שקשר של תפילין נמנה כ״קשר של קיימא״ — סימן שאינו מותר ונקשר כל יום. למסקנה: בשל ראש כר״ת, ובשל יד כרבינו אליהו." },
+    { type: "tf", src: "tosafot", q: "לפי ר״ת, ״שעת קשירה״ בסוגיא שלנו היא ההידוק של התפילין על הגוף, ולא קשירת קשר חדש.", answer: true, note: "תוס׳: ההוא קשירה היינו ההידוק שמהדקו ומצמצמו בראשו. לכן אין סתירה לכך שהקשר קבוע." },
+    { type: "table", src: "tosafot", q: "רקע · סדר הפרשיות: מה מיקום כל פרשה?", headers: ["דעה", "סדר הפרשיות"], rows: [
+      { label: "רש״י", answer: "קדש · והיה כי יביאך · שמע · והיה אם שמוע" },
+      { label: "רבינו תם", answer: "קדש · והיה כי יביאך · והיה אם שמוע · שמע" }
+    ], bank: ["קדש · והיה כי יביאך · שמע · והיה אם שמוע", "קדש · והיה כי יביאך · והיה אם שמוע · שמע", "שמע · והיה אם שמוע · קדש · והיה כי יביאך"], note: "תוס׳ לד: ד״ה והקורא קורא כסדרן. רש״י — כסדר שהן כתובות בתורה. ר״ת — שתי האחרונות מוחלפות. מכאן ״תפילין דרש״י״ ו״תפילין דרבינו תם״." }
   ],
   b: [
     { type: "mc", q: "מה מדייקת הגמרא מדברי רב חסדא ״סח — חוזר ומברך״?", choices: ["תמיד מברכים שתי ברכות, גם בלי דיבור", "רק מי שדיבר בין של יד לשל ראש חוזר ומברך", "אסור לברך על של ראש", "מברכים רק על של יד"], answer: 1, note: "הדיוק: סח — אין; לא סח — לא. אם לא הפסיק, אין ברכה שנייה." },
@@ -1224,20 +1579,35 @@ const QUESTIONS = {
     ], bank: ["להניח תפילין", "על מצות תפילין", "אשר קדשנו בלי ברכה"], note: "שני נוסחים — נשמע שתמיד מברכים שתיים, גם בלי דיבור." },
     { type: "mc", q: "מה קשה מנוסח רבי יוחנן על הדיוק?", choices: ["נשמע שתמיד אומרים שתי ברכות שונות — גם בלי דיבור", "הוא אוסר להניח של ראש", "הוא לא מזכיר ברכה בכלל", "הוא דורש לברך רק בלילה"], answer: 0, note: "אם יש נוסח נפרד לשל ראש, איך הדיוק אמר שרק מי שסח מברך שוב?" },
     { type: "mc", q: "מניח של יד, מדבר עם חבר, ואז מניח של ראש. לפי אביי ורבא מה יברך?", choices: ["רק ״להניח תפילין״", "גם ״להניח״ על של יד וגם ״על מצות תפילין״ על של ראש", "לא מברך כלום, כי דיבר", "רק ״על מצות תפילין״ בלי ברכה על של יד"], answer: 1, note: "לא סח — מברך אחת; סח — מברך שתיים. הדיבור מפסיק בין שני חלקי מצווה אחת." },
+    { type: "pick", q: "בחרו את המילה הנכונה בכל שורה", hint: "לפי תירוץ אביי ורבא.", lines: [
+      { before: "מי שלא דיבר בין של יד לשל ראש מברך ", choices: ["ברכה אחת", "שתי ברכות"], answer: 0, after: "." },
+      { before: "מי שדיבר בין של יד לשל ראש מברך ", choices: ["ברכה אחת", "שתי ברכות"], answer: 1, after: "." },
+      { before: "לכתחילה ", choices: ["מותר", "אסור"], answer: 1, after: " לדבר בין תפילה לתפילה." }
+    ], note: "לא סח — מברך אחת; סח — מברך שתיים. אבל הברייתא מדגישה שהדיבור עצמו עבירה." },
     { type: "tf", q: "לפי הברייתא, דיבור בין תפילה לתפילה הוא עבירה שחוזרים עליה מערכי המלחמה.", answer: true, note: "תנא: סח בין תפילה לתפילה — עבירה היא בידו, וחוזר עליה מערכי המלחמה." },
-    { type: "tf", q: "רש״י מפרש ש״סח״ פירושו שהניח את התפילין הפוך.", answer: false, note: "סח = דיבר. ההפסק הוא בדיבור בין של יד לשל ראש, לא בהנחה הפוכה." }
+    { type: "tf", q: "רש״י מפרש ש״סח״ פירושו שהניח את התפילין הפוך.", answer: false, note: "סח = דיבר. ההפסק הוא בדיבור בין של יד לשל ראש, לא בהנחה הפוכה." },
+    { type: "table", src: "tosafot", q: "תוספות · ברכות התפילין: מה מברך מי שלא דיבר?", headers: ["דעה", "מי שלא סח מברך"], rows: [
+      { label: "רש״י", answer: "ברכה אחת — ״להניח״ — על שתיהן" },
+      { label: "רבינו תם", answer: "״להניח״ על של יד, ו״על מצות״ על של ראש" }
+    ], bank: ["ברכה אחת — ״להניח״ — על שתיהן", "״להניח״ על של יד, ו״על מצות״ על של ראש", "אינו מברך כלל"], note: "תוס׳ לו. ד״ה לא סח מברך אחת. לר״ת ״על מצות תפילין״ היא הברכה הקבועה של של ראש; מי שסח מברך על של ראש שתיים. זה המקור למנהג שלנו לברך שתיים." },
+    { type: "mc", src: "tosafot", q: "תוספות לומדים מכאן לשוחט הרבה עופות שדיבר בין עוף לעוף. מה הכיוון?", choices: ["מותר לדבר, ואין בכך כלום", "הדיבור מחייב ברכה חדשה — ולכן עדיף לא לדבר, כדי לא להיכנס ל״ברכה שאינה צריכה״", "אסור לשחוט יותר מעוף אחד", "צריך לברך על כל עוף בנפרד תמיד"], answer: 1, note: "תוס׳ לו. ד״ה סח בין תפילה לתפילה. כיוון שאפשר לפטור הכל בברכה אחת, אין לו לדבר ולגרום לברכה נוספת. שאלה לשאלה: על מה כן מותר לדבר? על צורכי השחיטה עצמה." }
   ],
   c: [
+    { type: "order", q: "סדרו את ארבעת השלבים לפי הסוגיא", goal: "מהנחה בבוקר ועד חליצה בערב", hint: "לחצו לפי הסדר — מה עושים ראשון, ומה אחריו.", items: ["מניח של יד", "מניח של ראש", "חולץ של ראש", "חולץ של יד"], note: "כשהוא מניח — של יד ואחר כך של ראש. כשהוא חולץ — של ראש ואחר כך של יד. שימו לב: של יד נכנסת ראשונה ויוצאת אחרונה." },
     { type: "cloze", q: "השלימו את סדר ההנחה והחליצה", sentence: "מניח יד ואחר כך ראש; חולץ ___ ואחר כך יד.", choices: ["ראש", "יד", "שתיהן יחד", "ציץ"], answer: 0, note: "כשהוא מניח — של יד ואחר כך של ראש. כשהוא חולץ — של ראש ואחר כך של יד." },
+    { type: "stage", q: "זהו את שלב הסוגיא", phrase: "אֶלָּא כְּשֶׁהוּא חוֹלֵץ, חוֹלֵץ שֶׁל רֹאשׁ וְאַחַר כָּךְ חוֹלֵץ שֶׁל יָד — מְנָלַן?", choices: ["ברייתא", "קושיה", "תירוץ"], answer: 1, hint: "המילה ״מְנָלַן?״ מסמנת שלב מסוים.", note: "״מנלן?״ = מניין לנו? זו קושיה: על סדר ההנחה יש פסוק מפורש, ועל סדר החליצה עדיין אין מקור." },
     { type: "table", q: "מאיפה נלמד כל סדר?", headers: ["פעולה", "מקור"], rows: [
       { label: "סדר ההנחה", answer: "סדר הפסוק: וקשרתם ואחר כך והיו" },
       { label: "סדר החליצה", answer: "כל זמן שבין עיניך יהו שתים" }
     ], bank: ["סדר הפסוק: וקשרתם ואחר כך והיו", "כל זמן שבין עיניך יהו שתים", "קל וחומר מציץ"], note: "בשלמא הנחה — דכתיב. חליצה — מנלן? רב הונא." },
     { type: "mc", q: "לפי רב הונא, למה אי אפשר לחלוץ קודם של יד?", choices: ["כי של יד קדוש יותר", "כי כל זמן ששל ראש מונח חייבות להיות שתי תפילין", "כי אסור לגעת בשל יד", "כי הפסוק אומר לחלוץ בלילה"], answer: 1, note: "רש״י: ״יהו שתים״ — כל זמן ששל ראש בין עיניך, תהא גם של יד עליך." },
-    { type: "tf", q: "לפי הסוגיא מותר להישאר עם של ראש בלבד אחרי שחלץ של יד.", answer: false, note: "אסור: כל זמן שבין עיניך יהו שתים. לכן חולץ ראש קודם, ואחר כך יד." }
+    { type: "tf", q: "לפי הסוגיא מותר להישאר עם של ראש בלבד אחרי שחלץ של יד.", answer: false, note: "אסור: כל זמן שבין עיניך יהו שתים. לכן חולץ ראש קודם, ואחר כך יד." },
+    { type: "mc", src: "tosafot", q: "תוספות: איך מסדרים את התפילין בתוך התיק בסוף היום?", choices: ["של יד למטה ושל ראש למעלה", "של ראש למטה ושל יד למעלה — כדי שמחר תיפגשו בשל יד תחילה", "אין סדר, זה לא משנה", "כל אחת בתיק נפרד"], answer: 1, note: "תוס׳ לו. בשם ר״ת ורב האי גאון. אם של ראש תהיה למעלה, מחר בבוקר תיגע בה ראשונה — ותצטרך ״להעביר על המצות״ כדי להניח של יד קודם. לכן מכניסים של ראש ראשונה." },
+    { type: "typein", src: "tosafot", q: "איך נקרא הכלל שאסור לדלג על מצווה שנקרית לפניך תחילה?", sentence: "מסדרים את התיק כך שלא יצטרך ______.", answer: "להעביר על המצות", accept: ["להעביר על המצוות", "אין מעבירין על המצות", "אין מעבירין על המצוות", "העברה על המצות"], hint: "שלוש מילים. אין צורך בניקוד.", note: "״אין מעבירין על המצות״ — כשמצווה מזדמנת לך ראשונה, אין מדלגים עליה. כאן זה קובע איך לארוז את התיק." }
   ],
   d: [
     { type: "tf", q: "כאן ״משעת הנחתן״ פירושו אותו דבר כמו בסוגיא א: רגע ההנחה על הגוף.", answer: false, note: "כאן הכוונה לזמן הבוקר שבו המצווה חלה. לכן מניח בחושך בלי ברכה, ומברך כשמגיע הזמן וממשמש." },
+    { type: "order", q: "סדרו את מה שעושה המשכים לצאת לדרך", goal: "מהיציאה בחושך ועד הברכה", hint: "לפי הברייתא, מה קורה ראשון?", items: ["מתיירא שמא יאבדו", "מניח תפילין לפני הזמן — בלי ברכה", "מגיע זמן הנחת תפילין", "ממשמש בהן", "מברך עליהן"], note: "היה משכים לצאת לדרך ומתיירא שמא יאבדו — מניחן, וכשיגיע זמנן ממשמש בהן ומברך עליהן. הברכה נדחית לזמן, לא ההנחה." },
     { type: "cloze", q: "השלימו לפי הברייתא", sentence: "המשכים לדרך מניח לפני הזמן כי מתיירא שמא ___, ומברך כשיגיע זמנן.", choices: ["יאבדו", "ישן", "יחלצו", "יברך פעמיים"], answer: 0, note: "מניח בחושך בלי ברכה, וממשמש ומברך בזמן." },
     { type: "table", q: "שלוש הדעות — עד מתי מניחים", headers: ["חכם", "עד מתי מניחים"], rows: [
       { label: "תנא קמא", answer: "עד שקיעת החמה" },
@@ -1246,17 +1616,25 @@ const QUESTIONS = {
     ], bank: ["עד שקיעת החמה", "עד שתכלה רגל מן השוק", "עד זמן שינה", "כל הלילה לכתחילה"], note: "רב נחמן: הלכה כרבי יעקב. ויש גירסה שחולקת." },
     { type: "mc", q: "באיזה מקרה חכמים מודים לרבי יעקב?", choices: ["תמיד מורידים בשקיעה בלי יוצא מן הכלל", "מי שחלץ לשירותים או למרחץ ושקעה החמה — אינו חוזר ומניח", "מי שישן בצהריים", "רק בשבת"], answer: 1, note: "ומודים חכמים לרבי יעקב שאם חלצן לצאת לבית הכסא או ליכנס לבית המרחץ ושקעה חמה — שוב אינו חוזר ומניחן." },
     { type: "tf", q: "רש״י מפרש ״תכלה רגל מן השוק״ — עד שמתפזרים בני אדם מן הרחוב.", answer: true, note: "זה סוף זמן מהלך בני אדם בשוק, מאוחר יותר משקיעה גמורה לפי חלק מהדעות." },
-    { type: "tf", q: "רב חסדא ורבה בר רב הונא שהתפללו ערבית בתפילין מתאימים לגירסה שאין הלכה כרבי יעקב.", answer: false, note: "מצלו בהו באורתא — התפללו ערבית בתפילין. זה מתאים לגירסה שהלכה כרבי יעקב (מניחים גם אחרי השקיעה)." }
+    { type: "tf", q: "רב חסדא ורבה בר רב הונא שהתפללו ערבית בתפילין מתאימים לגירסה שאין הלכה כרבי יעקב.", answer: false, note: "מצלו בהו באורתא — התפללו ערבית בתפילין. זה מתאים לגירסה שהלכה כרבי יעקב (מניחים גם אחרי השקיעה)." },
+    { type: "mc", src: "tosafot", q: "תוספות: למה בעצם רבי יעקב וחכמים מפסיקים לפני הלילה?", choices: ["כי הם סוברים שהלילה אינו זמן תפילין כלל", "כי הם חוששים שמא יישן בהן — ולא מפני שהלילה אינו זמן תפילין", "כי בלילה אין ברכה", "כי אסור לצאת לרחוב בלילה"], answer: 1, note: "תוס׳ לו. ד״ה רבי יעקב אומר. שניהם סוברים שלילה זמן תפילין, והחשש הוא שינה. רבי יעקב רק מרחיק יותר — עד שתכלה רגל, לפני שאנשים הולכים לישון." },
+    { type: "tf", src: "tosafot", q: "תוספות לומדים מ״ממשמש ומברך״ שגם מי שהתעטף בטלית לפני עלות השחר אינו צריך לחלוץ אותה ולהתעטף שוב.", answer: true, note: "תוס׳ לו. ד״ה וכשיגיע זמנן. די שימשמש בציצית ויברך בזמן, בדיוק כמו בתפילין." }
   ],
   e: [
     { type: "tf", q: "״ההוא פליגא״: המעשה ״מצלו בהו באורתא״ חולק על הדעה שלילה אינו זמן תפילין.", answer: true, note: "הם התפללו ערבית בתפילין — ראיה שלילה כן זמן תפילין, או לפחות כך נהגו." },
+    { type: "stage", q: "זהו את שלב הסוגיא", phrase: "וּמִי אָמַר רַבָּה בַּר רַב הוּנָא הָכִי? וְהָא אָמַר רַבָּה בַּר רַב הוּנָא: סָפֵק חֲשֵׁיכָה סָפֵק אֵין חֲשֵׁיכָה — לֹא חוֹלֵץ וְלֹא מַנִּיחַ!", choices: ["דין חדש", "סתירה בין דברי אותו חכם", "מסקנה"], answer: 1, hint: "שימו לב שאותו שם מופיע פעמיים.", note: "״ומי אמר… והא אמר…״ — הגמרא מראה שאותו אמורא אמר שני דברים שנראים סותרים. זו קושיה מסוג מיוחד: סתירה פנימית." },
     { type: "cloze", q: "השלימו את התירוץ לסתירה", sentence: "דין ״ספק חשיכה״ נאמר ב___, לא בכל לילה.", choices: ["ערב שבת", "חול המועד", "תשעה באב", "יום כיפור"], answer: 0, note: "בלילה רגיל יכול להישאר בתפילין; ערב שבת בחשיכה ודאית חולץ." },
     { type: "table", q: "מה נלמד מכל פסוק?", headers: ["דעה", "מה נלמד"], rows: [
       { label: "רבי יוסי הגלילי מ״ימים / מימים״", answer: "פטור לילה ופטור שבת" },
       { label: "רבי עקיבא מ״והיה לאות״", answer: "רק פטור שבת ויום טוב" }
     ], bank: ["פטור לילה ופטור שבת", "רק פטור שבת ויום טוב", "חיוב תפילין בלילה ובשבת"], note: "ר״ע: החוקה נאמרה לפסח. פטור שבת — מהאות." },
     { type: "tf", q: "רבי עקיבא סובר ש״החוקה הזאת״ נאמרה לתפילין כמו לפסח.", answer: false, note: "רבי עקיבא: לא נאמרה חוקה זו אלא לפסח בלבד. פטור שבת הוא לומד מ״אות״." },
-    { type: "mc", q: "למה רבה בר רב הונא יכול לחלק: לילה — זמן תפילין, שבת — לא?", choices: ["כי הוא סובר כרבי יוסי הגלילי לגמרי", "כי הוא לומד פטור שבת ממקום של רבי עקיבא (״אות״), לא מ״ימים/מימים״ שמוציא גם לילות", "כי שבת ולילה הם אותו דבר", "כי אין פסוק על לילה כלל"], answer: 1, note: "נפקא ליה מהיכא דנפקא ליה לרבי עקיבא. אצל רבי יוסי הגלילי, ״ימים ולא לילות״ ו״מימים ולא כל ימים״ יוצאים מאותו פסוק." }
+    { type: "mc", q: "למה רבה בר רב הונא יכול לחלק: לילה — זמן תפילין, שבת — לא?", choices: ["כי הוא סובר כרבי יוסי הגלילי לגמרי", "כי הוא לומד פטור שבת ממקום של רבי עקיבא (״אות״), לא מ״ימים/מימים״ שמוציא גם לילות", "כי שבת ולילה הם אותו דבר", "כי אין פסוק על לילה כלל"], answer: 1, note: "נפקא ליה מהיכא דנפקא ליה לרבי עקיבא. אצל רבי יוסי הגלילי, ״ימים ולא לילות״ ו״מימים ולא כל ימים״ יוצאים מאותו פסוק." },
+    { type: "pick", q: "בחרו את המילה הנכונה בכל שורה", hint: "לפי רבי עקיבא בסוף הסוגיא.", lines: [
+      { before: "שבת נקראת ", choices: ["אות", "חוקה"], answer: 0, after: " בפני עצמה." },
+      { before: "לכן מי שכבר יש לו אות ", choices: ["צריך", "אינו צריך"], answer: 1, after: " אות נוספת של תפילין." },
+      { before: "״ושמרת את החוקה הזאת״ נאמרה לפי רבי עקיבא ל", choices: ["תפילין", "פסח"], answer: 1, after: " בלבד." }
+    ], note: "מי שצריכין אות — יצאו שבתות וימים טובים שהן גופן אות. זהו יסוד הפטור של תפילין בשבת עד היום." }
   ],
   f: [
     { type: "table", q: "מה עובר מי שמניח אחרי שקיעה", headers: ["חכם", "מה עובר"], rows: [
@@ -1268,31 +1646,66 @@ const QUESTIONS = {
       { label: "רבי אלעזר (עובר בעשה)", answer: "נשאר עשה" },
       { label: "רבי יוחנן (עובר בלאו)", answer: "נהפך ללאו" }
     ], bank: ["נשאר עשה", "נהפך ללאו", "רק המלצה"], note: "זו המחלוקת האמיתית: השמר דעשה — עשה, או נמי לאו." },
+    { type: "multi", q: "סמנו את כל המשפטים הנכונים על הסוגיא", hint: "יש יותר מאחד נכון.", rows: [
+      { text: "״השמר״ על מצוות לא תעשה — לכולי עלמא לאו.", ok: true },
+      { text: "המחלוקת היא דווקא ב״השמר״ שנאמר על מצוות עשה.", ok: true },
+      { text: "רבי אלעזר ורבי יוחנן חולקים אם ״פן״ הוא לשון אזהרה.", ok: false },
+      { text: "לפי רבי יוחנן, המניח אחרי שקיעה עבר על לאו.", ok: true },
+      { text: "לפי רבי אלעזר אין בכך שום איסור.", ok: false }
+    ], note: "הגמרא מצמצמת את המחלוקת: כולם מסכימים ש״השמר״ בלאו הוא לאו; נחלקו רק ב״השמר דעשה״." },
     { type: "tf", q: "רש״י מפרש שהמחלוקת היא אם הפסוק ״ושמרת״ על תפילין נחשב אזהרת לאו או נשאר עשה.", answer: true, note: "״ושמרת את החוקה״ — השמר דעשה: האם זה לאו או עשה." }
   ],
   g: [
     { type: "mc", q: "מתי מותר להניח תפילין בלילה לפי רבי אלעזר?", choices: ["כדי לקיים את המצווה לכתחילה", "רק כדי לשמרן שלא ייגנבו", "רק בשבת", "אסור לגמרי בכל מקרה"], answer: 1, note: "ואם לשומרן — מותר. מניח כדי שלא ייגנבו, לא כדי לקיים מצווה." },
     { type: "mc", q: "במעשה רב אשי, מה הייתה דעתו באמת?", choices: ["הוא רק שמר מפני גנבים, כפי שאמר", "אמר לרבינא ששומר, אבל סובר שהלילה זמן תפילין — הלכה ואין מורין כן", "רבינא אסר עליו להניח", "הוא חלץ מיד עם חשכה"], answer: 1, note: "חזיתיה לדעתיה דלאו לשומרן הוא בעי. קסבר: הלכה ואין מורין כן." },
+    { type: "typein", q: "איזה ביטוי מתאר הלכה שנוהגים בה, אך אין מלמדים אותה ברבים?", sentence: "רב אשי סבר: ______.", answer: "הלכה ואין מורין כן", accept: ["הלכה ואין מורין כן", "הילכתא ואין מורין כן"], hint: "ארבע מילים מלשון הגמרא.", note: "ביטוי שחוזר בש״ס: הדין נכון, אבל לא מפרסמים אותו — כדי שלא יבואו לזלזל או לטעות." },
     { type: "tf", q: "״הלכה ואין מורין כן״ פירושו: כך ההלכה, אבל אין אומרים זאת לרבים לכתחילה.", answer: true, note: "רש״י: הלכה שמותר להניח בלילה, ואין מורין כן — שלא יבואו לזלזל." },
-    { type: "mc", q: "למה אין מורין לרבים להניח בלילה, אף שהלכה כך?", choices: ["שלא יבואו לזלזל במצוות תפילין", "כי רב אשי חזר בו", "כי בלילה אין ברכה", "כי רבינא אסר"], answer: 0, note: "רש״י: אין מורין כן — שלא יבואו לזלזל." }
+    { type: "mc", q: "למה אין מורין לרבים להניח בלילה, אף שהלכה כך?", choices: ["שלא יבואו לזלזל במצוות תפילין", "כי רב אשי חזר בו", "כי בלילה אין ברכה", "כי רבינא אסר"], answer: 0, note: "רש״י: אין מורין כן — שלא יבואו לזלזל." },
+    { type: "multi", q: "מה הסוגיא לימדה — ומה לא?", hint: "סמנו רק את מה שהסוגיא באמת אמרה.", rows: [
+      { text: "מותר להניח תפילין בלילה כדי לשמרן מגנבים.", ok: true },
+      { text: "רב אשי בעצמו סבר שהלילה זמן תפילין.", ok: true },
+      { text: "הסוגיא פסקה שמורים לכל אדם להניח תפילין בלילה.", ok: false },
+      { text: "החשש שלא לפרסם הוא שמא יזלזלו במצווה.", ok: true },
+      { text: "רבינא הוכיח את רב אשי על שהניח בלילה.", ok: false }
+    ], note: "רבינא רק שאל, ורב אשי ענה ״לשמרן״ — והגמרא מגלה שכוונתו הייתה אחרת. אבל להלכה למעשה אין מורין כן." }
   ],
   h: [
     { type: "mc", q: "מה החיוב של רבה בר רב הונא?", choices: ["לחלץ תפילין בכל שעה", "למשמש בתפילין בכל שעה", "לברך בכל שעה מחדש", "לא לגעת בתפילין כלל"], answer: 1, note: "חייב אדם למשמש בתפילין בכל שעה — כדי שלא יסיח דעתו מהן." },
+    { type: "flow", q: "בנו את הקל וחומר מציץ", hint: "גררו לכל שלב את התוכן שלו.", rows: [
+      { label: "בציץ יש", answer: "אזכרה אחת" },
+      { label: "ובכל זאת נאמר בו", answer: "שלא יסיח דעתו ממנו" },
+      { label: "בתפילין יש", answer: "אזכרות הרבה" },
+      { label: "מסקנה", answer: "על אחת כמה וכמה שלא יסיח דעתו" }
+    ], bank: ["אזכרה אחת", "שלא יסיח דעתו ממנו", "אזכרות הרבה", "על אחת כמה וכמה שלא יסיח דעתו", "אין בו שם כלל"], note: "זהו קל וחומר קלאסי: אם בקל (ציץ, שם אחד) מחמירים — בחמור (תפילין, שמות רבים) על אחת כמה וכמה." },
     { type: "cloze", q: "השלימו את לימוד הציץ", sentence: "חייב אדם למשמש בתפילין בכל שעה, קל וחומר מ___.", choices: ["ציץ", "ציצית", "שבת", "קורבן"], answer: 0, note: "ציץ — אזכרה אחת ואסור להסיח; תפילין — אזכרות הרבה, על אחת כמה וכמה." },
     { type: "tf", q: "לפי הסוגיא, האיסור להסיח דעת שייך רק לציץ ולא לתפילין.", answer: false, note: "הקל וחומר בא לחייב בתפילין יותר: אזכרות הרבה." },
     { type: "tf", q: "רש״י מפרש ש״תמיד״ בציץ מלמד שלא יסיח דעתו ממנו כל זמן שהוא עליו.", answer: true, note: "כך דרשו: והיה על מצחו תמיד — שלא יסיח דעתו מן הציץ." }
   ],
   i: [
     { type: "mc", q: "למה הברייתא אומרת ש״ידך״ היא שמאל?", choices: ["כי בכל הפסוקים ״יד״ עומדת מול ״ימין״ שנאמרת בנפרד", "כי כתוב במפורש ״שמאלך״ בתפילין", "כי רבי יוסי החורם אמר כך", "כי של ראש נקשר בשמאל"], answer: 0, note: "״אף ידי… וימיני״, ״ידה… וימינה״, ״ידך וימינך״ — יד לחוד וימין לחוד, סימן ש״יד״ = שמאל." },
+    { type: "multi", q: "אילו פסוקים הברייתא מביאה כראיה?", hint: "שלושה מהם נכונים.", rows: [
+      { text: "אף ידי יסדה ארץ, וימיני טיפחה שמים", ok: true },
+      { text: "ידה ליתד תשלחנה, וימינה להלמות עמלים", ok: true },
+      { text: "למה תשיב ידך וימינך", ok: true },
+      { text: "שמאל ה׳ רוממה", ok: false },
+      { text: "וייקח יוסף את שניהם ביד ימינו", ok: false }
+    ], note: "בשלושת הפסוקים ״יד״ ו״ימין״ מופיעות זו לצד זו — סימן ש״יד״ סתם אינה ימין. הפסוק של יוסף מופיע בהמשך, בשאלת רבי יוסי החורם." },
     { type: "mc", q: "איזה פסוק אינו מופיע בברייתא?", choices: ["אף ידי יסדה ארץ וימיני טיפחה שמים", "שמאל ה׳ רוממה", "ידה ליתד תשלחנה וימינה להלמות עמלים", "למה תשיב ידך וימינך"], answer: 1, note: "שלושת הפסוקים הם ידי/וימיני, ידה/וימינה, ידך/וימינך. ״שמאל ה׳ רוממה״ אינו כאן." },
     { type: "cloze", q: "השלימו את תשובת הגמרא", sentence: "רבי יוסי החורם מצא ״יד ימינו״ אצל יוסף. ענו לו: רק ___ איקרי, ״יד״ סתם לא.", choices: ["יד ימינו", "שמאלך", "זרוע", "קיבורת"], answer: 0, note: "אין ראיה ש״יד״ לבדה היא ימין." },
     { type: "tf", q: "רש״י מדגיש שבפסוקים הללו הימין נזכר בנפרד, ולכן ״יד״ היא היד השנייה — שמאל.", answer: true, note: "זו דרשת הברייתא כפשוטה, וכך פרש״י את ההוכחה." }
   ],
   j: [
+    { type: "flow", q: "בנו את שרשרת הדרשה של רבי נתן", hint: "כל שלב נובע מהקודם.", rows: [
+      { label: "המקור", answer: "וקשרתם … וכתבתם" },
+      { label: "כתיבה נעשית ב…", answer: "יד ימין" },
+      { label: "לכן גם הקשירה ב…", answer: "יד ימין" },
+      { label: "ומכאן שההנחה ב…", answer: "יד שמאל" }
+    ], bank: ["וקשרתם … וכתבתם", "יד ימין", "יד שמאל", "שתי הידיים"], note: "מה כתיבה בימין — אף קשירה בימין. ואם קושרים ביד ימין, מוכרח שהתפילין מונחות על השמאל. שימו לב: ״יד ימין״ מופיעה פעמיים." },
     { type: "cloze", q: "השלימו את סדר רבי נתן", sentence: "כתיבה בימין, הלכך קשירה בימין, הלכך הנחה ב___.", choices: ["שמאל", "ימין", "שתי הידיים", "ראש"], answer: 0, note: "וקשרתם–וכתבתם: מה כתיבה בימין אף קשירה בימין — לכן מניחים בשמאל." },
     { type: "mc", q: "מניין לרבי יוסי החורם הנחה בשמאל, אחרי שנדחה מ״יד ימינו״?", choices: ["מהברייתא של שלושת הפסוקים", "מדרשת רבי נתן (כתיבה–קשירה)", "מציץ", "אין לו מקור"], answer: 1, note: "נפקא ליה מהיכא דנפקא ליה לרבי נתן." },
     { type: "mc", q: "רב אשי דורש ״ידכה״ בה״א. מה המשמעות, ולמה לא ״שבכח״?", choices: ["כהה = היד החלשה; לא כתוב בחי״ת", "שבכח = היד החזקה; כתוב בחי״ת", "זו טעות סופר", "הכוונה ליד ימין של כהן"], answer: 0, note: "ידכה בה״י — כהה. רבי אבא: ואימא ידך שבכח? אמר ליה: מי כתיב בחי״ת?" },
-    { type: "tf", q: "רש״י מפרש ״כהה״ — היד החלשה, שאינה עיקר כוחו.", answer: true, note: "ידכה כתיב בה״א, לשון כהה: היד שאינה חזקה." }
+    { type: "tf", q: "רש״י מפרש ״כהה״ — היד החלשה, שאינה עיקר כוחו.", answer: true, note: "ידכה כתיב בה״א, לשון כהה: היד שאינה חזקה." },
+    { type: "mc", src: "tosafot", q: "תוספות מקשים על דרשת רבי נתן: אם הקשירה חייבת להיות ביד ימין — מה יעשה איטר?", choices: ["איטר פטור מתפילין", "איטר קושר ביד שהיא ימין אצלו, כלומר בשמאל של שאר בני אדם", "איטר קושר בשתי ידיו", "התוספות משאירים זאת בקושיה בלי כל תשובה"], answer: 1, note: "תוס׳ לז. ד״ה מה כתיבה בימין. ״ימין״ נמדדת לפי האדם עצמו: היד החזקה שבה הוא כותב. אצל איטר זו השמאל, ולכן הוא מניח על ימינו. זה מתחבר ישירות לסוגיא יא." }
   ],
   k: [
     { type: "table", q: "מחלוקת בגידם", headers: ["ברייתא", "מי שאין לו זרוע"], rows: [
@@ -1304,28 +1717,47 @@ const QUESTIONS = {
       { label: "איטר", answer: "ימין שלו (היד החלשה אצלו)" },
       { label: "שולט בשתי ידיו (לפי אביי)", answer: "שמאל של כל אדם" }
     ], bank: ["שמאל של כל אדם", "ימין שלו (היד החלשה אצלו)", "שתי הידיים יחד"], note: "איטר מניח בימינו שהוא שמאלו. אביי: ״שמאלו של כל אדם״ — בשולט בשתי ידיו." },
+    { type: "stage", q: "זהו את שלב הסוגיא", phrase: "כִּי תַּנְיָא הַהִיא — בְּשׁוֹלֵט בִּשְׁתֵּי יָדָיו.", choices: ["קושיה", "תירוץ", "מעשה"], answer: 1, hint: "מה עושה כאן אביי מול שתי הברייתות?", note: "״כי תניא ההיא — ב…״ היא נוסחה קבועה של תירוץ: מעמידים כל ברייתא במקרה אחר, וכך שתיהן נכונות." },
     { type: "mc", q: "איך אביי מיישב את שתי הברייתות?", choices: ["שתיהן על איטר", "״בימינו שהוא שמאלו״ — איטר; ״בשמאלו של כל אדם״ — שולט בשתי ידיו", "שתיהן על גידם", "אין יישוב"], answer: 1, note: "כי תניא ההיא — בשולט בשתי ידיו." },
+    { type: "pick", q: "בחרו את המילה הנכונה בכל שורה", hint: "לפי מסקנת הסוגיא.", lines: [
+      { before: "אצל איטר, ״שמאל״ שבתורה פירושה ", choices: ["צד שמאל של הגוף", "היד החלשה שלו"], answer: 1, after: "." },
+      { before: "לכן איטר מניח תפילין על ", choices: ["ימינו", "שמאלו"], answer: 0, after: "." },
+      { before: "מי ששולט בשתי ידיו מניח על ", choices: ["ימינו", "שמאלו"], answer: 1, after: " — שמאל של כל אדם." }
+    ], note: "אצל איטר הכל מתהפך, כי המדד הוא כוח היד ולא הצד. אצל שולט בשתי ידיו אין יד חלשה — ולכן חוזרים לשמאל הרגיל." },
     { type: "tf", q: "לאיטר, ״שמאל״ פירושו תמיד צד שמאל של הגוף, כמו אצל כולם.", answer: false, note: "אצלו ״שמאל״ = היד החלשה, גם אם זו הימין של שאר בני אדם." }
   ],
   l: [
+    { type: "typein", q: "איך נקרא בגמרא מקום הנחת התפילין בזרוע?", sentence: "תנא דבי מנשה: ״על ידך״ — זו ______.", answer: "קיבורת", accept: ["קיבורת", "קבורת"], hint: "מילה אחת מלשון הגמרא.", note: "קיבורת = בשר הזרוע התפוח, מעל המרפק. לא כף היד." },
     { type: "mc", q: "מהי קיבורת?", choices: ["כף היד ממש", "השריר שבזרוע מעל המרפק", "העורף", "בין האצבעות"], answer: 1, note: "תנא דבי מנשה: על ידך — זו קיבורת. קיבורת היא בשר הזרוע התפוח, מעל המרפק — לא כף היד." },
     { type: "table", q: "מלאו את הרעיון של כל מקור", headers: ["מקור", "הרעיון"], rows: [
       { label: "היקש לראש", answer: "כמו גובה שבראש" },
       { label: "רבי אליעזר — לך לאות", answer: "מקום שאחרים לא רואים" },
       { label: "רבי יצחק — על לבבכם", answer: "כנגד הלב" }
     ], bank: ["כמו גובה שבראש", "מקום שאחרים לא רואים", "כנגד הלב", "בין הגבות ממש"], note: "שלוש דרשות למקום הקיבורת, לא לכף היד הגלויה." },
+    { type: "multi", q: "מה נכון על שלוש הדרשות?", hint: "יותר מאחד נכון.", rows: [
+      { text: "כל שלוש הדרשות מגיעות לאותה מסקנה — הקיבורת.", ok: true },
+      { text: "״לך לאות ולא לאחרים לאות״ מלמד שהמקום מכוסה.", ok: true },
+      { text: "״על לבבכם״ מלמד שהתפילין יהיו כנגד הלב.", ok: true },
+      { text: "לפי אחת הדרשות מניחים על כף היד הגלויה.", ok: false }
+    ], note: "שלוש דרכים שונות מגיעות לאותו מקום — סימן חזק במיוחד בסוגיא. זו תופעה שכיחה: כמה מקורות לדין אחד." },
     { type: "mc", q: "מה חידש אמימר במעשה החבישה?", choices: ["חייבים להסתיר את התפילין תמיד מתחת לבגד", "הפסוק ״לך לאות״ מלמד את המקום, לא שחייבים להסתיר בפועל", "אסור להניח כשיש חבישה", "מניחים על כף היד כשיש פצע"], answer: 1, note: "במקום ״לך לאות״ איתמר — המקום הנסתר בזרוע, לא חיוב הסתרה בכל מצב." }
   ],
   m: [
     { type: "cloze", q: "השלימו את מקום של ראש", sentence: "בין עיניך — זו ___, מקום שמוחו של תינוק רופס.", choices: ["קדקוד", "מצח", "עורף", "כף היד"], answer: 0, note: "תנא דבי מנשה: בין עיניך — זו קדקוד. רש״י: הרך שבקדקוד אצל תינוק." },
     { type: "tf", q: "רבי כעס על פלימו כי חשב ששאלת שני הראשים היא ליצנות — עד שבא מעשה אמיתי.", answer: true, note: "או קום גלי או קבל עלך שמתא. אדהכי אתא ההוא גברא עם תינוק שיש לו תרי רישי." },
+    { type: "tf", src: "tosafot", q: "תוספות מציינים שיש מדרש על אדם עם שני ראשים שאשמדאי העלה מן הארץ.", answer: true, note: "תוס׳ לז. ד״ה או קום גלי. התוספות מראים שהשאלה של פלימו לא הייתה מופרכת — יש לה בסיס במדרש." },
     { type: "mc", q: "למה חייבו עשרה סלעים בפדיון תינוק עם שני ראשים?", choices: ["כי יש שני ילדים נפרדים", "כי התורה תלתה את הפדיון בגלגולת — ושתי גולגולות", "זה קנס על שאלת פלימו", "כי רבי כעס"], answer: 1, note: "שאני הכא, דבגולגולת תלא רחמנא. מי שלא יחיה אינו נפדה (״אך — חלק״), אבל כאן יש שתי גולגולות חיות." },
     { type: "mc", q: "מאיפה למדים ש״בין עיניך״ הוא גובה הראש ולא בין העיניים ממש?", choices: ["רק מתקנת חכמים", "גזירה שווה מקרחה: מקום שעושה קרחה; ורבי יהודה — מקום הראוי לנגע אחד", "מציץ בלבד", "מ״ידכה״"], answer: 1, note: "לא תשימו קרחה בין עיניכם — מקום שיש בו שיער. רבי יהודה: מקום הראוי ליטמא בנגע אחד." },
+    { type: "flow", q: "בנו את הגזירה השווה", hint: "גררו לכל שלב את התוכן שלו.", rows: [
+      { label: "כאן נאמר", answer: "בין עיניך — בתפילין" },
+      { label: "ולהלן נאמר", answer: "בין עיניכם — בקרחה למת" },
+      { label: "מה להלן", answer: "בגובה הראש, מקום שעושה קרחה" },
+      { label: "אף כאן", answer: "בגובה הראש, מקום שעושה קרחה" }
+    ], bank: ["בין עיניך — בתפילין", "בין עיניכם — בקרחה למת", "בגובה הראש, מקום שעושה קרחה", "בין הגבות ממש"], note: "גזירה שווה: מילה זהה בשני מקומות מעבירה את הדין מזה לזה. שימו לב שהתשובה של שני השלבים האחרונים זהה — זה בדיוק מה שגזירה שווה עושה." },
     { type: "tf", q: "״שער צהוב״ בסוף הסוגיא בא לומר שבין העיניים מתאים לנגע אחד, ולכן מניחים שם.", answer: false, note: "להיפך: בין העיניים יש בשר ושער, שער לבן ושער צהוב — לא נגע אחד. לכן מוציאים את ״בין עיניך ממש״." },
     { type: "tf", q: "רש״י: מקום הקרחה הוא בגובה הראש, במקום השיער, לא במצח החלק.", answer: true, note: "מה להלן מקום שעושה קרחה — אף כאן בגובה הראש, מקום השיער." }
   ]
 };
-
 let ARAMAIC = {
   a: [
     { ar: "אִינִי", he: "האם באמת כך?" },
@@ -1570,9 +2002,13 @@ const SUGYOT = {
   }
 };
 
+// לשון המפרשים — מוזרק כאן ב־MEFARSHIM_DATA למטה.
+const MEFARSHIM = {};
+
 const CONTENT_KEY = "tefillin-content-v1";
 const DEFAULT_QUESTIONS = JSON.parse(JSON.stringify(QUESTIONS));
 const DEFAULT_ARAMAIC = JSON.parse(JSON.stringify(ARAMAIC));
+const DEFAULT_MEFARSHIM = JSON.parse(JSON.stringify(MEFARSHIM));
 const DEFAULT_SUGYA_CONTENT = (function () {
   const out = {};
   Object.keys(SUGYOT).forEach(function (id) {
@@ -1709,7 +2145,12 @@ function saveContentEdits() {
       })
     };
   });
-  localStorage.setItem(CONTENT_KEY, JSON.stringify({ sugyot: sugyot, questions: QUESTIONS, aramaic: ARAMAIC }));
+  localStorage.setItem(CONTENT_KEY, JSON.stringify({
+    sugyot: sugyot,
+    questions: QUESTIONS,
+    aramaic: ARAMAIC,
+    mefarshim: typeof MEFARSHIM === "undefined" ? {} : MEFARSHIM
+  }));
 }
 function isLegacyAramaicMatch(q) {
   if (!q || q.type !== "match") return false;
@@ -1745,6 +2186,12 @@ function applyContentSave(data) {
       ARAMAIC[id] = data.aramaic[id].map(function (w) {
         return { ar: w.ar || "", he: w.he || "" };
       }).filter(function (w) { return w.ar || w.he; });
+    });
+  }
+  if (data.mefarshim && typeof MEFARSHIM !== "undefined") {
+    Object.keys(data.mefarshim).forEach(function (id) {
+      if (!Array.isArray(data.mefarshim[id])) return;
+      MEFARSHIM[id] = data.mefarshim[id];
     });
   }
   if (data.sugyot) {
@@ -2387,6 +2834,17 @@ function renderLists() {
       btn.querySelector(".dot").style.background = s.color;
       btn.querySelector(".dot").textContent = s.num;
       btn.querySelector("span:last-child").innerHTML = s.num + " · " + s.title + "<small>" + s.daf + (zoneOnPage ? " · בעמוד זה" : "") + "</small>";
+      const pct = masteryOf(id);
+      if (!forMeasure && pct >= 0) {
+        const bar = document.createElement("span");
+        bar.className = "mastery-bar";
+        bar.title = "שליטה: " + pct + "%";
+        const fill = document.createElement("i");
+        fill.style.width = Math.max(6, pct) + "%";
+        fill.style.background = masteryColor(pct);
+        bar.appendChild(fill);
+        btn.querySelector("span:last-child").appendChild(bar);
+      }
       btn.addEventListener("click", function () {
         if (forMeasure) {
           const zone = (zoneOnPage || ZONES.find(function (z) { return z.sugya === id; }));
@@ -2555,6 +3013,7 @@ function openSugya(id) {
     wrap.querySelector(".g-text").innerHTML = row.html;
     host.appendChild(wrap);
   });
+  applyGlossTooltips(host);
   quizSugya = id;
   quizIndex = 0;
   quizPicked = {};
@@ -2575,6 +3034,116 @@ function closeSugya() {
   }
 }
 
+const SOUND_KEY = "tefillin-sound-v1";
+const MASTERY_KEY = "tefillin-mastery-v1";
+
+let soundOn = localStorage.getItem(SOUND_KEY) !== "off";
+let audioCtx = null;
+function tone(freq, start, dur, type, peak) {
+  if (!soundOn) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const t0 = audioCtx.currentTime + start;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type || "sine";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(peak || 0.14, t0 + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.02);
+  } catch (e) {}
+}
+function playCorrect() { tone(660, 0, 0.16, "sine", 0.16); tone(880, 0.09, 0.22, "sine", 0.14); }
+function playWrong() { tone(196, 0, 0.2, "triangle", 0.14); tone(147, 0.1, 0.25, "triangle", 0.12); }
+function playTap() { tone(520, 0, 0.07, "sine", 0.08); }
+function playWin() {
+  [523, 659, 784, 1047].forEach(function (f, i) { tone(f, i * 0.11, 0.18, "sine", 0.13); });
+  tone(1319, 0.46, 0.3, "sine", 0.12);
+}
+function setSoundOn(on) {
+  soundOn = on;
+  localStorage.setItem(SOUND_KEY, on ? "on" : "off");
+  const btn = document.getElementById("soundToggle");
+  if (btn) {
+    btn.setAttribute("aria-pressed", String(on));
+    btn.textContent = on ? "🔊" : "🔇";
+  }
+}
+
+let MASTERY = {};
+try { MASTERY = JSON.parse(localStorage.getItem(MASTERY_KEY) || "{}") || {}; } catch (e) { MASTERY = {}; }
+function noteAttempt(sugyaId, ok) {
+  if (!sugyaId) return;
+  const rec = MASTERY[sugyaId] || { c: 0, w: 0 };
+  if (ok) rec.c += 1; else rec.w += 1;
+  MASTERY[sugyaId] = rec;
+  try { localStorage.setItem(MASTERY_KEY, JSON.stringify(MASTERY)); } catch (e) {}
+  if (ok) playCorrect(); else playWrong();
+}
+// ציון שליטה: תשובה שגויה שוקלת פי 1.5, ומעט נתונים נמשך אל 50.
+function masteryOf(sugyaId) {
+  const rec = MASTERY[sugyaId];
+  if (!rec) return -1;
+  const n = rec.c + rec.w;
+  if (!n) return -1;
+  const raw = rec.c / (rec.c + rec.w * 1.5);
+  const conf = Math.min(1, n / 6);
+  return Math.round((raw * conf + 0.5 * (1 - conf)) * 100);
+}
+function masteryColor(pct) {
+  if (pct < 0) return "transparent";
+  return "hsl(" + Math.round((pct / 100) * 130) + ", 68%, 46%)";
+}
+
+// הופך [גלוס] שאחרי מילה לטולטיפ מרחף מעל אותה מילה.
+// עד שלוש מילים עבריות, כולל סימן פיסוק אחד בסוף.
+const GLOSS_WORD = /([\u0590-\u05FF"'״׳]+(?:[\s\u00A0]+[\u0590-\u05FF"'״׳]+){0,2}[?!.,;:]?)\s*$/;
+function applyGlossTooltips(host) {
+  function tipFor(text) {
+    const tip = document.createElement("i");
+    tip.textContent = text;
+    return tip;
+  }
+  function wireOpen(el) {
+    el.tabIndex = 0;
+    el.addEventListener("click", function () {
+      const open = el.classList.contains("is-open");
+      host.querySelectorAll(".gw.is-open").forEach(function (o) { o.classList.remove("is-open"); });
+      if (!open) { el.classList.add("is-open"); playTap(); }
+    });
+  }
+  host.querySelectorAll("span.gloss").forEach(function (g) {
+    const text = (g.textContent || "").replace(/^\s*\[|\]\s*$/g, "").trim();
+    const prev = g.previousSibling;
+    if (!text || !prev) return;
+    // מילה מודגשת לפני הגלוס — עוטפים את האלמנט עצמו.
+    if (prev.nodeType === 1) {
+      prev.classList.add("gw");
+      prev.appendChild(tipFor(text));
+      wireOpen(prev);
+      g.remove();
+      return;
+    }
+    if (prev.nodeType !== 3) return;
+    const raw = prev.nodeValue.replace(/\s+$/, "");
+    const m = raw.match(GLOSS_WORD);
+    if (!m) return;
+    g.remove();
+    prev.nodeValue = raw.slice(0, raw.length - m[1].length);
+    const wrap = document.createElement("span");
+    wrap.className = "gw";
+    wrap.appendChild(document.createTextNode(m[1]));
+    wrap.appendChild(tipFor(text));
+    wireOpen(wrap);
+    prev.parentNode.insertBefore(wrap, prev.nextSibling);
+  });
+}
+
 let quizSugya = null;
 let quizIndex = 0;
 let quizPicked = {};
@@ -2584,29 +3153,82 @@ function quizList() {
   return (QUESTIONS[quizSugya] || []);
 }
 function setSugyaTab(which) {
-  const gemaraOn = which === "gemara";
-  const quizOn = which === "quiz";
-  const arOn = which === "aramaic";
-  document.getElementById("tabGemara").classList.toggle("is-on", gemaraOn);
-  document.getElementById("tabQuiz").classList.toggle("is-on", quizOn);
-  document.getElementById("tabAramaic").classList.toggle("is-on", arOn);
-  document.getElementById("tabGemara").setAttribute("aria-selected", String(gemaraOn));
-  document.getElementById("tabQuiz").setAttribute("aria-selected", String(quizOn));
-  document.getElementById("tabAramaic").setAttribute("aria-selected", String(arOn));
-  document.getElementById("sugyaGemara").hidden = !gemaraOn;
-  document.getElementById("tagLegend").hidden = !gemaraOn;
-  document.getElementById("sugyaQuiz").hidden = !quizOn;
-  document.getElementById("sugyaAramaic").hidden = !arOn;
-  if (gemaraOn) requestAnimationFrame(function () { requestAnimationFrame(fitSugyaType); });
-  else if (quizOn) renderQuiz();
+  const map = {
+    gemara: ["tabGemara", "sugyaGemara"],
+    mefarshim: ["tabMefarshim", "sugyaMefarshim"],
+    aramaic: ["tabAramaic", "sugyaAramaic"],
+    quiz: ["tabQuiz", "sugyaQuiz"]
+  };
+  Object.keys(map).forEach(function (key) {
+    const on = key === which;
+    const tab = document.getElementById(map[key][0]);
+    tab.classList.toggle("is-on", on);
+    tab.setAttribute("aria-selected", String(on));
+    document.getElementById(map[key][1]).hidden = !on;
+  });
+  document.getElementById("tagLegend").hidden = which !== "gemara";
+  if (which === "gemara") requestAnimationFrame(function () { requestAnimationFrame(fitSugyaType); });
+  else if (which === "quiz") renderQuiz();
+  else if (which === "mefarshim") renderMefarshim();
   else renderAramaic();
 }
 function quizKindLabel(item) {
   if (item.type === "tf") return "נכון / לא נכון";
   if (item.type === "match") return "התאמת מושגים";
   if (item.type === "cloze") return "השלמת משפט";
-  if (item.type === "table") return "טבלה עם מאגר";
+  if (item.type === "table") return "גרירת פתקים לטבלה";
+  if (item.type === "order") return "סידור לפי הסדר";
+  if (item.type === "flow") return "תרשים מהלך";
+  if (item.type === "pick") return "בחירה בתוך המשפט";
+  if (item.type === "multi") return "סימון כל הנכונות";
+  if (item.type === "stage") return "זיהוי שלב הסוגיא";
+  if (item.type === "typein") return "כתיבת התשובה";
   return "רב־ברירה";
+}
+const SRC_LABEL = { rashi: "רש״י", tosafot: "תוספות" };
+// האם השאלה כבר נענתה נכון — לצביעת נקודות ההתקדמות.
+function quizOutcome(item, st) {
+  if (st === undefined || st === null) return null;
+  if (typeof st !== "object") {
+    const correct = item.type === "tf" ? (item.answer ? 0 : 1) : item.answer;
+    return st === correct ? "right" : "wrong";
+  }
+  if (st.kind === "match") return st.matched && st.matched.length === (item.pairs || []).length ? "right" : null;
+  if (st.kind === "table" || st.kind === "flow") {
+    const rows = item.rows || [];
+    if (!rows.length) return null;
+    return rows.every(function (r, i) { return st.fill[i] === r.answer; }) ? "right" : null;
+  }
+  if (st.kind === "order") return st.placed && st.placed.length === (item.items || []).length ? "right" : null;
+  if (st.kind === "pick") {
+    const lines = item.lines || [];
+    const done = lines.every(function (_, i) { return st.pick[i] !== undefined; });
+    if (!done) return null;
+    return lines.every(function (l, i) { return st.pick[i] === l.answer; }) ? "right" : "wrong";
+  }
+  if (st.kind === "multi") {
+    if (!st.checked) return null;
+    return st.wasRight ? "right" : "wrong";
+  }
+  if (st.kind === "typein") {
+    if (!st.checked) return null;
+    return st.wasRight ? "right" : "wrong";
+  }
+  return null;
+}
+function renderQuizDots(list) {
+  const host = document.getElementById("quizDots");
+  host.innerHTML = "";
+  list.forEach(function (item, i) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("aria-label", "שאלה " + (i + 1));
+    const out = quizOutcome(item, quizPicked[i]);
+    if (out) b.classList.add(out === "right" ? "is-right" : "is-wrong");
+    if (i === quizIndex) b.classList.add("is-now");
+    b.addEventListener("click", function () { quizIndex = i; renderQuiz(); });
+    host.appendChild(b);
+  });
 }
 function shuffleIdx(n) {
   const a = [];
@@ -2627,21 +3249,39 @@ function renderQuiz() {
   const note = document.getElementById("quizNote");
   document.getElementById("quizPrev").disabled = quizIndex <= 0;
   document.getElementById("quizNext").disabled = quizIndex >= list.length - 1;
+  const src = document.getElementById("quizSrc");
   if (!item) {
     progress.textContent = "";
     kind.textContent = "";
+    src.hidden = true;
+    document.getElementById("quizDots").innerHTML = "";
     qEl.textContent = "אין שאלות לסוגיא זו";
     opts.innerHTML = "";
     note.hidden = true;
     return;
   }
-  progress.textContent = "שאלה " + (quizIndex + 1) + " מתוך " + list.length;
+  renderQuizDots(list);
+  progress.textContent = (quizIndex + 1) + " / " + list.length;
   kind.textContent = quizKindLabel(item);
+  src.hidden = !item.src;
+  if (item.src) {
+    src.textContent = SRC_LABEL[item.src] || item.src;
+    src.classList.toggle("is-rashi", item.src === "rashi");
+  }
   qEl.textContent = item.q;
   opts.innerHTML = "";
+  opts.classList.remove("pop-in");
+  void opts.offsetWidth;
+  opts.classList.add("pop-in");
   if (item.type === "match") renderMatchQuiz(item, opts, note);
   else if (item.type === "cloze") renderClozeQuiz(item, opts, note);
   else if (item.type === "table") renderTableQuiz(item, opts, note);
+  else if (item.type === "flow") renderFlowQuiz(item, opts, note);
+  else if (item.type === "order") renderOrderQuiz(item, opts, note);
+  else if (item.type === "pick") renderPickQuiz(item, opts, note);
+  else if (item.type === "multi") renderMultiQuiz(item, opts, note);
+  else if (item.type === "typein") renderTypeinQuiz(item, opts, note);
+  else if (item.type === "stage") renderStageQuiz(item, opts, note);
   else renderChoiceQuiz(item, opts, note);
 }
 function showQuizNote(item, note, done) {
@@ -2669,11 +3309,45 @@ function renderChoiceQuiz(item, opts, note) {
     }
     btn.addEventListener("click", function () {
       quizPicked[quizIndex] = i;
+      noteAttempt(quizSugya, i === correct);
       renderQuiz();
     });
     opts.appendChild(btn);
   });
   showQuizNote(item, note, picked !== undefined && typeof picked !== "object");
+}
+function renderStageQuiz(item, opts, note) {
+  const picked = quizPicked[quizIndex];
+  const answered = picked !== undefined && typeof picked !== "object";
+  const phrase = document.createElement("p");
+  phrase.className = "stage-phrase";
+  phrase.textContent = item.phrase || "";
+  opts.appendChild(phrase);
+  const hint = document.createElement("p");
+  hint.className = "quiz-hint";
+  hint.textContent = item.hint || "איזה שלב בסוגיא פותחות המילים האלה?";
+  opts.appendChild(hint);
+  const row = document.createElement("div");
+  row.className = "stage-row";
+  (item.choices || []).forEach(function (label, i) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "stage-btn";
+    btn.textContent = label;
+    if (answered) {
+      btn.disabled = true;
+      if (i === item.answer) btn.classList.add("is-right");
+      else if (i === picked) btn.classList.add("is-wrong");
+    }
+    btn.addEventListener("click", function () {
+      quizPicked[quizIndex] = i;
+      noteAttempt(quizSugya, i === item.answer);
+      renderQuiz();
+    });
+    row.appendChild(btn);
+  });
+  opts.appendChild(row);
+  showQuizNote(item, note, answered);
 }
 function renderClozeQuiz(item, opts, note) {
   const parts = String(item.sentence || "").split("___");
@@ -2972,6 +3646,90 @@ function renderAramaic() {
     opts.appendChild(lex);
   }
 }
+let tableDrag = null;
+function tableDropSlackPx() {
+  const fine = window.matchMedia("(pointer: fine)").matches;
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  if (fine && !coarse) return 48;
+  if (fine) return 36;
+  return 22;
+}
+function distToRect(x, y, r) {
+  const cx = Math.min(Math.max(x, r.left), r.right);
+  const cy = Math.min(Math.max(y, r.top), r.bottom);
+  return Math.hypot(x - cx, y - cy);
+}
+function tableSlotFromPoint(x, y) {
+  const hit = document.elementFromPoint(x, y);
+  const slotEl = hit && hit.closest ? hit.closest("[data-table-slot]") : null;
+  if (slotEl) {
+    const n = Number(slotEl.dataset.tableSlot);
+    if (Number.isFinite(n)) return n;
+  }
+  const slack = tableDropSlackPx();
+  const nodes = document.querySelectorAll("[data-table-slot]");
+  let best = null;
+  let bestDist = slack;
+  nodes.forEach(function (node) {
+    const n = Number(node.dataset.tableSlot);
+    if (!Number.isFinite(n)) return;
+    const r = node.getBoundingClientRect();
+    const inflated = {
+      left: r.left - slack * 0.35,
+      top: r.top - slack * 0.55,
+      right: r.right + slack * 0.35,
+      bottom: r.bottom + slack * 0.55
+    };
+    const d = distToRect(x, y, inflated);
+    if (d <= bestDist) {
+      bestDist = d;
+      best = n;
+    }
+  });
+  return best;
+}
+function detachTableDragListeners() {
+  if (!tableDrag) return;
+  if (tableDrag.onMove) {
+    window.removeEventListener("pointermove", tableDrag.onMove);
+    window.removeEventListener("mousemove", tableDrag.onMove);
+    window.removeEventListener("pointerup", tableDrag.onUp);
+    window.removeEventListener("mouseup", tableDrag.onUp);
+    window.removeEventListener("pointercancel", tableDrag.onCancel);
+  }
+}
+function clearTableDrag() {
+  detachTableDragListeners();
+  if (tableDrag && tableDrag.ghost) tableDrag.ghost.remove();
+  document.querySelectorAll(".bank-chip-ghost").forEach(function (el) { el.remove(); });
+  tableDrag = null;
+  document.querySelectorAll(".quiz-slot.is-hover").forEach(function (el) {
+    el.classList.remove("is-hover");
+  });
+}
+function highlightTableHover(r) {
+  document.querySelectorAll("[data-table-slot]").forEach(function (el) {
+    const n = Number(el.dataset.tableSlot);
+    const locked = el.classList.contains("is-right");
+    el.classList.toggle("is-hover", r === n && !locked);
+  });
+}
+function placeTableWord(st, rows, r, word) {
+  if (!rows[r] || st.fill[r] === rows[r].answer) return;
+  st.fill[r] = word;
+  st.held = null;
+  noteAttempt(quizSugya, word === rows[r].answer);
+  if (word !== rows[r].answer) {
+    const badAt = r;
+    setTimeout(function () {
+      if (quizPicked[quizIndex] === st && st.fill[badAt] !== rows[badAt].answer) {
+        delete st.fill[badAt];
+        renderQuiz();
+      }
+    }, 500);
+  }
+  renderQuiz();
+}
 function renderTableQuiz(item, opts, note) {
   const rows = item.rows || [];
   let st = quizPicked[quizIndex];
@@ -2979,21 +3737,28 @@ function renderTableQuiz(item, opts, note) {
     st = { kind: "table", fill: {}, held: null };
     quizPicked[quizIndex] = st;
   }
+  clearTableDrag();
   const used = {};
   Object.keys(st.fill).forEach(function (k) { used[st.fill[k]] = true; });
   const hint = document.createElement("p");
   hint.className = "quiz-hint";
-  hint.textContent = "לחצו על מילה צהובה מהמאגר ואז על המשבצת הריקה. יש במאגר גם מילה שלא שייכת.";
+  hint.textContent = "גררו פתק אל המשבצת — או לחצו על פתק ואז על המשבצת. יש במאגר גם מילה שלא שייכת.";
   opts.appendChild(hint);
+  const wrap = document.createElement("div");
+  wrap.className = "quiz-table-wrap";
   const table = document.createElement("table");
   table.className = "quiz-table";
+  table.innerHTML = '<colgroup><col class="quiz-col-label"><col class="quiz-col-slot"></colgroup>';
+  const thead = document.createElement("thead");
   const head = document.createElement("tr");
   (item.headers || ["", ""]).forEach(function (h) {
     const th = document.createElement("th");
     th.textContent = h;
     head.appendChild(th);
   });
-  table.appendChild(head);
+  thead.appendChild(head);
+  table.appendChild(thead);
+  const tbody = document.createElement("tbody");
   const allRight = rows.every(function (row, r) { return st.fill[r] === row.answer; });
   rows.forEach(function (row, r) {
     const tr = document.createElement("tr");
@@ -3003,14 +3768,18 @@ function renderTableQuiz(item, opts, note) {
     const slot = document.createElement("button");
     slot.type = "button";
     slot.className = "quiz-slot";
+    slot.dataset.tableSlot = String(r);
     const filled = st.fill[r];
     if (filled) {
       slot.textContent = filled;
       if (filled === row.answer) slot.classList.add("is-right");
       else slot.classList.add("is-wrong");
+    } else if (st.held != null) {
+      slot.textContent = "הניחו כאן";
+      slot.classList.add("is-on");
     } else {
-      slot.textContent = st.held != null ? "הניחו כאן" : "";
-      if (st.held != null) slot.classList.add("is-on");
+      slot.textContent = "גררו לכאן";
+      slot.classList.add("is-empty");
     }
     slot.disabled = filled === row.answer;
     slot.addEventListener("click", function () {
@@ -3021,49 +3790,500 @@ function renderTableQuiz(item, opts, note) {
         return;
       }
       if (st.held == null) return;
-      const word = (item.bank || [])[st.held];
-      st.fill[r] = word;
-      if (word === row.answer) {
-        st.held = null;
-      } else {
-        const badAt = r;
-        setTimeout(function () {
-          if (quizPicked[quizIndex] === st && st.fill[badAt] !== rows[badAt].answer) {
-            delete st.fill[badAt];
-            renderQuiz();
-          }
-        }, 500);
-        st.held = null;
-      }
-      renderQuiz();
+      placeTableWord(st, rows, r, (item.bank || [])[st.held]);
     });
     tdR.appendChild(slot);
     tr.appendChild(tdL);
     tr.appendChild(tdR);
-    table.appendChild(tr);
+    tbody.appendChild(tr);
   });
-  opts.appendChild(table);
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+  opts.appendChild(wrap);
+  appendWordBank(item, st, rows, opts);
+  if (allRight && rows.length > 0) playWinOnce();
+  showQuizNote(item, note, allRight && rows.length > 0);
+}
+
+// מאגר הפתקים הנגררים — משותף לטבלה ולתרשים הזרימה.
+function appendWordBank(item, st, rows, opts) {
+  const used = {};
+  Object.keys(st.fill).forEach(function (k) { used[st.fill[k]] = true; });
+  const cap = document.createElement("p");
+  cap.className = "bank-caption";
+  cap.textContent = "מאגר הפתקים";
+  opts.appendChild(cap);
   const bank = document.createElement("div");
   bank.className = "bank-row";
   (item.bank || []).forEach(function (word, i) {
     const chip = document.createElement("button");
     chip.type = "button";
     chip.className = "bank-chip";
+    chip.draggable = false;
     chip.textContent = word;
     const taken = !!used[word] && Object.keys(st.fill).some(function (k) { return st.fill[k] === word && rows[k].answer === word; });
     const sittingWrong = Object.keys(st.fill).some(function (k) { return st.fill[k] === word && rows[k].answer !== word; });
     if (taken && !sittingWrong) chip.classList.add("is-used");
     if (st.held === i) chip.classList.add("is-on");
     chip.disabled = taken && !sittingWrong;
-    chip.addEventListener("click", function () {
-      if (chip.disabled) return;
+    function moveTableChip(e) {
+      if (!tableDrag || tableDrag.i !== i) return;
+      const dx = e.clientX - tableDrag.startX;
+      const dy = e.clientY - tableDrag.startY;
+      if (!tableDrag.moved && Math.hypot(dx, dy) < 8) return;
+      tableDrag.moved = true;
+      chip.classList.add("is-dragging");
+      if (!tableDrag.ghost) {
+        const ghost = document.createElement("div");
+        ghost.className = "bank-chip-ghost";
+        ghost.textContent = word;
+        ghost.setAttribute("aria-hidden", "true");
+        document.body.appendChild(ghost);
+        tableDrag.ghost = ghost;
+      }
+      tableDrag.ghost.style.left = (e.clientX - tableDrag.offsetX) + "px";
+      tableDrag.ghost.style.top = (e.clientY - tableDrag.offsetY) + "px";
+      const hover = tableSlotFromPoint(e.clientX, e.clientY);
+      highlightTableHover(hover != null && !(st.fill[hover] === rows[hover].answer) ? hover : null);
+    }
+    function finishChipPointer(e) {
+      if (!tableDrag || tableDrag.i !== i) return;
+      const moved = tableDrag.moved;
+      const dropX = e.clientX;
+      const dropY = e.clientY;
+      clearTableDrag();
+      chip.classList.remove("is-dragging");
+      if (moved) {
+        const slot = tableSlotFromPoint(dropX, dropY);
+        if (slot != null) placeTableWord(st, rows, slot, word);
+        return;
+      }
       st.held = st.held === i ? null : i;
       renderQuiz();
+    }
+    function cancelChipPointer() {
+      if (!tableDrag || tableDrag.i !== i) return;
+      clearTableDrag();
+      chip.classList.remove("is-dragging");
+    }
+    chip.addEventListener("pointerdown", function (e) {
+      if (chip.disabled) return;
+      e.preventDefault();
+      const rect = chip.getBoundingClientRect();
+      tableDrag = {
+        i: i,
+        word: word,
+        startX: e.clientX,
+        startY: e.clientY,
+        offsetX: e.clientX - rect.left,
+        offsetY: e.clientY - rect.top,
+        moved: false,
+        ghost: null,
+        onMove: moveTableChip,
+        onUp: finishChipPointer,
+        onCancel: cancelChipPointer
+      };
+      try { chip.setPointerCapture(e.pointerId); } catch (err) {}
+      window.addEventListener("pointermove", moveTableChip);
+      window.addEventListener("mousemove", moveTableChip);
+      window.addEventListener("pointerup", finishChipPointer);
+      window.addEventListener("mouseup", finishChipPointer);
+      window.addEventListener("pointercancel", cancelChipPointer);
     });
     bank.appendChild(chip);
   });
   opts.appendChild(bank);
+}
+
+// תרשים מהלך: שלבים קבועים עם משבצות גרירה ביניהם.
+function renderFlowQuiz(item, opts, note) {
+  const rows = item.rows || [];
+  let st = quizPicked[quizIndex];
+  if (!st || st.kind !== "flow") {
+    st = { kind: "flow", fill: {}, held: null };
+    quizPicked[quizIndex] = st;
+  }
+  clearTableDrag();
+  const hint = document.createElement("p");
+  hint.className = "quiz-hint";
+  hint.textContent = item.hint || "גררו פתק אל המשבצת בתרשים — או לחצו על פתק ואז על המשבצת.";
+  opts.appendChild(hint);
+  const flow = document.createElement("div");
+  flow.className = "flow";
+  const allRight = rows.every(function (row, r) { return st.fill[r] === row.answer; });
+  rows.forEach(function (row, r) {
+    if (r > 0) {
+      const arrow = document.createElement("div");
+      arrow.className = "flow-arrow";
+      arrow.textContent = "↓";
+      flow.appendChild(arrow);
+    }
+    const step = document.createElement("div");
+    step.className = "flow-step";
+    step.textContent = row.label;
+    flow.appendChild(step);
+    const arrow2 = document.createElement("div");
+    arrow2.className = "flow-arrow";
+    arrow2.textContent = "↓";
+    flow.appendChild(arrow2);
+    const slot = document.createElement("button");
+    slot.type = "button";
+    slot.className = "quiz-slot";
+    slot.dataset.tableSlot = String(r);
+    const filled = st.fill[r];
+    if (filled) {
+      slot.textContent = filled;
+      slot.classList.add(filled === row.answer ? "is-right" : "is-wrong");
+    } else if (st.held != null) {
+      slot.textContent = "הניחו כאן";
+      slot.classList.add("is-on");
+    } else {
+      slot.textContent = "גררו לכאן";
+      slot.classList.add("is-empty");
+    }
+    slot.disabled = filled === row.answer;
+    slot.addEventListener("click", function () {
+      if (filled === row.answer) return;
+      if (filled) { delete st.fill[r]; renderQuiz(); return; }
+      if (st.held == null) return;
+      placeTableWord(st, rows, r, (item.bank || [])[st.held]);
+    });
+    flow.appendChild(slot);
+  });
+  opts.appendChild(flow);
+  appendWordBank(item, st, rows, opts);
+  if (allRight && rows.length > 0) playWinOnce();
   showQuizNote(item, note, allRight && rows.length > 0);
+}
+
+// סידור: לוחצים על הפריטים לפי סדר המהלך; הנכון עולה לרצועה הממוספרת.
+function renderOrderQuiz(item, opts, note) {
+  const items = item.items || [];
+  let st = quizPicked[quizIndex];
+  if (!st || st.kind !== "order" || !st.pool || st.pool.length !== items.length) {
+    st = { kind: "order", placed: [], pool: shuffleIdx(items.length), bad: null };
+    quizPicked[quizIndex] = st;
+  }
+  const hint = document.createElement("p");
+  hint.className = "quiz-hint";
+  hint.textContent = item.hint || "לחצו על הפריטים לפי הסדר שקורה בסוגיא — הראשון קודם.";
+  opts.appendChild(hint);
+  if (item.goal) {
+    const goal = document.createElement("p");
+    goal.className = "order-goal";
+    goal.textContent = item.goal;
+    opts.appendChild(goal);
+  }
+  const strip = document.createElement("div");
+  strip.className = "order-strip" + (st.placed.length === items.length ? " is-full" : "");
+  if (!st.placed.length) {
+    const ph = document.createElement("p");
+    ph.className = "mef-empty";
+    ph.style.margin = "0";
+    ph.textContent = "כאן ייבנה הסדר";
+    strip.appendChild(ph);
+  }
+  st.placed.forEach(function (idx, n) {
+    const row = document.createElement("div");
+    row.className = "order-slot pop-in";
+    const num = document.createElement("b");
+    num.textContent = String(n + 1);
+    row.appendChild(num);
+    row.appendChild(document.createTextNode(items[idx]));
+    strip.appendChild(row);
+  });
+  opts.appendChild(strip);
+  const pool = document.createElement("div");
+  pool.className = "order-pool";
+  st.pool.forEach(function (idx) {
+    if (st.placed.indexOf(idx) >= 0) return;
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "bank-chip" + (st.bad === idx ? " is-wrong shake" : "");
+    chip.textContent = items[idx];
+    chip.addEventListener("click", function () {
+      const want = st.placed.length;
+      if (idx === want) {
+        st.placed.push(idx);
+        st.bad = null;
+        noteAttempt(quizSugya, true);
+        if (st.placed.length === items.length) playWinOnce();
+      } else {
+        st.bad = idx;
+        noteAttempt(quizSugya, false);
+        setTimeout(function () {
+          if (quizPicked[quizIndex] === st && st.bad === idx) { st.bad = null; renderQuiz(); }
+        }, 520);
+      }
+      renderQuiz();
+    });
+    pool.appendChild(chip);
+  });
+  opts.appendChild(pool);
+  showQuizNote(item, note, st.placed.length === items.length);
+}
+
+// בחירה בתוך המשפט: כמו ״הקף״ בחוברת — שתי אפשרויות בתוך שורה.
+function renderPickQuiz(item, opts, note) {
+  const lines = item.lines || [];
+  let st = quizPicked[quizIndex];
+  if (!st || st.kind !== "pick") {
+    st = { kind: "pick", pick: {} };
+    quizPicked[quizIndex] = st;
+  }
+  const hint = document.createElement("p");
+  hint.className = "quiz-hint";
+  hint.textContent = item.hint || "בכל שורה — לחצו על האפשרות הנכונה.";
+  opts.appendChild(hint);
+  const list = document.createElement("div");
+  list.className = "pick-list";
+  lines.forEach(function (line, li) {
+    const row = document.createElement("p");
+    row.className = "pick-line";
+    row.appendChild(document.createTextNode(line.before || ""));
+    (line.choices || []).forEach(function (label, ci) {
+      if (ci > 0) {
+        const sep = document.createElement("span");
+        sep.className = "pick-sep";
+        sep.textContent = "/";
+        row.appendChild(sep);
+      }
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "pick-opt";
+      btn.textContent = label;
+      const chosen = st.pick[li];
+      if (chosen !== undefined) {
+        btn.disabled = true;
+        if (ci === line.answer) btn.classList.add("is-right");
+        else if (ci === chosen) btn.classList.add("is-wrong");
+      }
+      btn.addEventListener("click", function () {
+        st.pick[li] = ci;
+        noteAttempt(quizSugya, ci === line.answer);
+        renderQuiz();
+      });
+      row.appendChild(btn);
+    });
+    row.appendChild(document.createTextNode(line.after || ""));
+    list.appendChild(row);
+  });
+  opts.appendChild(list);
+  const done = lines.length > 0 && lines.every(function (_, i) { return st.pick[i] !== undefined; });
+  if (done && lines.every(function (l, i) { return st.pick[i] === l.answer; })) playWinOnce();
+  showQuizNote(item, note, done);
+}
+
+// סימון כל הנכונות: מסמנים ובודקים בלחיצה אחת.
+function renderMultiQuiz(item, opts, note) {
+  const rows = item.rows || [];
+  let st = quizPicked[quizIndex];
+  if (!st || st.kind !== "multi") {
+    st = { kind: "multi", on: {}, checked: false, wasRight: false };
+    quizPicked[quizIndex] = st;
+  }
+  const hint = document.createElement("p");
+  hint.className = "quiz-hint";
+  hint.textContent = item.hint || "סמנו את כל המשפטים הנכונים, ואז לחצו ״בדקו אותי״.";
+  opts.appendChild(hint);
+  const list = document.createElement("div");
+  list.className = "multi-list";
+  rows.forEach(function (row, i) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    let cls = "multi-row" + (st.on[i] ? " is-on" : "");
+    if (st.checked) {
+      if (st.on[i] && row.ok) cls += " is-right";
+      else if (st.on[i] && !row.ok) cls += " is-wrong";
+      else if (!st.on[i] && row.ok) cls += " is-miss";
+    }
+    btn.className = cls;
+    const box = document.createElement("span");
+    box.className = "box";
+    box.textContent = st.checked && !st.on[i] && row.ok ? "✓" : "✓";
+    btn.appendChild(box);
+    btn.appendChild(document.createTextNode(row.text));
+    btn.disabled = st.checked;
+    btn.addEventListener("click", function () {
+      st.on[i] = !st.on[i];
+      playTap();
+      renderQuiz();
+    });
+    list.appendChild(btn);
+  });
+  opts.appendChild(list);
+  if (!st.checked) {
+    const check = document.createElement("button");
+    check.type = "button";
+    check.className = "quiz-check";
+    check.textContent = "בדקו אותי";
+    check.addEventListener("click", function () {
+      st.checked = true;
+      st.wasRight = rows.every(function (r, i) { return !!st.on[i] === !!r.ok; });
+      noteAttempt(quizSugya, st.wasRight);
+      if (st.wasRight) playWinOnce();
+      renderQuiz();
+    });
+    opts.appendChild(check);
+  }
+  showQuizNote(item, note, st.checked);
+}
+
+function normalizeAnswer(s) {
+  return String(s || "")
+    .replace(/[\u0591-\u05C7]/g, "")
+    .replace(/[״"׳'.,!?()\[\]־–—]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+// כתיבת התשובה: השוואה מקילה — בלי ניקוד, פיסוק או רווחים כפולים.
+function renderTypeinQuiz(item, opts, note) {
+  let st = quizPicked[quizIndex];
+  if (!st || st.kind !== "typein") {
+    st = { kind: "typein", value: "", checked: false, wasRight: false };
+    quizPicked[quizIndex] = st;
+  }
+  if (item.sentence) {
+    const s = document.createElement("p");
+    s.className = "quiz-sentence";
+    s.textContent = item.sentence;
+    opts.appendChild(s);
+  }
+  const hint = document.createElement("p");
+  hint.className = "quiz-hint";
+  hint.textContent = item.hint || "כתבו את התשובה ולחצו Enter. אין צורך בניקוד.";
+  opts.appendChild(hint);
+  const wrap = document.createElement("div");
+  wrap.className = "type-wrap";
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "type-in";
+  input.value = st.value;
+  input.placeholder = item.placeholder || "התשובה כאן";
+  input.disabled = st.checked && st.wasRight;
+  if (st.checked) input.classList.add(st.wasRight ? "is-right" : "is-wrong");
+  const accepts = [item.answer].concat(item.accept || []).map(normalizeAnswer);
+  function check() {
+    st.value = input.value;
+    st.checked = true;
+    st.wasRight = accepts.indexOf(normalizeAnswer(input.value)) >= 0;
+    noteAttempt(quizSugya, st.wasRight);
+    if (st.wasRight) playWinOnce();
+    renderQuiz();
+    if (!st.wasRight) {
+      const again = document.querySelector(".type-in");
+      if (again) again.focus();
+    }
+  }
+  input.addEventListener("input", function () { st.value = input.value; st.checked = false; });
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); check(); }
+  });
+  wrap.appendChild(input);
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "quiz-check";
+  btn.textContent = "בדקו אותי";
+  btn.disabled = st.checked && st.wasRight;
+  btn.addEventListener("click", check);
+  wrap.appendChild(btn);
+  opts.appendChild(wrap);
+  if (st.checked && !st.wasRight) {
+    const ans = document.createElement("p");
+    ans.className = "type-answer float-up";
+    ans.textContent = "התשובה: " + item.answer;
+    opts.appendChild(ans);
+  }
+  showQuizNote(item, note, st.checked);
+}
+
+const MEF_WHO = { rashi: "רש״י", tosafot: "תוספות" };
+function mefarshimFor(id) {
+  const base = (typeof MEFARSHIM === "undefined" ? {} : MEFARSHIM);
+  const intro = id === SUGYA_ORDER[0] ? (base.intro || []) : [];
+  return intro.concat(base[id] || []);
+}
+function renderMefarshim() {
+  const host = document.getElementById("sugyaMefarshim");
+  host.innerHTML = "";
+  const list = mefarshimFor(quizSugya);
+  if (!list.length) {
+    const p = document.createElement("p");
+    p.className = "mef-empty";
+    p.textContent = "לסוגיא זו לא נבחרו רש״י ותוספות.";
+    host.appendChild(p);
+    return;
+  }
+  const wrap = document.createElement("div");
+  wrap.className = "mefarshim";
+  list.forEach(function (m) {
+    const card = document.createElement("article");
+    card.className = "mef-card pop-in" + (m.who === "rashi" ? " is-rashi" : "");
+    const top = document.createElement("div");
+    top.className = "mef-top";
+    const who = document.createElement("span");
+    who.className = "mef-who";
+    who.textContent = MEF_WHO[m.who] || m.who;
+    top.appendChild(who);
+    if (m.daf) {
+      const daf = document.createElement("span");
+      daf.className = "mef-daf";
+      daf.textContent = "מנחות " + m.daf;
+      top.appendChild(daf);
+    }
+    card.appendChild(top);
+    if (m.title) {
+      const h = document.createElement("h3");
+      h.className = "mef-title";
+      h.textContent = m.title;
+      card.appendChild(h);
+    }
+    if (m.dh) {
+      const dh = document.createElement("p");
+      dh.className = "mef-dh";
+      dh.textContent = "ד״ה " + m.dh;
+      card.appendChild(dh);
+    }
+    if (m.text) {
+      const t = document.createElement("p");
+      t.className = "mef-text";
+      t.textContent = m.text;
+      card.appendChild(t);
+    }
+    if (m.explain) {
+      const e = document.createElement("p");
+      e.className = "mef-explain";
+      e.textContent = m.explain;
+      card.appendChild(e);
+    }
+    if (m.points && m.points.length) {
+      const ul = document.createElement("ul");
+      ul.className = "mef-points";
+      m.points.forEach(function (p) {
+        const li = document.createElement("li");
+        li.textContent = p;
+        ul.appendChild(li);
+      });
+      card.appendChild(ul);
+    }
+    if (m.takeaway) {
+      const tk = document.createElement("p");
+      tk.className = "mef-take";
+      tk.textContent = m.takeaway;
+      card.appendChild(tk);
+    }
+    wrap.appendChild(card);
+  });
+  host.appendChild(wrap);
+}
+
+let lastWinKey = null;
+// צליל סיום מתנגן פעם אחת לכל שאלה שהושלמה.
+function playWinOnce() {
+  const key = quizSugya + ":" + quizIndex;
+  if (lastWinKey === key) return;
+  lastWinKey = key;
+  playWin();
 }
 
 function stripHtml(html) {
@@ -3088,15 +4308,14 @@ function fillEditorSugyaSelect() {
 function setEditTab(which) {
   if (editTab === "parts" && which !== "parts") syncPartsTableFromDom();
   editTab = which;
-  document.getElementById("editTabParts").classList.toggle("is-on", which === "parts");
-  document.getElementById("editTabAramaic").classList.toggle("is-on", which === "aramaic");
-  document.getElementById("editTabQuiz").classList.toggle("is-on", which === "quiz");
-  document.getElementById("editTabParts").setAttribute("aria-selected", String(which === "parts"));
-  document.getElementById("editTabAramaic").setAttribute("aria-selected", String(which === "aramaic"));
-  document.getElementById("editTabQuiz").setAttribute("aria-selected", String(which === "quiz"));
-  document.getElementById("editorParts").hidden = which !== "parts";
-  document.getElementById("editorAramaic").hidden = which !== "aramaic";
-  document.getElementById("editorQuiz").hidden = which !== "quiz";
+  ["parts", "mefarshim", "aramaic", "quiz"].forEach(function (key) {
+    const on = key === which;
+    const tab = document.getElementById("editTab" + key.charAt(0).toUpperCase() + key.slice(1));
+    tab.classList.toggle("is-on", on);
+    tab.setAttribute("aria-selected", String(on));
+    document.getElementById("editor" + key.charAt(0).toUpperCase() + key.slice(1)).hidden = !on;
+  });
+  if (which === "mefarshim") renderEditorMefarshim();
 }
 function persistAndRefresh() {
   saveContentEdits();
@@ -3105,7 +4324,9 @@ function refreshOpenSugyaView() {
   if (!sugyaOverlay.classList.contains("is-open") || !quizSugya || !SUGYOT[quizSugya]) return;
   const keepTab = document.getElementById("tabQuiz").classList.contains("is-on")
     ? "quiz"
-    : (document.getElementById("tabAramaic").classList.contains("is-on") ? "aramaic" : "gemara");
+    : (document.getElementById("tabAramaic").classList.contains("is-on")
+      ? "aramaic"
+      : (document.getElementById("tabMefarshim").classList.contains("is-on") ? "mefarshim" : "gemara"));
   const keepIndex = quizIndex;
   const keepPicked = quizPicked;
   const keepArRound = aramaicRound;
@@ -3447,6 +4668,91 @@ function renderEditorAramaic() {
     list.push({ ar: "", he: "" });
     persistAndRefresh();
     renderEditorAramaic();
+  });
+  host.appendChild(add);
+}
+function ensureMefarshim(id) {
+  if (typeof MEFARSHIM === "undefined") return [];
+  if (!Array.isArray(MEFARSHIM[id])) MEFARSHIM[id] = [];
+  return MEFARSHIM[id];
+}
+function renderEditorMefarshim() {
+  const host = document.getElementById("editorMefarshim");
+  host.innerHTML = "";
+  const list = ensureMefarshim(editSugyaId);
+
+  const intro = document.createElement("p");
+  intro.className = "hint";
+  intro.style.margin = "0 0 12px";
+  intro.textContent = "רש״י ותוספות נבחרים לסוגיא. הלשון המקורית קוצרה לצורך הוראה; ההסבר והנקודות נכתבים בעברית פשוטה.";
+  host.appendChild(intro);
+
+  function field(label, value, onInput, isArea) {
+    const wrap = document.createElement("label");
+    wrap.className = "editor-field";
+    const cap = document.createElement("span");
+    cap.textContent = label;
+    const input = document.createElement(isArea ? "textarea" : "input");
+    if (!isArea) input.type = "text";
+    input.value = value || "";
+    input.addEventListener("input", function () { onInput(input.value); persistAndRefresh(); });
+    wrap.appendChild(cap);
+    wrap.appendChild(input);
+    return wrap;
+  }
+
+  list.forEach(function (m, index) {
+    const card = document.createElement("div");
+    card.className = "editor-card";
+    const head = document.createElement("div");
+    head.className = "editor-card-head";
+    const title = document.createElement("strong");
+    title.textContent = (MEF_WHO[m.who] || "מפרש") + " · " + (m.dh || "ללא ד״ה");
+    const actions = document.createElement("div");
+    actions.className = "editor-actions";
+    const swap = document.createElement("button");
+    swap.type = "button";
+    swap.className = "edit-btn";
+    swap.textContent = m.who === "rashi" ? "החלף לתוספות" : "החלף לרש״י";
+    swap.addEventListener("click", function () {
+      m.who = m.who === "rashi" ? "tosafot" : "rashi";
+      persistAndRefresh();
+      renderEditorMefarshim();
+    });
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "edit-btn danger";
+    del.textContent = "מחק";
+    del.addEventListener("click", function () {
+      list.splice(index, 1);
+      persistAndRefresh();
+      renderEditorMefarshim();
+    });
+    actions.appendChild(swap);
+    actions.appendChild(del);
+    head.appendChild(title);
+    head.appendChild(actions);
+    card.appendChild(head);
+    card.appendChild(field("דף", m.daf, function (v) { m.daf = v; }));
+    card.appendChild(field("דיבור המתחיל", m.dh, function (v) { m.dh = v; }));
+    card.appendChild(field("כותרת", m.title, function (v) { m.title = v; }));
+    card.appendChild(field("לשון המפרש", m.text, function (v) { m.text = v; }, true));
+    card.appendChild(field("הסבר בעברית", m.explain, function (v) { m.explain = v; }, true));
+    card.appendChild(field("נקודות (שורה לכל דעה)", (m.points || []).join("\n"), function (v) {
+      m.points = v.split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+    }, true));
+    card.appendChild(field("שורה תחתונה", m.takeaway, function (v) { m.takeaway = v; }));
+    host.appendChild(card);
+  });
+
+  const add = document.createElement("button");
+  add.type = "button";
+  add.className = "edit-btn primary";
+  add.textContent = "הוספת מפרש";
+  add.addEventListener("click", function () {
+    list.push({ who: "tosafot", daf: SUGYOT[editSugyaId] ? SUGYOT[editSugyaId].daf : "", dh: "", title: "", text: "", explain: "", points: [], takeaway: "" });
+    persistAndRefresh();
+    renderEditorMefarshim();
   });
   host.appendChild(add);
 }
@@ -4051,8 +5357,14 @@ document.getElementById("startBtn").addEventListener("click", function () {
 });
 document.getElementById("sugyaClose").addEventListener("click", closeSugya);
 document.getElementById("tabGemara").addEventListener("click", function () { setSugyaTab("gemara"); });
+document.getElementById("tabMefarshim").addEventListener("click", function () { setSugyaTab("mefarshim"); });
 document.getElementById("tabAramaic").addEventListener("click", function () { setSugyaTab("aramaic"); });
 document.getElementById("tabQuiz").addEventListener("click", function () { setSugyaTab("quiz"); });
+document.getElementById("soundToggle").addEventListener("click", function () {
+  setSoundOn(!soundOn);
+  if (soundOn) playTap();
+});
+setSoundOn(soundOn);
 document.getElementById("quizPrev").addEventListener("click", function () {
   if (quizIndex > 0) { quizIndex -= 1; renderQuiz(); }
 });
@@ -4126,6 +5438,9 @@ document.getElementById("editorSugya").addEventListener("change", function () {
 document.getElementById("editTabParts").addEventListener("click", function () {
   setEditTab("parts");
 });
+document.getElementById("editTabMefarshim").addEventListener("click", function () {
+  setEditTab("mefarshim");
+});
 document.getElementById("editTabAramaic").addEventListener("click", function () {
   setEditTab("aramaic");
 });
@@ -4146,8 +5461,12 @@ document.getElementById("editorReset").addEventListener("click", function () {
   }
   if (origQ) QUESTIONS[id] = JSON.parse(JSON.stringify(origQ));
   if (origA) ARAMAIC[id] = JSON.parse(JSON.stringify(origA));
+  if (typeof DEFAULT_MEFARSHIM !== "undefined" && DEFAULT_MEFARSHIM[id]) {
+    MEFARSHIM[id] = JSON.parse(JSON.stringify(DEFAULT_MEFARSHIM[id]));
+  }
   persistAndRefresh();
   renderEditorParts();
+  renderEditorMefarshim();
   renderEditorAramaic();
   renderEditorQuiz();
   renderZones();
