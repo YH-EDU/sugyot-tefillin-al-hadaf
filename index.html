@@ -6,10 +6,8 @@
   <title>סוגיות התפילין על הדף · מנחות לה:–לז:</title>
   <script>
     (function () {
-      var host = location.hostname;
-      var teacher = location.protocol === "file:" || host === "localhost" || host === "127.0.0.1";
-      window.TEACHER_MODE = teacher;
-      document.documentElement.classList.toggle("teacher", teacher);
+      window.TEACHER_MODE = false;
+      document.documentElement.classList.remove("teacher");
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1258,66 +1256,72 @@
     .order-pool { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
     .order-pool .bank-chip { min-width: 8.5rem; }
 
-    .quiz:has(.flow-board) { gap: 10px; }
-    .quiz:has(.flow-board) .quiz-cite-body {
-      max-height: 6.4rem;
-      overflow: auto;
-    }
+    .quiz:has(.flow-board) { gap: 12px; }
     .quiz:has(.flow-board) .quiz-q {
-      font-size: clamp(1.12rem, 1.9vw, 1.48rem);
+      font-size: clamp(1.16rem, 2vw, 1.55rem);
     }
     .flow-board {
       display: grid;
-      gap: 8px;
+      gap: 12px;
       width: 100%;
-      max-width: 58rem;
+      max-width: 40rem;
       margin-inline: auto;
     }
     .flow-board .quiz-hint { text-align: center; }
     .flow {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: stretch;
-      gap: 10px 12px;
+      flex-direction: column;
+      gap: 8px;
       width: 100%;
     }
     .flow-card {
-      flex: 1 1 9.4rem;
-      max-width: 14.8rem;
-      min-width: 8.2rem;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      align-items: stretch;
+      gap: 5px;
+      min-width: 0;
     }
     .flow-label {
       margin: 0;
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      font-size: 0.74rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: #f8efe0;
+      font-size: 0.82rem;
       font-weight: 800;
       color: var(--gold-deep);
-      line-height: 1.15;
-      letter-spacing: 0.02em;
+      line-height: 1.2;
     }
     .flow-card .quiz-slot {
-      flex: 1 1 auto;
-      min-height: 4.6rem;
-      padding: 8px 10px;
-      font-size: clamp(0.9rem, 1.35vw, 1.08rem);
-      line-height: 1.35;
+      min-height: 3.6rem;
+      padding: 12px 16px;
+      font-size: clamp(1rem, 1.5vw, 1.18rem);
+      line-height: 1.5;
+      text-align: right;
     }
     .flow-board .bank-caption { margin: 2px 0 0; }
     .flow-board .bank-row {
+      display: flex;
+      flex-direction: column;
       width: 100%;
       max-width: none;
       gap: 8px;
     }
     .flow-board .bank-chip {
-      max-width: 17.5rem;
+      display: flex;
+      width: 100%;
+      max-width: none;
       min-width: 0;
       min-height: 0;
-      padding: 8px 12px;
-      font-size: clamp(0.9rem, 1.3vw, 1.06rem);
+      justify-content: flex-start;
+      text-align: right;
+      padding: 12px 16px;
+      font-size: clamp(1rem, 1.45vw, 1.16rem);
+      line-height: 1.5;
     }
 
     .pick-list { display: grid; gap: 12px; }
@@ -1759,7 +1763,7 @@
     }
 
     .toast {
-      position: fixed; z-index: 28;
+      position: fixed; z-index: 140;
       top: 12px; left: 50%;
       transform: translateX(-50%) translateY(-10px);
       background: rgba(28, 20, 12, 0.94); color: var(--parchment);
@@ -1802,9 +1806,457 @@
         font-size: var(--g-size, clamp(1.2rem, 4.4vw, 1.65rem));
       }
     }
+  
+    /* --- auth + materials (from mishnayot-berakhot, adapted) --- */
+    .dropzone {
+      border: 2px dashed #c9a227;
+      border-radius: 16px;
+      padding: 28px 16px;
+      text-align: center;
+      background: rgba(201, 162, 39, 0.08);
+      color: #5a4718;
+      font-weight: 700;
+      margin-bottom: 14px;
+      cursor: pointer;
+    }
+    .dropzone.is-over { background: rgba(201, 162, 39, 0.2); }
+    .save-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 0 0 12px;
+    }
+    .save-box input {
+      flex: 1;
+      min-width: 180px;
+      border: 1px solid #d8c6a0;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font: inherit;
+    }
+    .save-ok { font-weight: 700; color: var(--navy); }
+    .save-box:empty, .kind-pick[hidden] { display: none; }
+    .kind-pick {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 0 0 14px;
+    }
+    .kind-pick span { font-weight: 800; }
+    .aid-kind {
+      display: inline-block;
+      margin-right: 6px;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: #efe3c4;
+      color: #5a4718;
+      font-size: 0.72rem;
+    }
+    .aids-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .aid-card {
+      background: #fffdf6;
+      border: 1px solid #e4d3ae;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      text-align: right;
+      padding: 0;
+      font: inherit;
+      color: inherit;
+    }
+    .aid-card img, .aid-card video {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      object-position: top center;
+      background: #fff;
+      display: block;
+    }
+    .aid-card .aid-pdf {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      color: #5a4718;
+      font: 800 1.1rem "Frank Ruhl Libre", serif;
+    }
+    .aid-card figcaption {
+      padding: 7px 9px 9px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .aid-del {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 26px;
+      height: 26px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(20, 15, 10, 0.72);
+      color: #fff;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .aid-show {
+      position: fixed;
+      inset: 0;
+      z-index: 110;
+      display: none;
+      background: #efe6d4;
+    }
+    .aid-show.is-open { display: flex; flex-direction: column; }
+    .aid-show-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #1c140c;
+      color: var(--parchment);
+    }
+    .aid-show-tools { display: flex; align-items: center; gap: 6px; }
+    .aid-show-stage {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 18px 24px 28px;
+      direction: ltr;
+    }
+    .aid-page {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      cursor: grab;
+      user-select: none;
+      transform-origin: top center;
+    }
+    .aid-page.is-panning { cursor: grabbing; }
+    .aid-page img {
+      display: block;
+      width: 720px;
+      height: auto;
+      background: #fff;
+      box-shadow: 0 18px 50px rgba(40, 24, 8, 0.22);
+      pointer-events: none;
+    }
+    .yt-wrap {
+      width: min(1100px, 94vw);
+      aspect-ratio: 16 / 9;
+      background: #140f0a;
+      box-shadow: 0 18px 50px rgba(40, 24, 8, 0.22);
+    }
+    .yt-wrap iframe { width: 100%; height: 100%; border: 0; }
+    .aid-show-stage video {
+      display: block;
+      width: min(1100px, 94vw);
+      max-height: 86vh;
+      background: #140f0a;
+      box-shadow: 0 18px 50px rgba(40, 24, 8, 0.22);
+    }
+    .yt-row {
+      display: flex;
+      gap: 8px;
+      margin: 0 0 14px;
+    }
+    .yt-row input {
+      flex: 1;
+      border: 1px solid #d8c6a0;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font: inherit;
+    }
+    #sugyaAids {
+      padding: 8px 0 12px;
+      max-height: min(62vh, 720px);
+      overflow: auto;
+    }
+    .login-gate { z-index: 120; }
+    .admin-gate { z-index: 125; }
+    .login-gate, .admin-gate {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at top, rgba(230, 200, 106, 0.18), transparent 55%),
+        rgba(18, 12, 6, 0.88);
+      padding: 18px;
+    }
+    .login-gate.is-open, .admin-gate.is-open { display: flex; }
+    .login-card {
+      width: min(420px, 100%);
+      background: var(--parchment);
+      color: var(--ink);
+      border-radius: 22px;
+      padding: 28px 24px 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      text-align: center;
+    }
+    .login-card h2 {
+      margin: 0 0 6px;
+      font-family: "Frank Ruhl Libre", serif;
+      font-size: 1.85rem;
+    }
+    .login-card .login-sub {
+      margin: 0 0 18px;
+      font-weight: 600;
+      opacity: 0.78;
+    }
+    .login-card label {
+      display: block;
+      text-align: right;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin: 0 0 5px;
+    }
+    .login-card .form-group { margin: 0 0 12px; text-align: right; }
+    .login-card p { margin: 0 0 14px; font-weight: 600; }
+    .login-card input, .login-card select {
+      width: 100%;
+      margin: 0;
+      border: 1px solid #d8c6a0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font: inherit;
+      background: #fff;
+      box-sizing: border-box;
+    }
+    .login-card .primary-btn {
+      width: 100%;
+      margin-top: 4px;
+      border: 1px solid #c9a227;
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, #fff4cf, #f0d78a);
+      color: #1c140c;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .login-card .primary-btn:hover { filter: brightness(1.03); }
+    .login-err { color: #8a1c1c; min-height: 1.2em; margin: 0 0 8px; text-align: right; }
+    .login-ok { color: #1e5a2a; min-height: 1.2em; margin: 0 0 8px; font-weight: 700; text-align: right; }
+    .login-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      justify-content: center;
+      margin-top: 16px;
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+    .login-links button {
+      border: 0;
+      background: none;
+      color: #5a4718;
+      text-decoration: underline;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      padding: 0;
+    }
+    .login-panel[hidden] { display: none !important; }
+    .admin-shell {
+      width: min(720px, 100%);
+      max-height: min(88vh, 900px);
+      overflow: auto;
+      background: var(--parchment);
+      color: var(--ink);
+      border-radius: 22px;
+      padding: 22px 20px 18px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    }
+    .admin-shell h2 {
+      margin: 0;
+      font-family: "Frank Ruhl Libre", serif;
+    }
+    .admin-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .admin-section {
+      background: #fffdf6;
+      border: 1px solid #e4d3ae;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .admin-section h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: #5a4718;
+    }
+    .admin-section input, .admin-section select {
+      width: 100%;
+      margin: 0 0 8px;
+      border: 1px solid #d8c6a0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      background: #fff;
+      box-sizing: border-box;
+    }
+    .user-list { display: flex; flex-direction: column; gap: 6px; margin: 0; max-height: 280px; overflow: auto; }
+    .user-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid #e4d3ae;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      font-weight: 700;
+      color: inherit;
+      width: 100%;
+      text-align: right;
+    }
+    .user-row .user-meta { opacity: 0.7; font-size: 0.82rem; }
+    .admin-tools { display: flex; gap: 6px; flex-wrap: wrap; }
+    .key-btn {
+      position: fixed;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 130;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(230, 200, 106, 0.4);
+      border-radius: 50%;
+      background: rgba(28, 20, 12, 0.92);
+      color: #f3e7c8;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .user-chip { font-size: 0.78rem; font-weight: 700; opacity: 0.85; color: var(--parchment); }
+    html:not(.teacher) #switchUserBtn { display: none !important; }
+
   </style>
 </head>
 <body>
+  <div class="login-gate is-open" id="loginGate">
+    <button type="button" class="key-btn" id="adminKey" title="כניסת מנהל" aria-label="כניסת מנהל">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8" cy="15" r="3"/><path d="M10.5 13.5 21 3l-3 1 2 2-2 1"/></svg>
+    </button>
+    <div class="login-card">
+      <h2>סוגיות התפילין על הדף</h2>
+      <div class="login-panel" id="panelLogin">
+        <p class="login-sub">כניסת מורה</p>
+        <div class="form-group">
+          <label for="loginUser">שם משתמש</label>
+          <input id="loginUser" type="text" dir="ltr" autocomplete="username" placeholder="Username" />
+        </div>
+        <div class="form-group">
+          <label for="loginPin">סיסמה</label>
+          <input id="loginPin" type="password" dir="ltr" inputmode="numeric" maxlength="4" autocomplete="current-password" placeholder="••••" />
+        </div>
+        <p class="login-err" id="loginErr"></p>
+        <button type="button" class="primary-btn" id="loginGo">כניסה</button>
+        <div class="login-links">
+          <button type="button" id="openRegister">מורה חדש? הירשם</button>
+          <button type="button" id="openForgotUser">שחזור שם משתמש</button>
+          <button type="button" id="openForgotPin">שחזור סיסמה</button>
+        </div>
+      </div>
+      <div class="login-panel" id="panelRegister" hidden>
+        <p class="login-sub">הרשמת מורה</p>
+        <div class="form-group"><label for="regName">שם מלא</label><input id="regName" type="text" autocomplete="off" /></div>
+        <div class="form-group"><label for="regUser">שם משתמש באנגלית</label><input id="regUser" type="text" dir="ltr" autocomplete="off" /></div>
+        <div class="form-group"><label for="regPin">סיסמה בת 4 ספרות</label><input id="regPin" type="password" dir="ltr" inputmode="numeric" maxlength="4" autocomplete="new-password" /></div>
+        <div class="form-group"><label for="regQuestion">שאלת שחזור</label><select id="regQuestion"></select></div>
+        <div class="form-group"><label for="regAnswer">תשובה</label><input id="regAnswer" type="text" autocomplete="off" /></div>
+        <p class="login-err" id="regErr"></p>
+        <button type="button" class="primary-btn" id="regGo">הירשם</button>
+        <div class="login-links"><button type="button" id="regBack">חזרה לכניסה</button></div>
+      </div>
+      <div class="login-panel" id="panelForgotUser" hidden>
+        <p class="login-sub">שחזור שם משתמש</p>
+        <div class="form-group"><label for="fuName">שם מלא</label><input id="fuName" type="text" autocomplete="off" /></div>
+        <div class="form-group"><label for="fuAnswer">או תשובת השחזור</label><input id="fuAnswer" type="text" autocomplete="off" /></div>
+        <p class="login-err" id="fuErr"></p>
+        <p class="login-ok" id="fuOk"></p>
+        <button type="button" class="primary-btn" id="fuGo">חפש</button>
+        <div class="login-links"><button type="button" id="fuBack">חזרה לכניסה</button></div>
+      </div>
+      <div class="login-panel" id="panelForgotPin" hidden>
+        <p class="login-sub">שחזור סיסמה</p>
+        <div class="form-group"><label for="fpUser">שם משתמש</label><input id="fpUser" type="text" dir="ltr" autocomplete="off" /></div>
+        <button type="button" class="ghost-btn" id="fpLoadQ" style="color:#1c140c;border-color:#c9a227;margin-bottom:10px">הצג שאלת שחזור</button>
+        <p id="fpQuestion" style="margin:0 0 10px;font-weight:700;text-align:right"></p>
+        <div class="form-group"><label for="fpAnswer">תשובה</label><input id="fpAnswer" type="text" autocomplete="off" /></div>
+        <div class="form-group"><label for="fpPin">סיסמה חדשה</label><input id="fpPin" type="password" dir="ltr" inputmode="numeric" maxlength="4" autocomplete="new-password" /></div>
+        <p class="login-err" id="fpErr"></p>
+        <p class="login-ok" id="fpOk"></p>
+        <button type="button" class="primary-btn" id="fpGo">עדכן סיסמה</button>
+        <div class="login-links"><button type="button" id="fpBack">חזרה לכניסה</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="admin-gate" id="adminGate">
+    <div class="admin-shell">
+      <div id="adminLoginBox">
+        <div class="admin-head">
+          <h2>כניסת מנהל</h2>
+          <button type="button" class="ghost-btn" id="adminCancel" style="color:#1c140c;border-color:#c9a227">סגור</button>
+        </div>
+        <div class="admin-section">
+          <div class="form-group" style="margin:0 0 10px;text-align:right">
+            <label for="adminUser">שם משתמש</label>
+            <input id="adminUser" type="text" dir="ltr" autocomplete="off" />
+          </div>
+          <div class="form-group" style="margin:0 0 10px;text-align:right">
+            <label for="adminPin">סיסמה</label>
+            <input id="adminPin" type="password" dir="ltr" inputmode="numeric" maxlength="4" autocomplete="off" />
+          </div>
+          <p class="login-err" id="adminErr"></p>
+          <button type="button" class="primary-btn" id="adminGo" style="width:100%">כניסה לניהול</button>
+        </div>
+      </div>
+      <div id="adminManageBox" hidden>
+        <div class="admin-head">
+          <h2>פאנל ניהול</h2>
+          <button type="button" class="ghost-btn" id="adminClose" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">יציאה</button>
+        </div>
+        <div class="admin-section">
+          <h3>פרטי מנהל מערכת</h3>
+          <input id="adminNewUser" type="text" dir="ltr" autocomplete="off" placeholder="שם משתמש מנהל" />
+          <input id="adminNewPin" type="password" dir="ltr" inputmode="numeric" maxlength="4" autocomplete="new-password" placeholder="סיסמה חדשה 4 ספרות" />
+          <button type="button" class="ghost-btn" id="adminSaveAuth" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">שמור פרטי מנהל</button>
+        </div>
+        <div class="admin-section">
+          <h3>הוספת מורה</h3>
+          <input id="newName" type="text" autocomplete="off" placeholder="שם מלא" />
+          <input id="newUser" type="text" dir="ltr" autocomplete="off" placeholder="username באנגלית" />
+          <input id="newPin" type="password" dir="ltr" inputmode="numeric" maxlength="4" autocomplete="new-password" placeholder="סיסמה 4 ספרות" />
+          <button type="button" class="ghost-btn" id="addUserBtn" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">הוסף מורה</button>
+        </div>
+        <div class="admin-section">
+          <h3>מורים רשומים</h3>
+          <div class="user-list" id="userList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="header-hotzone" id="headerHotzone" aria-hidden="true"></div>
   <header class="app-header">
     <div class="brand">
@@ -1813,6 +2265,8 @@
     </div>
     <div class="header-actions">
       <div class="header-start">
+        <span class="user-chip" id="userChip"></span>
+        <button class="ghost-btn" id="switchUserBtn" type="button">החלף מורה</button>
         <div class="header-edit" id="headerEdit">
           <button class="ghost-btn" id="editBtn" type="button" aria-pressed="false">עריכת תוכן</button>
         </div>
@@ -1886,7 +2340,7 @@
 
   <div class="toast" id="toast"></div>
 
-  <div class="overlay is-open" id="welcomeOverlay" role="dialog" aria-modal="true">
+  <div class="overlay" id="welcomeOverlay" role="dialog" aria-modal="true">
     <div class="modal welcome">
       <p class="kicker">מנחות לה ע״ב — לז ע״ב</p>
       <h1>סוגיות התפילין על הדף</h1>
@@ -1897,6 +2351,7 @@
         <li>לחיצה על דיבור בדף פותחת רק אותו — עם שם הדיבור והשאלות שעליו</li>
         <li>בלשון הגמרא ובתוספות אפשר ללחוץ על מילה ארמית או על מושג — הביאור עולה מעליה, בלי סימון מראש על המילה</li>
         <li>הסרגל למעלה מופיע כשמעבירים את העכבר. במיקוד אזורים הוא נעלם לגמרי</li>
+        <li>כניסת מורה שומרת עריכות ועזרים לפי משתמש; בלשונית ״עזרים״ בסוגיא אפשר להעלות דפי עבודה וסרטונים</li>
       </ul>
       <button class="start-btn" id="startBtn" type="button">בואו נתחיל</button>
     </div>
@@ -1919,6 +2374,7 @@
         <button type="button" class="sugya-tab" id="tabTosafot" role="tab" aria-selected="false">תוספות</button>
         <button type="button" class="sugya-tab" id="tabAramaic" role="tab" aria-selected="false">ארמית</button>
         <button type="button" class="sugya-tab" id="tabQuiz" role="tab" aria-selected="false">שאלות</button>
+        <button type="button" class="sugya-tab" id="tabAids" role="tab" aria-selected="false">עזרים</button>
         <button type="button" class="sugya-tab tab-sound" id="soundToggle" title="צלילים" aria-pressed="true">🔊</button>
       </div>
       <div class="tag-legend" id="tagLegend">
@@ -1967,7 +2423,39 @@
           <button type="button" id="aramaicNext">הקבוצה הבאה</button>
         </div>
       </div>
+      <div class="quiz" id="sugyaAids" hidden>
+        <div class="save-box" id="saveBox"></div>
+        <div class="yt-row">
+          <input id="ytUrl" type="url" placeholder="קישור יוטיוב" />
+          <button type="button" class="ghost-btn" id="ytAdd" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">הוסף</button>
+        </div>
+        <div class="dropzone" id="dropzone">גררו לכאן קובץ
+          <input type="file" id="aidFiles" accept="image/*,video/*,application/pdf,.pdf" multiple hidden />
+        </div>
+        <div class="kind-pick" id="kindPick" hidden>
+          <span>מה לשמור?</span>
+          <button type="button" class="ghost-btn" data-kind="דף עבודה" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">דף עבודה</button>
+          <button type="button" class="ghost-btn" data-kind="סרטון" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">סרטון</button>
+          <button type="button" class="ghost-btn" data-kind="תמונה" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">תמונה</button>
+          <button type="button" class="ghost-btn" data-kind="מבחן" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">מבחן</button>
+          <button type="button" class="ghost-btn" id="kindCancel" style="color:#1c140c;border-color:#c9a227">ביטול</button>
+        </div>
+        <div class="aids-grid" id="aidsGrid"></div>
+      </div>
     </div>
+  </div>
+
+  <div class="aid-show" id="aidShow">
+    <div class="aid-show-bar">
+      <span id="aidShowTitle">עזר</span>
+      <div class="aid-show-tools">
+        <button type="button" class="ghost-btn icon-only" id="aidZoomOut" title="הקטן">−</button>
+        <div class="zoom-readout" id="aidZoomReadout">100%</div>
+        <button type="button" class="ghost-btn icon-only" id="aidZoomIn" title="הגדל">+</button>
+        <button type="button" class="ghost-btn" id="aidShowClose">חזרה לסוגיא</button>
+      </div>
+    </div>
+    <div class="aid-show-stage" id="aidShowStage"></div>
   </div>
 
   <div class="overlay editor-overlay" id="editorOverlay" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
@@ -2003,8 +2491,21 @@
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="accounts.js"></script>
+  <script src="store.js"></script>
   <script>
-const STORE_KEY = "tefillin-daf-zones-v5";
+const STORE_KEY_BASE = "tefillin-daf-zones-v5";
+const CONTENT_KEY_BASE = "tefillin-content-v1";
+const MASTERY_KEY_BASE = "tefillin-mastery-v1";
+function currentUsername() {
+  return (window.TefillinAccounts && TefillinAccounts.session()) || "";
+}
+function zonesKey() { return STORE_KEY_BASE + ":" + (currentUsername() || "_guest"); }
+function contentKey() { return CONTENT_KEY_BASE + ":" + (currentUsername() || "_guest"); }
+function masteryKey() { return MASTERY_KEY_BASE + ":" + (currentUsername() || "_guest"); }
+function ytStorageKey() { return "tefillin-yt:" + (currentUsername() || "_guest"); }
+const STORE_KEY = STORE_KEY_BASE;
 const PAGES = [
   { id: "35b", label: "מנחות לה ע״ב", image: "menachot-35b.png", alt: "דף גמרא, מנחות לה ע״ב" },
   { id: "36a", label: "מנחות לו ע״א", image: "menachot-36a.png", alt: "דף גמרא, מנחות לו ע״א" },
@@ -2028,11 +2529,11 @@ const QUESTIONS = {
       { before: "מברכים ", choices: ["אחרי הנחה ולפני קשירה", "רק אחרי ששתיהן נגמרו"], answer: 0, after: " — ואז המצווה עדיין לא נגמרה." }
     ], note: "אביי ורבא: משעת הנחה ועד שעת קשירה. המצווה עדיין לא נגמרה — לכן זו עדיין ברכה לפני גמר העשייה." },
     { type: "mc", citeRow: 2, q: "למה ברכה בין הנחה לקשירה עדיין נחשבת ברכה לפני המצווה (״עובר לעשייתן״)?", choices: ["כי כבר התחיל את המצווה, וזה מספיק כדי לברך אחריה", "כי הקשירה עוד לא נגמרה — המצווה עדיין לא הושלמה", "כי הקשירה אינה חלק ממעשה המצווה", "כי מברכים רק אחרי שגם של ראש כבר מונח"], answer: 1, note: "״עובר לעשייתן״ = לפני שגמר את המצווה. אחרי הנחה ולפני קשירה המעשה עוד לא נשלם." },
-    { type: "flow", citeRows: [0, 1, 2], q: "בנו את מהלך הסוגיא", hint: "גררו כל משפט לריבוע. השם הקטן למעלה הוא שם השלב.", rows: [
-      { label: "דין", answer: "מברכים אחרי שכבר הניח את התפילין" },
-      { label: "קושיה", answer: "בכל מצווה מברכים לפני שעושים אותה" },
-      { label: "תירוץ", answer: "מברכים בין הנחה לקשירה — המצווה עוד לא נגמרה" }
-    ], bank: ["מברכים אחרי שכבר הניח את התפילין", "בכל מצווה מברכים לפני שעושים אותה", "מברכים בין הנחה לקשירה — המצווה עוד לא נגמרה", "מברכים רק אחרי ששתיהן כבר מונחות"], note: "כך נראה השלד: דין שנשמע אחרי המעשה → קושיה מהכלל → תירוץ שפותח חלון בין הנחה לקשירה." },
+    { type: "flow", citeRows: [0, 1, 2], q: "בנו את מהלך הסוגיא", hint: "גררו כל משפט לשלב שמתאים לו, מלמעלה למטה.", rows: [
+      { label: "דין", answer: "בהתחלה נשמע שמברכים רק אחרי שכבר הניח את התפילין על הגוף" },
+      { label: "קושיה", answer: "הרי בכל המצוות מברכים לפני שעושים אותן, לא אחרי המעשה" },
+      { label: "תירוץ", answer: "מברכים בין הנחה לקשירה — ואז המצווה עוד לא נגמרה" }
+    ], bank: ["בהתחלה נשמע שמברכים רק אחרי שכבר הניח את התפילין על הגוף", "הרי בכל המצוות מברכים לפני שעושים אותן, לא אחרי המעשה", "מברכים בין הנחה לקשירה — ואז המצווה עוד לא נגמרה", "מברכים רק אחרי ששתיהן כבר מונחות לגמרי"], note: "כך נראה השלד: דין שנשמע אחרי המעשה → קושיה מהכלל → תירוץ שפותח חלון בין הנחה לקשירה." },
     { type: "mc", citeRow: 2, src: "tosafot", dh: "משעת הנחה ועד שעת קשירה", q: "תוספות נחלקים מהי ״קשירה״. האם צריך לקשור קשר חדש בכל בוקר?", choices: ["רבינו אליהו: רק הידוק. רבינו תם: קשר חדש בכל בוקר", "שניהם אומרים שקושרים קשר חדש בכל בוקר", "רבינו אליהו: כן, קשר חדש בכל בוקר. רבינו תם: לא — הקשר קבוע, וכאן ״קשירה״ היא ההידוק", "שניהם אומרים שהקשר קבוע, ואין קשירה כלל בסוגיא"], answer: 2, note: "רבינו אליהו: קושרים מחדש כל בוקר. רבינו תם: הקשר קבוע, ו״קשירה״ כאן היא רק הידוק אל הגוף." },
     { type: "tf", citeRow: 2, src: "tosafot", dh: "משעת הנחה ועד שעת קשירה", q: "לפי רבינו תם, ״שעת קשירה״ בסוגיא שלנו היא ההידוק של התפילין אל הגוף, ולא עשיית קשר חדש.", answer: true, note: "תוס׳: ההוא קשירה היינו ההידוק שמהדקו ומצמצמו בראשו. לכן אין סתירה לכך שהקשר עצמו קבוע." },
     { type: "mc", citeRow: 0, q: "רש״י כותב על ״משעת הנחתן״ שלוש מילים: ״משמע לאחר שהניחן״. מה הוא מלמד בזה?", choices: ["שהוא כבר מתרץ: מברכים בין הנחה לקשירה", "שהלשון נשמעת כאילו מברכים אחרי המצווה — וזו הבעיה שתיצור קושיה", "ש״משעת הנחתן״ פירושו לפני שהניח", "שהברכה נאמרת רק על של ראש"], answer: 1, note: "בלי רש״י קשה לראות את הקושיה. הוא מצביע שהלשון נשמעת בדיעבד — וזה נגד ״עובר לעשייתן״.", src: "rashi", dh: "מאימתי מברך עליהן משעת הנחתן" },
@@ -2056,15 +2557,15 @@ const QUESTIONS = {
       { before: "לכתחילה ", choices: ["אסור", "מותר"], answer: 0, after: " לדבר בין תפילה לתפילה." }
     ], note: "לא סח — אחת; סח — שתיים. עצם הדיבור הוא עבירה, לא רק הברכה החסרה." },
     { type: "mc", citeRow: 4, q: "הברייתא אומרת על המדבר בין תפילה לתפילה ש״עבירה היא בידו״. למה זה חמור בדיוק ברגע הזה?", choices: ["כי אסור לדבר כל זמן שהתפילין עליו, גם אחרי ששתיהן מונחות", "של יד ושל ראש הן מצווה אחת רצופה, והדיבור מפריד ביניהן", "כי ברכת של יד מתבטלת לגמרי וצריך להניח של יד מחדש", "כי הן שתי מצוות נפרדות, ולכן אסור לחבר ביניהן"], answer: 1, note: "שתיהן חטיבה אחת. הדיבור קוטע את הרצף — וזה זלזול במצווה. לכן גם חוזר מעורכי המלחמה." },
-    { type: "flow", citeRows: [0, 1, 2], q: "מהלך הסוגיא — חלק א: למה יש בעיה", hint: "גררו כל משפט לריבוע. זה הסיכום עד הקושיה.", rows: [
-      { label: "דין", answer: "מי שדיבר בין של יד לשל ראש מברך שוב" },
-      { label: "דיוק", answer: "מי שלא דיבר — לא מברך שוב" },
-      { label: "קושיה", answer: "יש ברכה נפרדת לשל ראש, כאילו תמיד מברכים שתיים" }
-    ], bank: ["מי שדיבר בין של יד לשל ראש מברך שוב", "מי שלא דיבר — לא מברך שוב", "יש ברכה נפרדת לשל ראש, כאילו תמיד מברכים שתיים", "אין ברכה כלל על של ראש"], note: "מרב חסדא נשמע שרק מי שדיבר מברך שוב. מנוסח רבי יוחנן נשמע שיש תמיד ברכה שנייה לשל ראש." },
-    { type: "flow", citeRows: [3, 4], q: "מהלך הסוגיא — חלק ב: איך מתרצים", hint: "גררו את המסקנה ואת החומרה.", rows: [
-      { label: "תירוץ", answer: "לא דיבר — ברכה אחת; דיבר — שתי ברכות" },
-      { label: "ברייתא", answer: "הדיבור באמצע הוא עבירה, כי קוטע מצווה אחת" }
-    ], bank: ["לא דיבר — ברכה אחת; דיבר — שתי ברכות", "הדיבור באמצע הוא עבירה, כי קוטע מצווה אחת", "תמיד מברכים שלוש ברכות"], note: "אביי ורבא מיישבים: יש ברכה שנייה רק למי שדיבר. הברייתא מוסיפה שעצם הדיבור הוא זלזול." },
+    { type: "flow", citeRows: [0, 1, 2], q: "מהלך הסוגיא — חלק א: למה יש בעיה", hint: "גררו כל משפט לשלב שמתאים לו, מלמעלה למטה.", rows: [
+      { label: "דין", answer: "מי שדיבר בין של יד לשל ראש חוזר ומברך על של ראש" },
+      { label: "דיוק", answer: "מי שלא דיבר בין שתיהן אינו מברך שוב — ברכה אחת מספיקה" },
+      { label: "קושיה", answer: "לרבי יוחנן יש נוסח נפרד לשל ראש, כאילו תמיד מברכים שתיים" }
+    ], bank: ["מי שדיבר בין של יד לשל ראש חוזר ומברך על של ראש", "מי שלא דיבר בין שתיהן אינו מברך שוב — ברכה אחת מספיקה", "לרבי יוחנן יש נוסח נפרד לשל ראש, כאילו תמיד מברכים שתיים", "אין ברכה כלל על של ראש"], note: "מרב חסדא נשמע שרק מי שדיבר מברך שוב. מנוסח רבי יוחנן נשמע שיש תמיד ברכה שנייה לשל ראש." },
+    { type: "flow", citeRows: [3, 4], q: "מהלך הסוגיא — חלק ב: איך מתרצים", hint: "גררו כל משפט לשלב שמתאים לו, מלמעלה למטה.", rows: [
+      { label: "תירוץ", answer: "לא דיבר — ברכה אחת על שתיהן; דיבר — שתי ברכות" },
+      { label: "ברייתא", answer: "עצם הדיבור באמצע הוא עבירה, כי הוא קוטע מצווה אחת" }
+    ], bank: ["לא דיבר — ברכה אחת על שתיהן; דיבר — שתי ברכות", "עצם הדיבור באמצע הוא עבירה, כי הוא קוטע מצווה אחת", "תמיד מברכים שלוש ברכות, גם בלי דיבור"], note: "אביי ורבא מיישבים: יש ברכה שנייה רק למי שדיבר. הברייתא מוסיפה שעצם הדיבור הוא זלזול." },
     { type: "mc", citeRow: 3, src: "tosafot", dh: "לא סח מברך אחת סח מברך שתים", q: "לפי רבינו תם, כשהגמרא אומרת ״לא סח מברך אחת״ — אחת על מה?", choices: ["ברכה אחת בסך הכל על שתי התפילין יחד", "אחת על של יד בלבד, ובלי ברכה על של ראש", "על של ראש בלבד (״על מצות״), בנוסף ל״להניח״ שכבר בירך על של יד", "שתים על של ראש: ״להניח״ וגם ״על מצות״"], answer: 2, note: "זו נקודת המחלוקת: רש״י סופר את שתי התפילין יחד; ר״ת סופר רק את של ראש, ועל של יד תמיד מברך ״להניח״." },
     { type: "mc", citeRow: 3, src: "tosafot", dh: "לא סח מברך אחת סח מברך שתים", q: "יוסי לא דיבר בין של יד לשל ראש. לפי מי הוא מברך רק ״להניח״, ולפי מי הוא מוסיף גם ״על מצות״?", choices: ["ר״ת — רק ״להניח״; רש״י — שתי הברכות", "רש״י — רק ״להניח״; ר״ת — ״להניח״ וגם ״על מצות״", "שניהם — רק ״להניח״", "שניהם — תמיד שתי ברכות"], answer: 1, note: "מי שלא דיבר: לרש״י ברכה אחת, לר״ת שתיים. מי שדיבר: לרש״י שתיים, לר״ת שלוש." },
     { type: "mc", citeRow: 3, src: "tosafot", dh: "לא סח מברך אחת סח מברך שתים", q: "יש שני מנהגים כיום: יש המברכים רק ״להניח״, ויש שמוסיפים גם ״על מצות״ על של ראש — גם בלי דיבור. מאיפה זה יוצא?", choices: ["מנהג ספרד כרבינו תם, ומנהג אשכנז כרש״י", "שני המנהגים יוצאים מאביי ורבא בגמרא, לא מהראשונים", "מנהג ספרד כרש״י: ברכת היד פוטרת גם את הראש. מנהג אשכנז כרבינו תם: על של ראש תמיד מוסיפים ״על מצות״", "מנהג אחד למי שדיבר ומנהג אחד למי שלא — בלי קשר לרש״י ור״ת"], answer: 2, note: "בני ספרד מברכים ברכה אחת כרש״י; בני אשכנז מוסיפים ״על מצות תפילין״ על של ראש כרבינו תם." },
@@ -2090,12 +2591,12 @@ const QUESTIONS = {
     ], bank: ["סדר הפסוק: וקשרתם ואחר כך והיו", "כל זמן שבין עיניך יהו שתים", "קל וחומר מציץ"], note: "בשלמא הנחה — דכתיב. חליצה — מנלן? רב הונא." },
     { type: "mc", citeRow: 3, q: "לפי רב הונא, למה אי אפשר לחלוץ קודם של יד?", choices: ["כי של יד קדוש יותר משל ראש, ולכן נשארת עד הסוף", "כי כל זמן ששל ראש מונח חייבות להיות שתי תפילין", "כי אסור לחלוץ של יד כל זמן שהשמש זורחת", "כי סדר החליצה הפוך מסדר הפסוק: קודם ״והיו״ ואחר כך ״וקשרתם״"], answer: 1, note: "רש״י: ״יהו שתים״ — כל זמן ששל ראש בין עיניך, תהא גם של יד עליך." },
     { type: "tf", citeRow: 3, q: "לפי הסוגיא מותר להישאר עם של ראש בלבד אחרי שחלץ של יד.", answer: false, note: "אסור: כל זמן שבין עיניך יהו שתים. לכן חולץ ראש קודם, ואחר כך יד." },
-    { type: "flow", citeRows: [0, 1, 2, 3], q: "בנו את מהלך הסוגיא", hint: "גררו כל משפט לריבוע. זה הסיכום של סדר ההנחה והחליצה.", rows: [
-      { label: "ברייתא", answer: "מניח יד ואחר כך ראש; חולץ ראש ואחר כך יד" },
-      { label: "סיוע", answer: "סדר ההנחה כתוב בפסוק: קודם היד, אחר כך הראש" },
-      { label: "שאלה", answer: "מניין לנו סדר החליצה?" },
-      { label: "תירוץ", answer: "כל זמן ששל ראש מונח — חייבות להיות שתי תפילין" }
-    ], bank: ["מניח יד ואחר כך ראש; חולץ ראש ואחר כך יד", "סדר ההנחה כתוב בפסוק: קודם היד, אחר כך הראש", "מניין לנו סדר החליצה?", "כל זמן ששל ראש מונח — חייבות להיות שתי תפילין", "חולצים קודם של יד כדי שהראש יישאר"], note: "ההנחה מהפסוק. החליצה מדיוק ״והיו״: כל זמן שבין עיניך יהו שתיים." },
+    { type: "flow", citeRows: [0, 1, 2, 3], q: "בנו את מהלך הסוגיא", hint: "גררו כל משפט לשלב שמתאים לו, מלמעלה למטה.", rows: [
+      { label: "ברייתא", answer: "מניחים של יד ואחר כך של ראש, וחולצים של ראש ואחר כך של יד" },
+      { label: "סיוע", answer: "סדר ההנחה כתוב בפסוק: קודם וקשרתם, אחר כך והיו" },
+      { label: "שאלה", answer: "מניין לנו שגם בחליצה חולצים קודם את של ראש?" },
+      { label: "תירוץ", answer: "כל זמן ששל ראש מונח בין העיניים — חייבות להיות שתי תפילין" }
+    ], bank: ["מניחים של יד ואחר כך של ראש, וחולצים של ראש ואחר כך של יד", "סדר ההנחה כתוב בפסוק: קודם וקשרתם, אחר כך והיו", "מניין לנו שגם בחליצה חולצים קודם את של ראש?", "כל זמן ששל ראש מונח בין העיניים — חייבות להיות שתי תפילין", "חולצים קודם של יד כדי שהראש יישאר לבדו"], note: "ההנחה מהפסוק. החליצה מדיוק ״והיו״: כל זמן שבין עיניך יהו שתיים." },
     { type: "mc", citeRow: 1, src: "tosafot", dh: "וקשרתם לאות על ידך והדר והיו לטוטפת בין עיניך", q: "תוספות: איך מסדרים את התפילין בתוך התיק בסוף היום?", choices: ["של יד למטה ושל ראש למעלה — כדי שמחר תיפגשו בשל ראש תחילה", "של ראש למטה ושל יד למעלה — כדי שמחר תיפגשו בשל יד תחילה", "של ראש למעלה, כי היא חשובה יותר ומוציאים אותה ראשונה", "שתי התפילין זו ליד זו באותו גובה, בלי למעלה ולמטה"], answer: 1, note: "תוס׳ לו. בשם ר״ת ורב האי גאון. אם של ראש תהיה למעלה, מחר בבוקר תיגע בה ראשונה — ותצטרך ״להעביר על המצות״ כדי להניח של יד קודם. לכן מכניסים של ראש ראשונה." },
     { type: "typein", citeRow: 1, src: "tosafot", dh: "וקשרתם לאות על ידך והדר והיו לטוטפת בין עיניך", q: "איך נקרא הכלל שאסור לדלג על מצווה שנקרית לפניך תחילה?", sentence: "מסדרים את התיק כך שלא יצטרך ______.", answer: "להעביר על המצות", accept: ["להעביר על המצוות", "אין מעבירין על המצות", "אין מעבירין על המצוות", "העברה על המצות"], hint: "שלוש מילים. אין צורך בניקוד.", note: "״אין מעבירין על המצות״ — כשמצווה מזדמנת לך ראשונה, אין מדלגים עליה. כאן זה קובע איך לארוז את התיק." },
     { type: "mc", citeRow: 3, q: "רב הונא מדייק מן המילה ״והיו״. מהו הדיוק לפי רש״י?", choices: ["שהמילה בלשון יחיד — רק של ראש צריכה להישאר", "שהמילה בלשון רבים — כל זמן שאותן של ראש מונחות, גם של יד מונחות", "שצריך להניח שתי תפילין של ראש", "שחולצים את שתיהן יחד באותו רגע"], answer: 1, note: "רש״י: משמע שתים — כל זמן שיהו בין עיניך יהו שתיים.", src: "rashi", dh: "והיו" },
@@ -2133,17 +2634,17 @@ const QUESTIONS = {
       { before: "לכן מי שכבר יש לו אות ", choices: ["צריך", "אינו צריך"], answer: 1, after: " אות נוספת של תפילין." },
       { before: "״ושמרת את החוקה הזאת״ נאמרה לפי רבי עקיבא ל", choices: ["תפילין", "פסח"], answer: 1, after: " בלבד." }
     ], note: "מי שצריכין אות — יצאו שבתות וימים טובים שהן גופן אות. זהו יסוד הפטור של תפילין בשבת עד היום." },
-    { type: "flow", citeRows: [0, 1, 2], q: "מהלך הסוגיא — חלק א: הסתירה בלילה", hint: "גררו את שלושת השלבים. זה החלק עד תירוץ ערב שבת.", rows: [
-      { label: "קושיה", answer: "הם התפללו ערבית בתפילין — אז לילה כן זמן תפילין?" },
-      { label: "סתירה", answer: "אותו חכם אמר בחשיכה ודאית חולצים" },
-      { label: "תירוץ", answer: "דין החליצה בחשיכה נאמר רק בערב שבת" }
-    ], bank: ["הם התפללו ערבית בתפילין — אז לילה כן זמן תפילין?", "אותו חכם אמר בחשיכה ודאית חולצים", "דין החליצה בחשיכה נאמר רק בערב שבת", "בכל לילה חולצים מיד בשקיעה"], note: "המעשה ׳מצלו בהו באורתא׳ חולק. הסתירה בדברי רבה בר רב הונא מתיישבת: ספק חשיכה — בערב שבת." },
-    { type: "flow", citeRows: [3, 4, 5, 6], q: "מהלך הסוגיא — חלק ב: שבת ולילה", hint: "גררו את המשך המהלך: למה אפשר לחלק בין שבת ללילה.", rows: [
-      { label: "קושיה", answer: "אם לילה זמן תפילין — גם שבת; ואם שבת לא — גם לילה לא" },
-      { label: "דעה א", answer: "רבי יוסי הגלילי: הפסוק מוציא גם לילות וגם שבתות" },
-      { label: "דעה ב", answer: "רבי עקיבא: שבת פטורה כי היא עצמה אות" },
-      { label: "תירוץ", answer: "רבה בר רב הונא לומד כרבי עקיבא — רק שבת פטורה, לא הלילה" }
-    ], bank: ["אם לילה זמן תפילין — גם שבת; ואם שבת לא — גם לילה לא", "רבי יוסי הגלילי: הפסוק מוציא גם לילות וגם שבתות", "רבי עקיבא: שבת פטורה כי היא עצמה אות", "רבה בר רב הונא לומד כרבי עקיבא — רק שבת פטורה, לא הלילה", "שבת ולילה נלמדים תמיד מאותו פסוק"], note: "הקושיה: אותו מקור מוציא שבת ולילה יחד. התירוץ: הוא לומד פטור שבת מ׳אות׳, כמו רבי עקיבא, ולא מ׳ימים׳." },
+    { type: "flow", citeRows: [0, 1, 2], q: "מהלך הסוגיא — חלק א: הסתירה בלילה", hint: "גררו כל משפט לשלב שמתאים לו, מלמעלה למטה.", rows: [
+      { label: "קושיה", answer: "הם התפללו ערבית בתפילין — משמע שלילה כן זמן תפילין" },
+      { label: "סתירה", answer: "אותו חכם אמר שבחשיכה ודאית חולצים את התפילין" },
+      { label: "תירוץ", answer: "דין החליצה בחשיכה נאמר רק בערב שבת, לא בכל לילה" }
+    ], bank: ["הם התפללו ערבית בתפילין — משמע שלילה כן זמן תפילין", "אותו חכם אמר שבחשיכה ודאית חולצים את התפילין", "דין החליצה בחשיכה נאמר רק בערב שבת, לא בכל לילה", "בכל לילה חולצים מיד בשקיעה, בלי חילוק"], note: "המעשה ׳מצלו בהו באורתא׳ חולק. הסתירה בדברי רבה בר רב הונא מתיישבת: ספק חשיכה — בערב שבת." },
+    { type: "flow", citeRows: [3, 4, 5, 6], q: "מהלך הסוגיא — חלק ב: שבת ולילה", hint: "גררו כל משפט לשלב שמתאים לו, מלמעלה למטה.", rows: [
+      { label: "קושיה", answer: "אם לילה זמן תפילין גם שבת זמן, ואם שבת לא — גם לילה לא" },
+      { label: "דעה א", answer: "רבי יוסי הגלילי לומד מאותו פסוק פטור לילות ופטור שבתות" },
+      { label: "דעה ב", answer: "רבי עקיבא פוטר שבת כי היא עצמה אות, לא מאותו פסוק" },
+      { label: "תירוץ", answer: "רבה בר רב הונא לומד כרבי עקיבא: רק שבת פטורה, הלילה חייב" }
+    ], bank: ["אם לילה זמן תפילין גם שבת זמן, ואם שבת לא — גם לילה לא", "רבי יוסי הגלילי לומד מאותו פסוק פטור לילות ופטור שבתות", "רבי עקיבא פוטר שבת כי היא עצמה אות, לא מאותו פסוק", "רבה בר רב הונא לומד כרבי עקיבא: רק שבת פטורה, הלילה חייב", "שבת ולילה נלמדים תמיד מאותו פסוק, בלי חילוק"], note: "הקושיה: אותו מקור מוציא שבת ולילה יחד. התירוץ: הוא לומד פטור שבת מ׳אות׳, כמו רבי עקיבא, ולא מ׳ימים׳." },
     { type: "pick", citeRow: 1, q: "בין השמשות — הקיפו את הנכון לפי רש״י", hint: "רש״י מפרק את דברי רבה בר רב הונא לשני חלקים.", lines: [{ before: "אם התפילין כבר מונחות עליו — ", choices: ["חולץ אותן", "אינו חולץ אותן"], answer: 1, after: "." }, { before: "ואם עדיין אינן עליו — ", choices: ["מניח אותן", "אינו מניח אותן"], answer: 1, after: "." }], note: "רש״י: אם מונחין, ולא מניח אם חלוצין. בזמן של ספק אין משנים כלום.", src: "rashi", dh: "לא חולצין" },
     { type: "mc", citeRow: 6, q: "לפי רש״י, למה שבת ויום טוב אינם צריכים תפילין?", choices: ["מפני שאסור לטלטל אותן ברשות הרבים", "מפני שהם בעצמם אות בין הקדוש ברוך הוא לישראל", "מפני שבשבת אין חיוב ברכות על מצוות עשה", "מפני ששבת נקראת חוקה ולא אות"], answer: 1, note: "רש״י: בין הקב״ה לישראל, דכתיב כי אות היא. יום שיש לו כבר אות משלו אינו זקוק לאות נוספת.", src: "rashi", dh: "שהן עצמן אות" }
   ],
@@ -2186,12 +2687,12 @@ const QUESTIONS = {
   ],
   h: [
     { type: "mc", citeRow: 0, q: "מה החיוב של רבה בר רב הונא?", choices: ["לברך בכל שעה מחדש על התפילין", "למשמש בתפילין בכל שעה", "לחלץ תפילין בכל שעה ולחזור ולהניח", "לא לגעת בתפילין כל זמן שהן עליו, כדי לא להסיח"], answer: 1, note: "חייב אדם למשמש בתפילין בכל שעה — כדי שלא יסיח דעתו מהן." },
-    { type: "flow", citeRow: 1, q: "בנו את הקל וחומר מציץ", hint: "גררו כל משפט לריבוע — זה סיכום הקל וחומר.", rows: [
-      { label: "הקל", answer: "בציץ יש שם אחד בלבד" },
+    { type: "flow", citeRow: 1, q: "בנו את הקל וחומר מציץ", hint: "גררו כל משפט לשלב שמתאים לו, מלמעלה למטה.", rows: [
+      { label: "הקל", answer: "בציץ יש אזכרה אחת בלבד" },
       { label: "ובכל זאת", answer: "אסור להסיח דעת ממנו כל זמן שהוא על המצח" },
-      { label: "החמור", answer: "בתפילין יש הרבה שמות" },
-      { label: "מסקנה", answer: "על אחת כמה וכמה אסור להסיח דעת מן התפילין" }
-    ], bank: ["בציץ יש שם אחד בלבד", "אסור להסיח דעת ממנו כל זמן שהוא על המצח", "בתפילין יש הרבה שמות", "על אחת כמה וכמה אסור להסיח דעת מן התפילין", "רק בציץ אסור להסיח, לא בתפילין"], note: "קל וחומר: אם בקל מחמירים — בחמור על אחת כמה וכמה. לכן חייב למשמש בתפילין בכל שעה." },
+      { label: "החמור", answer: "בתפילין יש אזכרות הרבה" },
+      { label: "מסקנה", answer: "על אחת כמה וכמה אסור להסיח דעת מן התפילין, ולכן חייב למשמש" }
+    ], bank: ["בציץ יש אזכרה אחת בלבד", "אסור להסיח דעת ממנו כל זמן שהוא על המצח", "בתפילין יש אזכרות הרבה", "על אחת כמה וכמה אסור להסיח דעת מן התפילין, ולכן חייב למשמש", "רק בציץ אסור להסיח, ובתפילין מותר"], note: "קל וחומר: אם בקל מחמירים — בחמור על אחת כמה וכמה. לכן חייב למשמש בתפילין בכל שעה." },
     { type: "cloze", citeRow: 1, q: "השלימו את לימוד הציץ", sentence: "חייב אדם למשמש בתפילין בכל שעה, קל וחומר מ___.", choices: ["ציצית", "ציץ", "מזוזה", "ציץ שעליו כמה שמות"], answer: 1, note: "ציץ — אזכרה אחת ואסור להסיח; תפילין — אזכרות הרבה, על אחת כמה וכמה." },
     { type: "tf", citeRow: 1, q: "לפי הסוגיא, האיסור להסיח דעת שייך רק לציץ ולא לתפילין.", answer: false, note: "הקל וחומר בא לחייב בתפילין יותר: אזכרות הרבה." },
     { type: "tf", citeRow: 1, q: "רש״י מפרש ש״תמיד״ בציץ מלמד שלא יסיח דעתו ממנו כל זמן שהוא עליו.", answer: true, note: "כך דרשו: והיה על מצחו תמיד — שלא יסיח דעתו מן הציץ." }
@@ -2212,12 +2713,12 @@ const QUESTIONS = {
     { type: "stage", citeRow: 2, q: "זהו את שלב הסוגיא", phrase: "רַבִּי יוֹסֵי הַחוֹרֵם אוֹמֵר: מָצִינוּ יָמִין שֶׁנִּקְרֵאת יָד!", choices: ["דין", "קושיה", "תירוץ"], answer: 1, hint: "רש״י כותב עליו ״ולא ילפינן מהכא״. מה זה עושה ללימוד?", note: "רבי יוסי החורם מקשה מן הפסוק ״כי ישית אביו יד ימינו״ ובא לדחות את הלימוד. הגמרא מתרצת: ״יד ימינו״ נקרא יד, אבל ״יד״ סתמא לעולם איננה ימין.", src: "rashi", dh: "מצינו ימין שנקרא יד" }
   ],
   j: [
-    { type: "flow", citeRow: 0, q: "בנו את שרשרת הדרשה של רבי נתן", hint: "גררו כל משפט לריבוע. כל שלב נובע מהקודם.", rows: [
-      { label: "המקור", answer: "הפסוק סומך וקשרתם לוכתבתם" },
-      { label: "כתיבה", answer: "כותבים ביד ימין" },
-      { label: "קשירה", answer: "לכן גם קושרים ביד ימין" },
-      { label: "הנחה", answer: "נמצא שמניחים את התפילין על השמאל" }
-    ], bank: ["הפסוק סומך וקשרתם לוכתבתם", "כותבים ביד ימין", "לכן גם קושרים ביד ימין", "נמצא שמניחים את התפילין על השמאל", "מניחים על הימין כי היא חזקה יותר"], note: "מה כתיבה בימין — אף קשירה בימין. ואם היד הימנית קושרת, היא תפוסה — לכן התפילין על השמאל." },
+    { type: "flow", citeRow: 0, q: "בנו את שרשרת הדרשה של רבי נתן", hint: "גררו כל משפט לשלב שמתאים לו, מלמעלה למטה.", rows: [
+      { label: "המקור", answer: "הפסוק סומך וקשרתם לוכתבתם — אותה יד לשני המעשים" },
+      { label: "כתיבה", answer: "כתיבת המזוזה נעשית ביד ימין" },
+      { label: "קשירה", answer: "לכן גם הקשירה נעשית ביד ימין" },
+      { label: "הנחה", answer: "אם הימין קושרת היא תפוסה — נמצא שמניחים על השמאל" }
+    ], bank: ["הפסוק סומך וקשרתם לוכתבתם — אותה יד לשני המעשים", "כתיבת המזוזה נעשית ביד ימין", "לכן גם הקשירה נעשית ביד ימין", "אם הימין קושרת היא תפוסה — נמצא שמניחים על השמאל", "מניחים על הימין כי היא היד החזקה יותר"], note: "מה כתיבה בימין — אף קשירה בימין. ואם היד הימנית קושרת, היא תפוסה — לכן התפילין על השמאל." },
     { type: "cloze", citeRow: 0, q: "השלימו את סדר רבי נתן", sentence: "כתיבה בימין, הלכך קשירה בימין, הלכך הנחה ב___.", choices: ["ימין", "שמאל", "שתי הידיים", "יד ימין של כהן"], answer: 1, note: "וקשרתם–וכתבתם: מה כתיבה בימין אף קשירה בימין — לכן מניחים בשמאל." },
     { type: "mc", citeRow: 1, q: "מניין לרבי יוסי החורם הנחה בשמאל, אחרי שנדחה מ״יד ימינו״?", choices: ["מהברייתא של שלושת הפסוקים ידי/ימיני", "מדרשת רבי נתן (כתיבה–קשירה)", "מדרשת ״ידכה״ של רב אשי", "מקל וחומר מציץ, שגם הוא בשמאל"], answer: 1, note: "נפקא ליה מהיכא דנפקא ליה לרבי נתן." },
     { type: "mc", citeRow: 2, q: "רב אשי דורש ״ידכה״ בה״א. מה המשמעות, ולמה לא ״שבכח״?", choices: ["שבכח = היד החזקה, כי כתוב בה״א כמו כח", "כהה = היד החלשה; לא כתוב בחי״ת", "זו דרשה רק לגידם, לא ליד שמאל", "הכוונה ליד ימין של כהן, מלשון כהן"], answer: 1, note: "ידכה בה״י — כהה. רבי אבא: ואימא ידך שבכח? אמר ליה: מי כתיב בחי״ת?" },
@@ -2271,12 +2772,12 @@ const QUESTIONS = {
     { type: "tf", citeRow: 2, src: "tosafot", dh: "או קום גלי", q: "תוספות מציינים שיש מדרש על אדם עם שני ראשים שאשמדאי העלה מן הארץ.", answer: true, note: "תוס׳ לז. ד״ה או קום גלי. התוספות מראים שהשאלה של פלימו לא הייתה מופרכת — יש לה בסיס במדרש." },
     { type: "mc", citeRows: [3, 5], q: "למה חייבו עשרה סלעים בפדיון תינוק עם שני ראשים?", choices: ["כי יש שני ילדים נפרדים לגמרי, ושני פדיונות", "כי התורה תלתה את הפדיון בגלגולת — ושתי גולגולות", "זה קנס על האב שהביא תינוק כזה לפני רבי", "כי רבי כעס על פלימו, והמעשה בא ללמד לקח"], answer: 1, note: "שאני הכא, דבגולגולת תלא רחמנא. מי שלא יחיה אינו נפדה (״אך — חלק״), אבל כאן יש שתי גולגולות חיות." },
     { type: "mc", citeRows: [6, 7], q: "מאיפה למדים ש״בין עיניך״ הוא גובה הראש ולא בין העיניים ממש?", choices: ["רק מתקנת חכמים, בלי מקור בפסוק", "גזירה שווה מקרחה: מקום שעושה קרחה; ורבי יהודה — מקום הראוי לנגע אחד", "מקל וחומר מציץ, שגם הוא על המצח", "מדרשת ״ידכה״, שמקום ההנחה הוא בגובה"], answer: 1, note: "לא תשימו קרחה בין עיניכם — מקום שיש בו שיער. רבי יהודה: מקום הראוי ליטמא בנגע אחד." },
-    { type: "flow", citeRow: 7, q: "בנו את הגזירה השווה", hint: "גררו כל משפט לריבוע — כך נראית הגזירה השווה בעברית פשוטה.", rows: [
+    { type: "flow", citeRow: 7, q: "בנו את הגזירה השווה", hint: "גררו כל משפט לשלב שמתאים לו, מלמעלה למטה.", rows: [
       { label: "כאן", answer: "בתפילין נאמר ״בין עיניך״" },
-      { label: "ולהלן", answer: "באיסור קרחה למת נאמר ״בין עיניכם״" },
-      { label: "מה להלן", answer: "הכוונה לגובה הראש, במקום השיער" },
-      { label: "אף כאן", answer: "גם תפילין של ראש מונחות בגובה הראש, לא בין העיניים ממש" }
-    ], bank: ["בתפילין נאמר ״בין עיניך״", "באיסור קרחה למת נאמר ״בין עיניכם״", "הכוונה לגובה הראש, במקום השיער", "גם תפילין של ראש מונחות בגובה הראש, לא בין העיניים ממש", "מניחים ממש בין שתי הגבות"], note: "גזירה שווה: מילה זהה בשני מקומות מעבירה את הדין. ״בין עיניך״ = מקום הקרחה = גובה הראש." },
+      { label: "ולהלן", answer: "באיסור קרחה למת נאמר גם ״בין עיניכם״" },
+      { label: "מה להלן", answer: "שם הכוונה לגובה הראש, במקום שעושים קרחה" },
+      { label: "אף כאן", answer: "גם תפילין של ראש מונחות בגובה הראש, ולא בין העיניים ממש" }
+    ], bank: ["בתפילין נאמר ״בין עיניך״", "באיסור קרחה למת נאמר גם ״בין עיניכם״", "שם הכוונה לגובה הראש, במקום שעושים קרחה", "גם תפילין של ראש מונחות בגובה הראש, ולא בין העיניים ממש", "מניחים ממש בין שתי הגבות, על המצח החלק"], note: "גזירה שווה: מילה זהה בשני מקומות מעבירה את הדין. ״בין עיניך״ = מקום הקרחה = גובה הראש." },
     { type: "tf", citeRow: 9, q: "״שער צהוב״ בסוף הסוגיא בא לומר שבין העיניים מתאים לנגע אחד, ולכן מניחים שם.", answer: false, note: "להיפך: בין העיניים יש בשר ושער, שער לבן ושער צהוב — לא נגע אחד. לכן מוציאים את ״בין עיניך ממש״." },
     { type: "tf", citeRow: 7, q: "רש״י: מקום הקרחה הוא בגובה הראש, במקום השיער, לא במצח החלק.", answer: true, note: "מה להלן מקום שעושה קרחה — אף כאן בגובה הראש, מקום השיער." },
     { type: "mc", citeRow: 0, q: "דבי רבי ינאי אמרו ״מקום שמוחו של תינוק רופס״. מהו לפי רש״י?", choices: ["העורף שמאחורי הראש", "המקום הרך שבראשו של תינוק בן שנה", "ממש בין שתי הגבות, על המצח החלק", "המקום שמאחורי האוזן, שם מתחיל השיער"], answer: 1, note: "רש״י: רופס — רך, כשהוא קטן בן שנה. אצל מבוגר זהו האזור שמעל קו השיער בקדמת הראש.", src: "rashi", dh: "רופס" },
@@ -3201,7 +3702,7 @@ const TOSAFOT_ROWS = {
   ]
 };
 
-const CONTENT_KEY = "tefillin-content-v1";
+/* CONTENT_KEY per-user via contentKey() */
 const DEFAULT_QUESTIONS = JSON.parse(JSON.stringify(QUESTIONS));
 const DEFAULT_ARAMAIC = JSON.parse(JSON.stringify(ARAMAIC));
 const DEFAULT_MEFARSHIM = JSON.parse(JSON.stringify(MEFARSHIM));
@@ -3378,7 +3879,7 @@ function saveContentEdits() {
       })
     };
   });
-  localStorage.setItem(CONTENT_KEY, JSON.stringify({
+  localStorage.setItem(contentKey(), JSON.stringify({
     sugyot: sugyot,
     questions: QUESTIONS,
     aramaic: ARAMAIC,
@@ -3510,7 +4011,38 @@ function migrateShaklaQuestions(bank) {
     });
   });
 }
-try { applyContentSave(JSON.parse(localStorage.getItem(CONTENT_KEY) || "null")); } catch (e) {}
+function resetToShippedContent() {
+  Object.keys(DEFAULT_SUGYA_CONTENT).forEach(function (id) {
+    const orig = DEFAULT_SUGYA_CONTENT[id];
+    if (!orig || !SUGYOT[id]) return;
+    SUGYOT[id].subtitle = orig.subtitle;
+    SUGYOT[id].daf = orig.daf;
+    SUGYOT[id].color = orig.color;
+    SUGYOT[id].fill = orig.fill;
+    SUGYOT[id].rows = JSON.parse(JSON.stringify(orig.rows));
+  });
+  Object.keys(DEFAULT_QUESTIONS).forEach(function (id) {
+    QUESTIONS[id] = JSON.parse(JSON.stringify(DEFAULT_QUESTIONS[id]));
+  });
+  Object.keys(DEFAULT_ARAMAIC).forEach(function (id) {
+    ARAMAIC[id] = JSON.parse(JSON.stringify(DEFAULT_ARAMAIC[id]));
+  });
+  if (typeof DEFAULT_MEFARSHIM !== "undefined") {
+    Object.keys(DEFAULT_MEFARSHIM).forEach(function (id) {
+      MEFARSHIM[id] = JSON.parse(JSON.stringify(DEFAULT_MEFARSHIM[id]));
+    });
+  }
+  if (typeof DEFAULT_TOSAFOT_ROWS !== "undefined") {
+    Object.keys(DEFAULT_TOSAFOT_ROWS).forEach(function (dh) {
+      TOSAFOT_ROWS[dh] = JSON.parse(JSON.stringify(DEFAULT_TOSAFOT_ROWS[dh]));
+    });
+  }
+}
+function loadUserContent() {
+  resetToShippedContent();
+  try { applyContentSave(JSON.parse(localStorage.getItem(contentKey()) || "null")); } catch (e) {}
+}
+loadUserContent();
 function migrateDafOrderSugyot() {
   ["h", "i", "l", "m"].forEach(function (id) {
     const fresh = DEFAULT_SUGYA_CONTENT[id];
@@ -3613,10 +4145,15 @@ function migrateSugyaFlows(bank, defaults) {
     if (!Array.isArray(bank[id]) || !Array.isArray(defaults[id])) return;
     const defaultFlows = defaults[id].filter(function (q) { return q && q.type === "flow"; });
     if (!defaultFlows.length) return;
-    const keepQ = {};
-    defaultFlows.forEach(function (q) { if (q.q) keepQ[q.q] = true; });
+    const byQ = {};
+    defaultFlows.forEach(function (q) { if (q.q) byQ[q.q] = q; });
     bank[id] = bank[id].filter(function (q) {
-      return !q || q.type !== "flow" || keepQ[q.q];
+      return !q || q.type !== "flow" || byQ[q.q];
+    });
+    bank[id].forEach(function (q, i) {
+      if (q && q.type === "flow" && byQ[q.q]) {
+        bank[id][i] = JSON.parse(JSON.stringify(byQ[q.q]));
+      }
     });
     const have = {};
     bank[id].forEach(function (q) { if (q && q.q) have[(q.type || "") + "|" + q.q] = true; });
@@ -4277,11 +4814,13 @@ function cloneZones(list) {
 }
 function loadZones() {
   try {
-    let saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
-    if (!Array.isArray(saved) || !saved.length) {
+    let saved = JSON.parse(localStorage.getItem(zonesKey()) || "null");
+    // Legacy global keys only for guest/dev — logged-in teachers start from DEFAULT_ZONES.
+    if ((!Array.isArray(saved) || !saved.length) && !currentUsername()) {
       saved = JSON.parse(localStorage.getItem("tefillin-daf-zones-v4") || "null")
         || JSON.parse(localStorage.getItem("tefillin-daf-zones-v3") || "null")
-        || JSON.parse(localStorage.getItem("tefillin-daf-zones-v2") || "null");
+        || JSON.parse(localStorage.getItem("tefillin-daf-zones-v2") || "null")
+        || JSON.parse(localStorage.getItem("tefillin-daf-zones-v5") || "null");
     }
     if (Array.isArray(saved) && saved.length) {
       const byId = {};
@@ -4379,7 +4918,7 @@ function loadZones() {
   });
 }
 function saveZones() {
-  localStorage.setItem(STORE_KEY, JSON.stringify(ZONES.map(function (z) {
+  localStorage.setItem(zonesKey(), JSON.stringify(ZONES.map(function (z) {
     const rects = zoneRects(z).map(cloneBox);
     const main = rects[0] || { top: 0, left: 0, width: 0, height: 0 };
     return {
@@ -4391,7 +4930,7 @@ function saveZones() {
 }
 
 const SUGYA_ORDER = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"];
-const ZONES = loadZones();
+let ZONES = loadZones();
 ensureDhZones();
 function pageIndexOf(pageId) {
   const i = PAGES.findIndex(function (p) { return p.id === pageId; });
@@ -4960,7 +5499,7 @@ function closeSugya() {
 }
 
 const SOUND_KEY = "tefillin-sound-v1";
-const MASTERY_KEY = "tefillin-mastery-v1";
+const MASTERY_KEY = MASTERY_KEY_BASE;
 
 let soundOn = localStorage.getItem(SOUND_KEY) !== "off";
 let audioCtx = null;
@@ -5001,13 +5540,13 @@ function setSoundOn(on) {
 }
 
 let MASTERY = {};
-try { MASTERY = JSON.parse(localStorage.getItem(MASTERY_KEY) || "{}") || {}; } catch (e) { MASTERY = {}; }
+try { MASTERY = JSON.parse(localStorage.getItem(masteryKey()) || "{}") || {}; } catch (e) { MASTERY = {}; }
 function noteAttempt(sugyaId, ok) {
   if (!sugyaId) return;
   const rec = MASTERY[sugyaId] || { c: 0, w: 0 };
   if (ok) rec.c += 1; else rec.w += 1;
   MASTERY[sugyaId] = rec;
-  try { localStorage.setItem(MASTERY_KEY, JSON.stringify(MASTERY)); } catch (e) {}
+  try { localStorage.setItem(masteryKey(), JSON.stringify(MASTERY)); } catch (e) {}
   if (ok) playCorrect(); else playWrong();
 }
 // ציון שליטה: תשובה שגויה שוקלת פי 1.5, ומעט נתונים נמשך אל 50.
@@ -5257,7 +5796,8 @@ const SUGYA_TABS = {
   rashi: ["tabRashi", "sugyaRashi"],
   tosafot: ["tabTosafot", "sugyaTosafot"],
   aramaic: ["tabAramaic", "sugyaAramaic"],
-  quiz: ["tabQuiz", "sugyaQuiz"]
+  quiz: ["tabQuiz", "sugyaQuiz"],
+  aids: ["tabAids", "sugyaAids"]
 };
 // לשוניות רש״י/תוספות מקבלות מונה, ומתעממות בסוגיא שאין בה מפרש נבחר.
 function applyLayerTabs() {
@@ -5266,6 +5806,7 @@ function applyLayerTabs() {
   document.getElementById("tabRashi").hidden = openLayer !== "rashi";
   document.getElementById("tabTosafot").hidden = openLayer !== "tosafot";
   document.getElementById("tabQuiz").hidden = false;
+  document.getElementById("tabAids").hidden = false;
   const switchEl = document.getElementById("quizSrcSwitch");
   if (switchEl) switchEl.hidden = true;
   const quizTab = document.getElementById("tabQuiz");
@@ -5308,6 +5849,11 @@ function setSugyaTab(which) {
   if (which === "gemara") requestAnimationFrame(function () { requestAnimationFrame(fitSugyaType); });
   else if (which === "rashi" || which === "tosafot") renderMefarshim(which);
   else if (which === "quiz") renderQuiz();
+  else if (which === "aids") {
+    if (typeof hideKindPick === "function") hideKindPick();
+    if (typeof renderSaveBox === "function") renderSaveBox();
+    if (typeof renderAids === "function") renderAids();
+  }
   else renderAramaic();
 }
 function quizKindLabel(item) {
@@ -5400,8 +5946,17 @@ function quizCiteRowsOf(item) {
   if (typeof item.citeRow === "number") return [item.citeRow];
   return [];
 }
+function quizCiteAllowed(item) {
+  if (!item) return false;
+  if (item.noCite === true || item.cite === false) return false;
+  if (item.forceCite === true) return true;
+  const t = item.type;
+  if (t === "flow" || t === "order" || t === "stage") return false;
+  if (t === "cloze" || t === "typein" || t === "pick") return false;
+  return true;
+}
 function quizCiteData(item) {
-  if (!item) return [];
+  if (!item || !quizCiteAllowed(item)) return [];
   if (item.cite) return [{ tag: item.citeTag || "", kind: item.citeKind || "", html: item.cite }];
   const all = ((SUGYOT[quizSugya] || {}).rows) || [];
   return quizCiteRowsOf(item).map(function (i) { return all[i]; }).filter(Boolean);
@@ -6203,7 +6758,7 @@ function renderFlowQuiz(item, opts, note) {
   board.className = "flow-board";
   const hint = document.createElement("p");
   hint.className = "quiz-hint";
-  hint.textContent = item.hint || "גררו כל משפט לריבוע שמתאים לו. השם הקטן למעלה הוא שלב הסוגיא.";
+  hint.textContent = item.hint || "גררו כל משפט לשלב שמתאים לו, מלמעלה למטה.";
   board.appendChild(hint);
   const flow = document.createElement("div");
   flow.className = "flow";
@@ -8376,6 +8931,7 @@ document.getElementById("tabRashi").addEventListener("click", function () { setS
 document.getElementById("tabTosafot").addEventListener("click", function () { setSugyaTab("tosafot"); });
 document.getElementById("tabAramaic").addEventListener("click", function () { setSugyaTab("aramaic"); });
 document.getElementById("tabQuiz").addEventListener("click", function () { setSugyaTab("quiz"); });
+document.getElementById("tabAids").addEventListener("click", function () { setSugyaTab("aids"); });
 // חיצים מדלגים בין שאלות, כל עוד לא כותבים בתיבת טקסט.
 document.addEventListener("keydown", function (e) {
   if (!sugyaOverlay.classList.contains("is-open")) return;
@@ -8505,7 +9061,7 @@ document.getElementById("copyZonesBtn").addEventListener("click", function () {
   });
 });
 document.getElementById("resetZonesBtn").addEventListener("click", function () {
-  localStorage.removeItem(STORE_KEY);
+  localStorage.removeItem(zonesKey());
   ZONES.splice(0, ZONES.length);
   cloneZones(ALL_DEFAULT_ZONES).forEach(function (z) {
     z.rects = (z.part || "gemara") === "gemara" ? [cloneBox(z)] : [];
@@ -8532,6 +9088,14 @@ document.getElementById("fsBtn").addEventListener("click", function () {
 document.getElementById("fsExitChip").addEventListener("click", function () { setFullscreen(false); });
 document.addEventListener("keydown", function (event) {
   if (event.key === "Escape") {
+    if (document.getElementById("aidShow") && document.getElementById("aidShow").classList.contains("is-open")) {
+      if (typeof closeAidShow === "function") closeAidShow();
+      return;
+    }
+    if (document.getElementById("adminGate") && document.getElementById("adminGate").classList.contains("is-open")) {
+      if (typeof closeAdmin === "function") closeAdmin();
+      return;
+    }
     if (editOn) { setEditor(false); return; }
     closeSugya();
     document.getElementById("welcomeOverlay").classList.remove("is-open");
@@ -8561,6 +9125,795 @@ dragPanel(measurePanel, measurePanel.querySelector(".legend-head"));
 goToPage(0);
 setZoom(1);
 fitDafSize();
-  </script>
+  
+/* ===== auth + materials (sugya-scoped) ===== */
+window.showToast = showToast;
+if (window.pdfjsLib) {
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+}
+var BASE = (function () {
+  var path = location.pathname || "/";
+  if (/index\.html$/i.test(path)) path = path.replace(/index\.html$/i, "");
+  if (path.slice(-1) !== "/") path += "/";
+  return path;
+})();
+function asset(url) {
+  if (!url) return url;
+  if (/^(https?:|data:|blob:)/i.test(url)) return url;
+  return BASE + String(url).replace(/^\//, "");
+}
+var aidRole = "עזרים";
+var pendingFiles = [];
+var sessionItems = [];
+var aidPan = null;
+var aidZoom = 1;
+var viewingAid = null;
+var KIND_ROLE = {
+  "דף עבודה": "עזרים",
+  "סרטון": "סרטונים",
+  "תמונה": "תמונה",
+  "מבחן": "מבחנים"
+};
+function kindOf(row) {
+  if (row && row.kind) return row.kind;
+  if (row && (row.type === "youtube" || row.type === "video" || row.role === "youtube" || row.role === "סרטונים")) return "סרטון";
+  if (row && row.role === "מבחנים") return "מבחן";
+  if (row && row.role === "תמונה") return "תמונה";
+  return "דף עבודה";
+}
+function setAidZoom(next) {
+  aidZoom = Math.max(0.45, Math.min(2.4, next));
+  var page = document.querySelector(".aid-page");
+  if (page) page.style.transform = "scale(" + aidZoom + ")";
+  var readout = document.getElementById("aidZoomReadout");
+  if (readout) readout.textContent = Math.round(aidZoom * 100) + "%";
+}
+function materialsUrl() {
+  return "/api/materials?sugya=" + encodeURIComponent(quizSugya || "a");
+}
+function closeAidShow() {
+  var stage = document.getElementById("aidShowStage");
+  if (!stage) return;
+  stage.querySelectorAll("video").forEach(function (v) { try { v.pause(); } catch (e) {} });
+  stage.innerHTML = "";
+  document.getElementById("aidShow").classList.remove("is-open");
+}
+function bindAidPan(page) {
+  var stage = document.getElementById("aidShowStage");
+  page.addEventListener("mousedown", function (event) {
+    if (event.button !== 0) return;
+    aidPan = { x: event.clientX, y: event.clientY, sl: stage.scrollLeft, st: stage.scrollTop };
+    page.classList.add("is-panning");
+  });
+}
+window.addEventListener("mousemove", function (event) {
+  if (!aidPan) return;
+  var stage = document.getElementById("aidShowStage");
+  stage.scrollLeft = aidPan.sl - (event.clientX - aidPan.x);
+  stage.scrollTop = aidPan.st - (event.clientY - aidPan.y);
+});
+window.addEventListener("mouseup", function () {
+  aidPan = null;
+  var page = document.querySelector(".aid-page");
+  if (page) page.classList.remove("is-panning");
+});
+function openAid(row) {
+  viewingAid = row;
+  var stage = document.getElementById("aidShowStage");
+  document.getElementById("aidShowTitle").textContent = row.name || "עזר";
+  stage.innerHTML = "";
+  if (row.type === "youtube" && row.youtubeId) {
+    var wrap = document.createElement("div");
+    wrap.className = "yt-wrap";
+    var frame = document.createElement("iframe");
+    frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen";
+    frame.allowFullscreen = true;
+    frame.src = "https://www.youtube.com/embed/" + row.youtubeId + "?rel=0&modestbranding=1&autoplay=1";
+    wrap.appendChild(frame);
+    stage.appendChild(wrap);
+  } else if (row.type === "video") {
+    var video = document.createElement("video");
+    video.controls = true;
+    video.autoplay = true;
+    video.src = row.file;
+    stage.appendChild(video);
+  } else {
+    var page = document.createElement("div");
+    page.className = "aid-page";
+    var srcs = (row.pages && row.pages.length ? row.pages : [row.file]).filter(Boolean);
+    srcs.forEach(function (src) {
+      var img = document.createElement("img");
+      img.alt = "";
+      img.src = src;
+      page.appendChild(img);
+    });
+    page.style.transform = "scale(" + aidZoom + ")";
+    stage.appendChild(page);
+    bindAidPan(page);
+  }
+  document.getElementById("aidShow").classList.add("is-open");
+}
+function currentUser() {
+  return window.TefillinAccounts ? TefillinAccounts.session() : "";
+}
+function isAdmin() {
+  return !!(window.TefillinAccounts && TefillinAccounts.isAdmin(currentUser()));
+}
+function hydratePersonal(row) {
+  var out = {};
+  Object.keys(row || {}).forEach(function (k) { out[k] = row[k]; });
+  if (row.pages && row.pages.length && typeof row.pages[0] !== "string") {
+    out.pages = row.pages.map(function (blob) { return URL.createObjectURL(blob); });
+  }
+  if (row.fileBlob instanceof Blob) {
+    out.file = URL.createObjectURL(row.fileBlob);
+  }
+  out.personal = true;
+  return out;
+}
+function fillQuestionSelect(sel) {
+  if (!sel) return;
+  sel.innerHTML = "";
+  TefillinAccounts.QUESTIONS.forEach(function (q) {
+    var opt = document.createElement("option");
+    opt.value = q;
+    opt.textContent = q;
+    sel.appendChild(opt);
+  });
+}
+function showAuthPanel(id) {
+  ["panelLogin", "panelRegister", "panelForgotUser", "panelForgotPin"].forEach(function (name) {
+    var el = document.getElementById(name);
+    if (el) el.hidden = name !== id;
+  });
+}
+function setTeacherMode(on) {
+  window.TEACHER_MODE = !!on;
+  document.documentElement.classList.toggle("teacher", !!on);
+}
+function reloadUserWorkspace() {
+  loadUserContent();
+  ZONES = loadZones();
+  try { MASTERY = JSON.parse(localStorage.getItem(masteryKey()) || "{}") || {}; } catch (e) { MASTERY = {}; }
+  renderZones();
+  renderLists();
+  renderSugyaBar();
+  if (typeof renderPageChrome === "function") renderPageChrome();
+  else if (typeof goToPage === "function") goToPage(pageIndex);
+}
+function enterApp(name, pin) {
+  if (TefillinAccounts.isAdmin(name)) {
+    showToast("המנהל נכנס רק מאייקון המפתח");
+    return;
+  }
+  sessionItems = [];
+  TefillinAccounts.setSession(name);
+  TefillinAccounts.setRemember(name, pin);
+  document.getElementById("loginGate").classList.remove("is-open");
+  document.getElementById("loginErr").textContent = "";
+  document.getElementById("loginPin").value = "";
+  var user = TefillinAccounts.getUser(name);
+  document.getElementById("userChip").textContent = (user && user.name) ? user.name : name;
+  setTeacherMode(true);
+  reloadUserWorkspace();
+  if (!sessionStorage.getItem("tefillin-welcome-seen")) {
+    document.getElementById("welcomeOverlay").classList.add("is-open");
+    sessionStorage.setItem("tefillin-welcome-seen", "1");
+  }
+}
+function showLogin(clearSession) {
+  sessionItems = [];
+  if (clearSession && window.TefillinAccounts) TefillinAccounts.setSession("");
+  setTeacherMode(false);
+  document.getElementById("userChip").textContent = "";
+  document.getElementById("loginGate").classList.add("is-open");
+  document.getElementById("loginErr").textContent = "";
+  document.getElementById("loginPin").value = "";
+  var mem = TefillinAccounts.remember();
+  if (mem && mem.username && !TefillinAccounts.isAdmin(mem.username)) {
+    document.getElementById("loginUser").value = mem.username;
+  } else {
+    document.getElementById("loginUser").value = "";
+  }
+  showAuthPanel("panelLogin");
+}
+function tryTeacherLogin() {
+  var name = document.getElementById("loginUser").value.trim();
+  var pin = document.getElementById("loginPin").value.trim();
+  var err = document.getElementById("loginErr");
+  if (!TefillinAccounts.validUser(name)) {
+    err.textContent = "שם משתמש באנגלית";
+    return false;
+  }
+  if (!TefillinAccounts.validPin(pin)) {
+    err.textContent = "סיסמה בת 4 ספרות";
+    return false;
+  }
+  if (TefillinAccounts.isAdmin(name)) {
+    err.textContent = "כניסת מנהל רק מאייקון המפתח";
+    return false;
+  }
+  var user = TefillinAccounts.findUser(name, pin);
+  if (!user || user.admin) {
+    err.textContent = "שם משתמש או סיסמה שגויים";
+    document.getElementById("loginPin").value = "";
+    return false;
+  }
+  enterApp(user.username, pin);
+  return true;
+}
+function renderUserList() {
+  var list = document.getElementById("userList");
+  list.innerHTML = "";
+  var teachers = TefillinAccounts.teachers();
+  if (!teachers.length) {
+    list.innerHTML = "<p style='margin:0;opacity:.7'>אין מורים רשומים עדיין.</p>";
+    return;
+  }
+  teachers.forEach(function (user) {
+    var row = document.createElement("div");
+    row.className = "user-row";
+    var label = document.createElement("span");
+    label.appendChild(document.createTextNode((user.name || "") + " "));
+    var meta = document.createElement("span");
+    meta.className = "user-meta";
+    meta.dir = "ltr";
+    meta.textContent = user.username;
+    label.appendChild(meta);
+    row.appendChild(label);
+    var tools = document.createElement("div");
+    tools.className = "admin-tools";
+    var reset = document.createElement("button");
+    reset.type = "button";
+    reset.className = "ghost-btn";
+    reset.style.cssText = "color:#1c140c;border-color:#c9a227";
+    reset.textContent = "אפס סיסמה";
+    reset.onclick = function () {
+      var pin = prompt("סיסמה חדשה בת 4 ספרות עבור " + (user.name || user.username));
+      if (!pin) return;
+      try {
+        TefillinAccounts.resetPin(user.username, pin);
+        showToast("הסיסמה עודכנה");
+      } catch (err) {
+        showToast("סיסמה חייבת להיות 4 ספרות");
+      }
+    };
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "ghost-btn";
+    del.style.cssText = "color:#8a1c1c;border-color:#c9a227";
+    del.textContent = "מחק";
+    del.onclick = function () {
+      if (!confirm("למחוק את המורה " + (user.name || user.username) + "?")) return;
+      TefillinAccounts.removeUser(user.username);
+      renderUserList();
+    };
+    tools.appendChild(reset);
+    tools.appendChild(del);
+    row.appendChild(tools);
+    list.appendChild(row);
+  });
+}
+function showAdminManage() {
+  document.getElementById("loginGate").classList.add("is-open");
+  document.getElementById("adminLoginBox").hidden = true;
+  document.getElementById("adminManageBox").hidden = false;
+  document.getElementById("adminErr").textContent = "";
+  document.getElementById("adminNewUser").value = TefillinAccounts.ADMIN_USER;
+  document.getElementById("adminNewPin").value = "";
+  renderUserList();
+}
+function closeAdmin() {
+  document.getElementById("adminGate").classList.remove("is-open");
+  document.getElementById("adminLoginBox").hidden = false;
+  document.getElementById("adminManageBox").hidden = true;
+  document.getElementById("adminErr").textContent = "";
+  document.getElementById("adminUser").value = "";
+  document.getElementById("adminPin").value = "";
+}
+function unlockAdmin(name, pin) {
+  var user = TefillinAccounts.findUser(name, pin);
+  if (!user || !user.admin) return false;
+  TefillinAccounts.setAdminRemember(user.username, pin);
+  TefillinAccounts.setSession("");
+  setTeacherMode(false);
+  document.getElementById("userChip").textContent = "";
+  showAdminManage();
+  return true;
+}
+function openAdmin() {
+  document.getElementById("adminGate").classList.add("is-open");
+  document.getElementById("adminUser").value = "";
+  document.getElementById("adminPin").value = "";
+  document.getElementById("adminErr").textContent = "";
+  document.getElementById("adminLoginBox").hidden = false;
+  document.getElementById("adminManageBox").hidden = true;
+}
+function renderSaveBox() {
+  var box = document.getElementById("saveBox");
+  if (!box) return;
+  box.innerHTML = "";
+  if (!isAdmin()) return;
+  if (window.TefillinStore && TefillinStore.canSave()) {
+    var ok = document.createElement("span");
+    ok.className = "save-ok";
+    ok.textContent = "שמירה באתר פעילה";
+    var clear = document.createElement("button");
+    clear.type = "button";
+    clear.className = "ghost-btn";
+    clear.style.cssText = "color:#1c140c;border-color:#c9a227";
+    clear.textContent = "נתק מפתח";
+    clear.onclick = function () { TefillinStore.setToken(""); renderSaveBox(); };
+    box.appendChild(ok);
+    box.appendChild(clear);
+    return;
+  }
+  var input = document.createElement("input");
+  input.type = "password";
+  input.placeholder = "מפתח גיטהאב לשמירה באתר (פעם אחת)";
+  input.autocomplete = "off";
+  var btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "ghost-btn";
+  btn.style.cssText = "color:#1c140c;border-color:#c9a227;background:#fff8dc";
+  btn.textContent = "הפעל שמירה באתר";
+  btn.onclick = function () {
+    if (!input.value.trim()) {
+      showToast("צריך מפתח GitHub עם הרשאת repo");
+      return;
+    }
+    TefillinStore.setToken(input.value.trim());
+    renderSaveBox();
+    showToast("מעכשיו גרירה וקישורים יישמרו באתר");
+  };
+  box.appendChild(input);
+  box.appendChild(btn);
+}
+function youtubeIdFromUrl(url) {
+  url = String(url || "").replace(/[\u200e\u200f\u202a-\u202e]/g, "").trim();
+  if (/^[\w-]{11}$/.test(url)) return url;
+  var patterns = [
+    /youtu\.be\/([\w-]{11})/i,
+    /youtube(?:-nocookie)?\.com\/(?:embed|shorts|live)\/([\w-]{11})/i,
+    /youtube(?:-nocookie)?\.com\/watch\?[^#]*\bv=([\w-]{11})/i,
+    /[?&]v=([\w-]{11})/i,
+    /\/([\w-]{11})(?:[?&#]|$)/i
+  ];
+  for (var i = 0; i < patterns.length; i++) {
+    var found = url.match(patterns[i]);
+    if (found) return found[1];
+  }
+  return "";
+}
+function readLocalLinks() {
+  try { return JSON.parse(localStorage.getItem(ytStorageKey()) || "[]"); } catch (e) { return []; }
+}
+function writeLocalLinks(list) {
+  try { localStorage.setItem(ytStorageKey(), JSON.stringify(list)); } catch (e) {}
+}
+function belongsToCurrent(row) {
+  return row && row.sugya === quizSugya;
+}
+function addYoutubeLink(url) {
+  var user = currentUser();
+  if (!user) {
+    showToast("צריך להתחבר כמורה");
+    return;
+  }
+  if (!quizSugya) {
+    showToast("פתחו סוגיא קודם");
+    return;
+  }
+  var vid = youtubeIdFromUrl(url);
+  if (!vid) {
+    showToast("לא זוהה קישור יוטיוב. הדביקו קישור מלא");
+    return;
+  }
+  if (readLocalLinks().some(function (row) { return row.youtubeId === vid && belongsToCurrent(row); })) {
+    showToast("הסרטון כבר שמור לסוגיא הזו");
+    return;
+  }
+  var item = {
+    id: "yt-" + vid + "-" + Date.now(),
+    username: user,
+    name: "סרטון יוטיוב",
+    role: "סרטונים",
+    kind: "סרטון",
+    type: "youtube",
+    youtubeId: vid,
+    url: "https://www.youtube.com/watch?v=" + vid,
+    sugya: quizSugya,
+    personal: true
+  };
+  writeLocalLinks(readLocalLinks().concat([item]));
+  document.getElementById("ytUrl").value = "";
+  function finish() {
+    showToast("נשמר");
+    openAid(item);
+  }
+  sessionItems.push(item);
+  var save = window.TefillinAccounts ? TefillinAccounts.saveFile(item) : Promise.resolve();
+  save.then(function () {
+    if (isAdmin() && window.TefillinStore && TefillinStore.canSave()) {
+      return TefillinStore.addYoutube(quizSugya, vid, item.name).catch(function () {});
+    }
+  }).then(finish).catch(finish);
+}
+function loadMaterials() {
+  var user = currentUser();
+  function withLocal(items) {
+    items = items ? items.slice().filter(belongsToCurrent) : [];
+    function mergeRow(row) {
+      if (!belongsToCurrent(row)) return;
+      if (items.some(function (x) { return (x.id && x.id === row.id) || (x.youtubeId && x.youtubeId === row.youtubeId); })) return;
+      items.push(row);
+    }
+    sessionItems.concat(readLocalLinks()).forEach(mergeRow);
+    items.forEach(function (row) {
+      if (row.pages) row.pages = row.pages.map(function (src) { return typeof src === "string" ? asset(src) : src; });
+      if (row.file && typeof row.file === "string") row.file = asset(row.file);
+    });
+    if (!window.TefillinAccounts || !user) return Promise.resolve({ items: items });
+    return TefillinAccounts.userFiles(user).then(function (personal) {
+      personal.forEach(function (row) { mergeRow(hydratePersonal(row)); });
+      return { items: items };
+    }).catch(function () { return { items: items }; });
+  }
+  return fetch(materialsUrl()).then(function (res) {
+    if (!res.ok) throw new Error("api");
+    return res.json();
+  }).catch(function () {
+    return fetch(asset("חומרים/רישום.json")).then(function (res) {
+      if (!res.ok) throw new Error("registry");
+      return res.json();
+    }).then(function (data) {
+      return { items: (data.items || []).filter(belongsToCurrent) };
+    });
+  }).then(function (data) {
+    return withLocal(data && data.items);
+  }).catch(function () {
+    return withLocal([]);
+  });
+}
+function renderAids() {
+  var grid = document.getElementById("aidsGrid");
+  if (!grid) return;
+  loadMaterials().then(function (data) {
+    var rows = data.items || [];
+    grid.innerHTML = "";
+    if (!rows.length) {
+      grid.innerHTML = "<p style='grid-column:1/-1;opacity:.7'>אין עזרים לסוגיא הזו.</p>";
+      return;
+    }
+    rows.forEach(function (row) {
+      var card = document.createElement("button");
+      card.type = "button";
+      card.className = "aid-card";
+      if (row.type === "youtube") {
+        var thumb = document.createElement("img");
+        thumb.alt = "";
+        thumb.src = "https://img.youtube.com/vi/" + row.youtubeId + "/hqdefault.jpg";
+        card.appendChild(thumb);
+      } else if (row.type === "video") {
+        var media = document.createElement("video");
+        media.src = row.file;
+        media.muted = true;
+        card.appendChild(media);
+      } else if (row.pages && row.pages[0]) {
+        var img = document.createElement("img");
+        img.alt = "";
+        img.src = row.pages[0];
+        card.appendChild(img);
+      } else {
+        var mark = document.createElement("div");
+        mark.className = "aid-pdf";
+        mark.textContent = kindOf(row);
+        card.appendChild(mark);
+      }
+      var cap = document.createElement("figcaption");
+      var badge = document.createElement("span");
+      badge.className = "aid-kind";
+      badge.textContent = kindOf(row);
+      cap.appendChild(badge);
+      cap.appendChild(document.createTextNode(row.name || ""));
+      var del = document.createElement("button");
+      del.className = "aid-del";
+      del.type = "button";
+      del.textContent = "×";
+      del.onclick = function (e) {
+        e.stopPropagation();
+        var done = function () { renderAids(); };
+        if (row.youtubeId) {
+          writeLocalLinks(readLocalLinks().filter(function (x) { return x.id !== row.id && x.youtubeId !== row.youtubeId; }));
+        }
+        if (row.personal || (row.username && row.username === currentUser())) {
+          if (window.TefillinAccounts) {
+            TefillinAccounts.deleteFile(row.id).then(done).catch(done);
+          } else {
+            done();
+          }
+          return;
+        }
+        if (isAdmin() && window.TefillinStore && TefillinStore.canSave()) {
+          TefillinStore.removeItem(row).then(done).catch(function () {
+            showToast("המחיקה מהאתר נכשלה");
+            done();
+          });
+          return;
+        }
+        showToast("אפשר למחוק רק עזרים שהוספתם");
+      };
+      card.appendChild(cap);
+      card.appendChild(del);
+      card.onclick = function () { openAid(row); };
+      grid.appendChild(card);
+    });
+  }).catch(function () {
+    showToast("יש לפתוח את התוכנה דרך פתח.bat כדי לשמור עזרים בתיקייה");
+  });
+}
+function hideKindPick() {
+  pendingFiles = [];
+  var el = document.getElementById("kindPick");
+  if (el) el.hidden = true;
+}
+function askKind(files) {
+  var list = Array.from(files || []).filter(function (f) {
+    var type = (f.type || "").toLowerCase();
+    var name = (f.name || "").toLowerCase();
+    return type.indexOf("image/") === 0 || type.indexOf("video/") === 0 || type.indexOf("pdf") !== -1 || name.slice(-4) === ".pdf";
+  });
+  if (!list.length) {
+    showToast("אפשר לגרור תמונות, סרטונים או קובצי PDF");
+    return;
+  }
+  pendingFiles = list;
+  document.getElementById("kindPick").hidden = false;
+}
+function addFiles(files, kind) {
+  var user = currentUser();
+  if (!user) {
+    showToast("צריך להתחבר כמורה");
+    return;
+  }
+  if (!quizSugya) {
+    showToast("פתחו סוגיא קודם");
+    return;
+  }
+  var list = Array.from(files || []);
+  if (!list.length || !KIND_ROLE[kind]) {
+    showToast("בחרו סוג לשמירה");
+    return;
+  }
+  aidRole = KIND_ROLE[kind];
+  var chain = Promise.resolve();
+  list.forEach(function (file) {
+    chain = chain.then(function () {
+      return TefillinAccounts.fileToPages(file).then(function (parsed) {
+        var row = {
+          id: "u-" + user + "-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7),
+          username: user,
+          name: file.name,
+          role: aidRole,
+          kind: kind,
+          type: parsed.type === "video" ? "video" : (parsed.type === "pages" ? "pages" : "file"),
+          sugya: quizSugya,
+          pages: parsed.pages,
+          fileBlob: parsed.fileBlob,
+          personal: true
+        };
+        return TefillinAccounts.saveFile(row).then(function () {
+          if (isAdmin() && window.TefillinStore && TefillinStore.canSave()) {
+            return TefillinStore.uploadFile(quizSugya, aidRole, file).then(function (saved) {
+              if (saved) sessionItems.push(saved);
+            }).catch(function () {});
+          }
+        });
+      });
+    });
+  });
+  chain.then(function () {
+    hideKindPick();
+    renderAids();
+    showToast("נשמר");
+  }).catch(function (err) {
+    if (err && err.message === "type") showToast("אפשר לגרור תמונות, סרטונים או קובצי PDF");
+    else showToast("השמירה נכשלה");
+  });
+}
+(function bindAidsUi() {
+  var dropzone = document.getElementById("dropzone");
+  var aidFiles = document.getElementById("aidFiles");
+  if (!dropzone || !aidFiles) return;
+  dropzone.addEventListener("click", function () { aidFiles.click(); });
+  aidFiles.addEventListener("change", function () { askKind(aidFiles.files); aidFiles.value = ""; });
+  ;["dragenter", "dragover"].forEach(function (name) {
+    dropzone.addEventListener(name, function (e) {
+      e.preventDefault();
+      dropzone.classList.add("is-over");
+    });
+  });
+  dropzone.addEventListener("dragleave", function () { dropzone.classList.remove("is-over"); });
+  dropzone.addEventListener("drop", function (e) {
+    e.preventDefault();
+    dropzone.classList.remove("is-over");
+    askKind(e.dataTransfer.files);
+  });
+  document.querySelectorAll("#kindPick [data-kind]").forEach(function (btn) {
+    btn.onclick = function () { addFiles(pendingFiles, btn.getAttribute("data-kind")); };
+  });
+  document.getElementById("kindCancel").onclick = hideKindPick;
+  document.getElementById("aidShowClose").onclick = closeAidShow;
+  document.getElementById("aidZoomIn").onclick = function () { setAidZoom(aidZoom + 0.15); };
+  document.getElementById("aidZoomOut").onclick = function () { setAidZoom(aidZoom - 0.15); };
+  document.getElementById("ytAdd").onclick = function () {
+    addYoutubeLink(document.getElementById("ytUrl").value);
+  };
+  document.getElementById("ytUrl").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      addYoutubeLink(document.getElementById("ytUrl").value);
+    }
+  });
+})();
+fillQuestionSelect(document.getElementById("regQuestion"));
+function bindPinInput(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener("input", function () {
+    this.value = this.value.replace(/\D/g, "").slice(0, 4);
+  });
+}
+["loginPin", "adminPin", "newPin", "regPin", "fpPin", "adminNewPin"].forEach(bindPinInput);
+document.getElementById("loginGo").onclick = tryTeacherLogin;
+["loginUser", "loginPin"].forEach(function (id) {
+  document.getElementById(id).addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      tryTeacherLogin();
+    }
+  });
+});
+document.getElementById("openRegister").onclick = function () {
+  document.getElementById("regErr").textContent = "";
+  showAuthPanel("panelRegister");
+};
+document.getElementById("openForgotUser").onclick = function () {
+  document.getElementById("fuErr").textContent = "";
+  document.getElementById("fuOk").textContent = "";
+  showAuthPanel("panelForgotUser");
+};
+document.getElementById("openForgotPin").onclick = function () {
+  document.getElementById("fpErr").textContent = "";
+  document.getElementById("fpOk").textContent = "";
+  document.getElementById("fpQuestion").textContent = "";
+  showAuthPanel("panelForgotPin");
+};
+document.getElementById("regBack").onclick = function () { showAuthPanel("panelLogin"); };
+document.getElementById("fuBack").onclick = function () { showAuthPanel("panelLogin"); };
+document.getElementById("fpBack").onclick = function () { showAuthPanel("panelLogin"); };
+document.getElementById("regGo").onclick = function () {
+  var err = document.getElementById("regErr");
+  err.textContent = "";
+  try {
+    TefillinAccounts.registerUser({
+      name: document.getElementById("regName").value,
+      username: document.getElementById("regUser").value,
+      pin: document.getElementById("regPin").value,
+      question: document.getElementById("regQuestion").value,
+      answer: document.getElementById("regAnswer").value
+    });
+    var registered = document.getElementById("regUser").value.trim();
+    document.getElementById("regName").value = "";
+    document.getElementById("regUser").value = "";
+    document.getElementById("regPin").value = "";
+    document.getElementById("regAnswer").value = "";
+    showAuthPanel("panelLogin");
+    document.getElementById("loginUser").value = registered;
+    document.getElementById("loginPin").value = "";
+    document.getElementById("loginPin").focus();
+    showToast("ההרשמה הצליחה. אפשר להתחבר");
+  } catch (e) {
+    if (e.message === "name") err.textContent = "הזינו שם מלא";
+    else if (e.message === "user") err.textContent = "שם משתמש באנגלית, מתחיל באות";
+    else if (e.message === "pin") err.textContent = "סיסמה בת 4 ספרות";
+    else if (e.message === "recovery") err.textContent = "בחרו שאלה והזינו תשובה";
+    else if (e.message === "taken" || e.message === "admin") err.textContent = "שם המשתמש תפוס";
+    else err.textContent = "לא ניתן להירשם";
+  }
+};
+document.getElementById("fuGo").onclick = function () {
+  var err = document.getElementById("fuErr");
+  var ok = document.getElementById("fuOk");
+  err.textContent = "";
+  ok.textContent = "";
+  var found = TefillinAccounts.recoverUsername(document.getElementById("fuName").value, document.getElementById("fuAnswer").value);
+  if (!found.length) {
+    err.textContent = "לא נמצא התאמה";
+    return;
+  }
+  ok.textContent = found.map(function (u) { return u.name + " · " + u.username; }).join(" | ");
+};
+document.getElementById("fpLoadQ").onclick = function () {
+  var q = TefillinAccounts.recoverQuestion(document.getElementById("fpUser").value);
+  document.getElementById("fpErr").textContent = q ? "" : "לא נמצא משתמש עם שאלת שחזור";
+  document.getElementById("fpQuestion").textContent = q || "";
+};
+document.getElementById("fpGo").onclick = function () {
+  var err = document.getElementById("fpErr");
+  var ok = document.getElementById("fpOk");
+  err.textContent = "";
+  ok.textContent = "";
+  try {
+    var user = TefillinAccounts.recoverPin(
+      document.getElementById("fpUser").value,
+      document.getElementById("fpAnswer").value,
+      document.getElementById("fpPin").value
+    );
+    ok.textContent = "הסיסמה עודכנה. אפשר להתחבר כ־" + user;
+    document.getElementById("loginUser").value = user;
+    document.getElementById("fpPin").value = "";
+    document.getElementById("fpAnswer").value = "";
+  } catch (e) {
+    if (e.message === "pin") err.textContent = "סיסמה חדשה בת 4 ספרות";
+    else if (e.message === "answer") err.textContent = "תשובה שגויה";
+    else err.textContent = "לא ניתן לעדכן";
+  }
+};
+document.getElementById("switchUserBtn").onclick = function () { showLogin(true); };
+document.getElementById("adminKey").onclick = openAdmin;
+document.getElementById("adminCancel").onclick = closeAdmin;
+document.getElementById("adminClose").onclick = closeAdmin;
+document.getElementById("adminGo").onclick = function () {
+  var name = document.getElementById("adminUser").value.trim();
+  var pin = document.getElementById("adminPin").value.trim();
+  if (!unlockAdmin(name, pin)) {
+    document.getElementById("adminErr").textContent = "כניסת מנהל שגויה";
+  }
+};
+["adminUser", "adminPin"].forEach(function (id) {
+  document.getElementById(id).addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById("adminGo").click();
+    }
+  });
+});
+document.getElementById("adminSaveAuth").onclick = function () {
+  try {
+    TefillinAccounts.setAdminAuth(document.getElementById("adminNewUser").value, document.getElementById("adminNewPin").value);
+    showToast("פרטי המנהל עודכנו");
+    renderUserList();
+  } catch (err) {
+    if (err.message === "user") showToast("שם מנהל באנגלית");
+    else if (err.message === "pin") showToast("סיסמה בת 4 ספרות");
+    else showToast("לא ניתן לעדכן מנהל");
+  }
+};
+document.getElementById("addUserBtn").onclick = function () {
+  try {
+    TefillinAccounts.registerUser({
+      name: document.getElementById("newName").value || document.getElementById("newUser").value,
+      username: document.getElementById("newUser").value,
+      pin: document.getElementById("newPin").value,
+      question: "צבע אהוב עליי",
+      answer: "temp"
+    });
+    document.getElementById("newName").value = "";
+    document.getElementById("newUser").value = "";
+    document.getElementById("newPin").value = "";
+    renderUserList();
+    showToast("המורה נוסף");
+  } catch (err) {
+    if (err.message === "user") showToast("שם באנגלית, מתחיל באות, בלי רווחים");
+    else if (err.message === "pin") showToast("סיסמה בת 4 ספרות");
+    else if (err.message === "admin" || err.message === "taken") showToast("שם משתמש תפוס");
+    else if (err.message === "name") showToast("הזינו שם מלא");
+    else showToast("לא ניתן להוסיף את המורה");
+  }
+};
+showLogin(true);
+
+</script>
 </body>
 </html>

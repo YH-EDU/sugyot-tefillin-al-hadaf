@@ -1,5 +1,15 @@
-pdfs/
-preview/
 __pycache__/
+*.pyc
 .DS_Store
 Thumbs.db
+pdfs/
+preview/
+mivchan/
+_*.py
+_*.js
+_*.png
+_*.txt
+_*.json
+_backup.html
+_raw_dump.txt
+_mefarshim_draft.js
