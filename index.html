@@ -4361,6 +4361,28 @@ function derivedDhZones() {
 }
 const ALL_DEFAULT_ZONES = DEFAULT_ZONES.concat(derivedDhZones());
 
+/* מיקומים מדויקים שנשמרו ממיקוד האזורים במחשב — ברירת מחדל לכל מורה חדש */
+const SHIPPED_ZONE_DRAWINGS = [{"id":"a","sugya":"a","page":"35b","part":"gemara","dh":"","top":60.75619295958279,"left":32.54716981132076,"width":16.19496855345912,"height":11.994784876140812,"rects":[{"top":60.75619295958279,"left":32.54716981132076,"width":16.19496855345912,"height":11.994784876140812},{"top":62.05997392438071,"left":48.742138364779876,"width":11.006289308176093,"height":10.691003911342897}]},{"id":"b","sugya":"b","page":"36a","part":"gemara","dh":"","top":13.359023763648043,"left":32.94025157232704,"width":26.96540880503145,"height":13.615928066795117,"rects":[{"top":13.359023763648043,"left":32.94025157232704,"width":26.96540880503145,"height":13.615928066795117},{"top":26.97495183044316,"left":36.16352201257861,"width":23.742138364779883,"height":1.4129736673089255}]},{"id":"c","sugya":"c","page":"36a","part":"gemara","dh":"","top":27.121888959795786,"left":33.25471698113208,"width":3.464033018867923,"height":14.625060301604346,"rects":[{"top":27.121888959795786,"left":33.25471698113208,"width":3.464033018867923,"height":14.625060301604346},{"top":28.45215157353886,"left":36.71875,"width":23.265526729559753,"height":13.294797687861273},{"top":41.74694926140013,"left":55.0314465408805,"width":4.9528301886792505,"height":1.8625561978163105}]},{"id":"d","sugya":"d","page":"36a","part":"gemara","dh":"","top":41.61849710982659,"left":33.0188679245283,"width":22.798742138364787,"height":12.267180475272951,"rects":[{"top":41.61849710982659,"left":33.0188679245283,"width":22.798742138364787,"height":12.267180475272951},{"top":43.22414900449583,"left":55.81761006289309,"width":4.638364779874202,"height":10.982658959537574},{"top":44.829800899165065,"left":60.45597484276729,"width":18.553459119496864,"height":9.055876685934479}]},{"id":"e","sugya":"e","page":"36b","part":"gemara","dh":"","top":13.624338624338625,"left":32.38993710691824,"width":27.751572327044016,"height":24.867724867724867,"rects":[{"top":13.624338624338625,"left":32.38993710691824,"width":27.751572327044016,"height":24.867724867724867},{"top":35.383597883597886,"left":13.9937106918239,"width":18.39622641509434,"height":3.1084656084656075},{"top":38.492063492063494,"left":46.93396226415094,"width":13.207547169811313,"height":1.6534391534391517}]},{"id":"f","sugya":"f","page":"36b","part":"gemara","dh":"","top":38.55820105820106,"left":13.757861635220126,"width":33.09748427672956,"height":7.539682539682545,"rects":[{"top":38.55820105820106,"left":13.757861635220126,"width":33.09748427672956,"height":7.539682539682545},{"top":39.88095238095239,"left":46.855345911949684,"width":13.364779874213845,"height":7.93650793650793},{"top":46.0978835978836,"left":17.21698113207547,"width":29.638364779874212,"height":1.7195767195767147}]},{"id":"g","sugya":"g","page":"36b","part":"gemara","dh":"","top":46.36243386243386,"left":13.522012578616351,"width":3.616352201257861,"height":4.43121693121693,"rects":[{"top":46.36243386243386,"left":13.522012578616351,"width":3.616352201257861,"height":4.43121693121693},{"top":47.883597883597886,"left":17.138364779874212,"width":43.553459119496864,"height":4.36507936507936}]},{"id":"h","sugya":"h","page":"36b","part":"gemara","dh":"","top":50.79365079365079,"left":13.679245283018867,"width":3.9308176100628938,"height":6.216931216931222,"rects":[{"top":50.79365079365079,"left":13.679245283018867,"width":3.9308176100628938,"height":6.216931216931222},{"top":52.182539682539684,"left":17.61006289308176,"width":43.39622641509434,"height":4.828042328042329}]},{"id":"i","sugya":"i","page":"36b","part":"gemara","dh":"","top":13.486492276267786,"left":33.125,"width":26.953125000000007,"height":4.339502233567327,"rects":[{"top":13.486492276267786,"left":33.125,"width":26.953125000000007,"height":4.339502233567327}]},{"id":"i2","sugya":"i","page":"37a","part":"gemara","dh":"","top":11.2,"left":36.4,"width":29.199999999999996,"height":16.9,"rects":[{"top":11.2,"left":36.4,"width":29.199999999999996,"height":16.9}]},{"id":"j","sugya":"j","page":"37a","part":"gemara","dh":"","top":16.44187540141297,"left":32.54716981132076,"width":3.1446540880503093,"height":12.074502247912655,"rects":[{"top":16.44187540141297,"left":32.54716981132076,"width":3.1446540880503093,"height":12.074502247912655},{"top":18.17597944765575,"left":35.691823899371066,"width":24.213836477987428,"height":10.340398201669878},{"top":28.516377649325626,"left":51.4937106918239,"width":8.411949685534594,"height":1.3487475915221587}]},{"id":"k","sugya":"k","page":"37a","part":"gemara","dh":"","top":28.644829800899164,"left":32.54716981132076,"width":18.553459119496857,"height":4.367373153500328,"rects":[{"top":28.644829800899164,"left":32.54716981132076,"width":18.553459119496857,"height":4.367373153500328},{"top":30.057803468208093,"left":51.100628930817614,"width":9.276729559748425,"height":8.927424534360952},{"top":33.01220295439949,"left":32.70440251572327,"width":18.396226415094347,"height":5.9730250481695535}]},{"id":"l","sugya":"l","page":"37a","part":"gemara","dh":"","top":38.59987154784842,"left":32.15408805031446,"width":28.537735849056602,"height":17.019910083493905,"rects":[{"top":38.59987154784842,"left":32.15408805031446,"width":28.537735849056602,"height":17.019910083493905}]},{"id":"m","sugya":"m","page":"37a","part":"gemara","dh":"","top":78,"left":36.4,"width":29.199999999999996,"height":18,"rects":[{"top":78,"left":36.4,"width":29.199999999999996,"height":18}]},{"id":"l2","sugya":"l","page":"37b","part":"gemara","dh":"","top":14.5,"left":36.4,"width":29.2,"height":22,"rects":[{"top":14.5,"left":36.4,"width":29.2,"height":22}]},{"id":"m2","sugya":"m","page":"37b","part":"gemara","dh":"","top":12,"left":36.4,"width":29.2,"height":3.2,"rects":[{"top":12,"left":36.4,"width":29.2,"height":3.2},{"top":36.5,"left":36.4,"width":29.2,"height":17.8}]},{"id":"a-r0","sugya":"a","page":"35b","part":"rashi","dh":"מאימתי מברך עליהן משעת הנחתן","top":83.63754889178618,"left":14.229559748427672,"width":29.166666666666668,"height":1.629726205997386,"rects":[{"top":83.63754889178618,"left":14.229559748427672,"width":29.166666666666668,"height":1.629726205997386}]},{"id":"a-r1","sugya":"a","page":"35b","part":"rashi","dh":"אביי ורבא דאמרי תרוייהו","top":85.78878748370273,"left":14.072327044025156,"width":31.839622641509436,"height":1.8252933507170752,"rects":[{"top":85.78878748370273,"left":14.072327044025156,"width":31.839622641509436,"height":1.8252933507170752}]},{"id":"a-t0","sugya":"a","page":"35b","part":"tosafot","dh":"והקורא קורא כסדרן","top":10.821382007822686,"left":62.814465408805034,"width":10.298742138364773,"height":19.882659713168188,"rects":[{"top":10.821382007822686,"left":62.814465408805034,"width":10.298742138364773,"height":19.882659713168188}]},{"id":"a-t1","sugya":"a","page":"35b","part":"tosafot","dh":"משעת הנחה ועד שעת קשירה","top":89.96088657105607,"left":13.679245283018867,"width":65.40880503144653,"height":8.474576271186436,"rects":[{"top":89.96088657105607,"left":13.679245283018867,"width":65.40880503144653,"height":8.474576271186436}]},{"id":"b-r0","sugya":"b","page":"36a","part":"rashi","dh":"לא סח","top":9.505459216441874,"left":49.056603773584904,"width":20.9119496855346,"height":1.1560693641618514,"rects":[{"top":9.505459216441874,"left":49.056603773584904,"width":20.9119496855346,"height":1.1560693641618514}]},{"id":"b-r1","sugya":"b","page":"36a","part":"rashi","dh":"עבירה היא בידו וחוזר עליה מערכי המלחמה","top":14.450867052023122,"left":61.32075471698113,"width":17.84591194968553,"height":4.1746949261400115,"rects":[{"top":14.450867052023122,"left":61.32075471698113,"width":17.84591194968553,"height":4.1746949261400115}]},{"id":"b-t0","sugya":"b","page":"36a","part":"tosafot","dh":"לא סח מברך אחת סח מברך שתים","top":71.2267180475273,"left":13.757861635220126,"width":64.22955974842768,"height":3.7893384714193985,"rects":[{"top":71.2267180475273,"left":13.757861635220126,"width":64.22955974842768,"height":3.7893384714193985}]},{"id":"b-t1","sugya":"b","page":"36a","part":"tosafot","dh":"סח בין תפילה לתפילה חוזר ומברך","top":59.087989723827874,"left":13.60062893081761,"width":45.59748427672956,"height":10.66152858060373,"rects":[{"top":59.087989723827874,"left":13.60062893081761,"width":45.59748427672956,"height":10.66152858060373},{"top":60.69364161849711,"left":59.198113207547166,"width":20.204402515723274,"height":9.055876685934493}]},{"id":"c-r0","sugya":"c","page":"36a","part":"rashi","dh":"והיו","top":17.21258831085421,"left":61.399371069182386,"width":3.5377358490566095,"height":14.515093127809887,"rects":[{"top":17.21258831085421,"left":61.399371069182386,"width":3.5377358490566095,"height":14.515093127809887},{"top":18.946692357096982,"left":64.937106918239,"width":14.15094339622641,"height":12.780989081567114},{"top":31.727681438664096,"left":72.87735849056604,"width":6.210691823899367,"height":1.2845215157353955}]},{"id":"c-t0","sugya":"c","page":"36a","part":"tosafot","dh":"וקשרתם לאות על ידך והדר והיו לטוטפת בין עיניך","top":77.4138326283518,"left":13.050314465408805,"width":66.19496855345912,"height":9.120102761721256,"rects":[{"top":77.4138326283518,"left":13.050314465408805,"width":66.19496855345912,"height":9.120102761721256},{"top":86.53393539007305,"left":50.62893081761006,"width":28.61635220125786,"height":1.6698779704559996}]},{"id":"d-r0","sugya":"d","page":"36a","part":"rashi","dh":"ממשמש בהו","top":34.68208092485549,"left":69.33962264150944,"width":9.276729559748432,"height":1.0276172125883107,"rects":[{"top":34.68208092485549,"left":69.33962264150944,"width":9.276729559748432,"height":1.0276172125883107}]},{"id":"d-r1","sugya":"d","page":"36a","part":"rashi","dh":"שתכלה רגל מן השוק","top":36.095054592164416,"left":68.55345911949685,"width":10.534591194968556,"height":0.8991650610147701,"rects":[{"top":36.095054592164416,"left":68.55345911949685,"width":10.534591194968556,"height":0.8991650610147701}]},{"id":"d-t0","sugya":"d","page":"36a","part":"tosafot","dh":"וכשיגיע זמנן ממשמש בהן ומברך","top":91.02976069514692,"left":13.836477987421384,"width":29.795597484276726,"height":3.660886319845858,"rects":[{"top":91.02976069514692,"left":13.836477987421384,"width":29.795597484276726,"height":3.660886319845858},{"top":91.99315183194847,"left":43.63207547169811,"width":35.613207547169814,"height":2.6974951830443104},{"top":94.69064701499278,"left":61.1,"width":18.14528301886792,"height":1.091843288375074}]},{"id":"d-t1","sugya":"d","page":"36a","part":"tosafot","dh":"רבי יעקב אומר עד שתכלה רגל מן השוק","top":95.2686816970737,"left":13.915094339622641,"width":39.46540880503145,"height":2.183686576750162,"rects":[{"top":95.2686816970737,"left":13.915094339622641,"width":39.46540880503145,"height":2.183686576750162},{"top":96.10362068230171,"left":53.38050314465409,"width":25.786163522012565,"height":1.3487475915221552}]},{"id":"e-r0","sugya":"e","page":"36b","part":"rashi","dh":"לא חולצין","top":0,"left":0,"width":0,"height":0,"rects":[]},{"id":"e-r1","sugya":"e","page":"36b","part":"rashi","dh":"שהן עצמן אות","top":10.972404730617608,"left":19.0625,"width":26.71875,"height":1.3140604467805517,"rects":[{"top":10.972404730617608,"left":19.0625,"width":26.71875,"height":1.3140604467805517}]},{"id":"f-r0","sugya":"f","page":"36b","part":"rashi","dh":"עובר בלאו","top":12.352168199737187,"left":13.90625,"width":14.375000000000004,"height":1.4454664914586086,"rects":[{"top":12.352168199737187,"left":13.90625,"width":14.375000000000004,"height":1.4454664914586086},{"top":13.797634691195796,"left":25.234374999999996,"width":5.9375000000000036,"height":1.0512483574244413}]},{"id":"f-r1","sugya":"f","page":"36b","part":"rashi","dh":"השמר דלאו לאו","top":14.060446780551905,"left":14.0625,"width":10.46875,"height":10.64388961892247,"rects":[{"top":14.060446780551905,"left":14.0625,"width":10.46875,"height":10.64388961892247},{"top":15.374507227332456,"left":24.53125,"width":7.03125,"height":9.329829172141919},{"top":24.704336399474375,"left":28.125,"width":3.4375,"height":1.1826544021024965}]},{"id":"g-r0","sugya":"g","page":"36b","part":"rashi","dh":"ואם לשומרן","top":24.90144546649146,"left":14.21875,"width":17.265624999999996,"height":2.365308804204993,"rects":[{"top":24.90144546649146,"left":14.21875,"width":17.265624999999996,"height":2.365308804204993}]},{"id":"g-r1","sugya":"g","page":"36b","part":"rashi","dh":"קסבר הלכה","top":27.33245729303548,"left":14.140625000000002,"width":17.421875,"height":1.3140604467805517,"rects":[{"top":27.33245729303548,"left":14.140625000000002,"width":17.421875,"height":1.3140604467805517}]},{"id":"i-r0","sugya":"i","page":"36b","part":"rashi","dh":"ידי יסדה ארץ וימיני וגו׳","top":0,"left":0,"width":0,"height":0,"rects":[]},{"id":"i-r1","sugya":"i","page":"37a","part":"rashi","dh":"מצינו ימין שנקרא יד","top":8.359923420548819,"left":47.5,"width":11.71875,"height":0.8296107211231654,"rects":[{"top":8.359923420548819,"left":47.5,"width":11.71875,"height":0.8296107211231654}]},{"id":"j-r0","sugya":"j","page":"37a","part":"rashi","dh":"מה כתיבה בימין","top":9.505459216441874,"left":47.327044025157235,"width":31.603773584905667,"height":2.4405908798972398,"rects":[{"top":9.505459216441874,"left":47.327044025157235,"width":31.603773584905667,"height":2.4405908798972398},{"top":11.946050096339114,"left":61.32075471698113,"width":17.610062893081775,"height":2.6974951830443157}]},{"id":"j-r1","sugya":"j","page":"37a","part":"rashi","dh":"מידכה בה׳","top":14.065510597302506,"left":60.770440251572325,"width":18.160377358490578,"height":4.624277456647398,"rects":[{"top":14.065510597302506,"left":60.770440251572325,"width":18.160377358490578,"height":4.624277456647398},{"top":18.689788053949904,"left":68.16037735849056,"width":10.770440251572339,"height":1.1560693641618478}]},{"id":"k-r0","sugya":"k","page":"37a","part":"rashi","dh":"לרבות את הגידם","top":21.250797702616463,"left":61.484375,"width":9.0625,"height":2.6164645820038324,"rects":[{"top":21.250797702616463,"left":61.484375,"width":9.0625,"height":2.6164645820038324},{"top":22.590938098276965,"left":70.546875,"width":8.671875,"height":1.2763241863433308},{"top":23.867262284620296,"left":73.984375,"width":5.234375,"height":1.340140395660498}]},{"id":"k-r1","sugya":"k","page":"37a","part":"rashi","dh":"בשולט בשתי ידיו","top":26.483726866624124,"left":61.64062500000001,"width":3.671874999999993,"height":6.8283343969368175,"rects":[{"top":26.483726866624124,"left":61.64062500000001,"width":3.671874999999993,"height":6.8283343969368175},{"top":27.696234843650284,"left":65.3125,"width":13.59375,"height":5.615826419910658}]},{"id":"k-t0","sugya":"k","page":"37a","part":"tosafot","dh":"מה כתיבה בימין אף קשירה בימין","top":15.783875933405541,"left":13.359375000000002,"width":18.046875,"height":9.25335035098915,"rects":[{"top":15.783875933405541,"left":13.359375000000002,"width":18.046875,"height":9.25335035098915}]},{"id":"l-r0","sugya":"l","page":"37b","part":"rashi","dh":"גובה","top":0,"left":0,"width":0,"height":0,"rects":[]},{"id":"l-r1","sugya":"l","page":"37b","part":"rashi","dh":"הוה ציריא בידיה","top":0,"left":0,"width":0,"height":0,"rects":[]},{"id":"m-r0","sugya":"m","page":"37a","part":"rashi","dh":"רופס","top":0,"left":0,"width":0,"height":0,"rects":[]},{"id":"m-r1","sugya":"m","page":"37b","part":"rashi","dh":"לאפוקי בין עיניך","top":0,"left":0,"width":0,"height":0,"rects":[]},{"id":"m-t0","sugya":"m","page":"37a","part":"tosafot","dh":"או קום גלי","top":0,"left":0,"width":0,"height":0,"rects":[]}];
+function applyShippedZoneDrawings(list) {
+  const byId = {};
+  (SHIPPED_ZONE_DRAWINGS || []).forEach(function (z) { if (z && z.id) byId[z.id] = z; });
+  return list.map(function (base) {
+    const extra = byId[base.id];
+    if (!extra) return base;
+    const merged = Object.assign({}, base, {
+      page: extra.page || base.page,
+      top: extra.top, left: extra.left, width: extra.width, height: extra.height,
+      dh: base.dh || extra.dh || ""
+    });
+    if (Array.isArray(extra.rects) && extra.rects.length) {
+      merged.rects = extra.rects.map(cloneBox);
+    }
+    syncPrimary(merged);
+    return merged;
+  });
+}
+
+
 function pageLabelOf(pageId) {
   const p = PAGES.find(function (x) { return x.id === pageId; });
   return p ? p.label.replace("מנחות ", "") : String(pageId || "");
@@ -4430,6 +4452,8 @@ function syncPrimary(z) {
   z.width = r.width;
   z.height = r.height;
 }
+
+const ALL_DEFAULT_ZONES_DRAWN = applyShippedZoneDrawings(ALL_DEFAULT_ZONES);
 function boundingBox(rects) {
   let top = 100, left = 100, right = 0, bottom = 0;
   rects.forEach(function (r) {
@@ -4815,12 +4839,12 @@ function cloneZones(list) {
 function loadZones() {
   try {
     let saved = JSON.parse(localStorage.getItem(zonesKey()) || "null");
-    // Legacy global keys only for guest/dev — logged-in teachers start from DEFAULT_ZONES.
-    if ((!Array.isArray(saved) || !saved.length) && !currentUsername()) {
-      saved = JSON.parse(localStorage.getItem("tefillin-daf-zones-v4") || "null")
+    // אם למשתמש אין עדיין שמירה — קודם ננסה את המיקומים המדויקים הישנים מהמחשב (v5 וכו'), ואם אין — את מה שנשלח באתר.
+    if (!Array.isArray(saved) || !saved.length) {
+      saved = JSON.parse(localStorage.getItem("tefillin-daf-zones-v5") || "null")
+        || JSON.parse(localStorage.getItem("tefillin-daf-zones-v4") || "null")
         || JSON.parse(localStorage.getItem("tefillin-daf-zones-v3") || "null")
-        || JSON.parse(localStorage.getItem("tefillin-daf-zones-v2") || "null")
-        || JSON.parse(localStorage.getItem("tefillin-daf-zones-v5") || "null");
+        || JSON.parse(localStorage.getItem("tefillin-daf-zones-v2") || "null");
     }
     if (Array.isArray(saved) && saved.length) {
       const byId = {};
@@ -4828,7 +4852,7 @@ function loadZones() {
         if (isOldColumnZone(z)) return;
         byId[z.id] = z;
       });
-      const mapped = ALL_DEFAULT_ZONES.map(function (base) {
+      const mapped = ALL_DEFAULT_ZONES_DRAWN.map(function (base) {
         const extra = byId[base.id] || {};
         const merged = Object.assign({}, base, extra, {
           sugya: base.sugya,
@@ -4874,24 +4898,27 @@ function loadZones() {
         }
         const l2 = by.l2;
         const m2 = by.m2;
+        // רק אם עדיין ברירת מחדל גסה / מיקום שגוי ישן — לא לדרוס ציור מדויק של המורה
         if (l2 && l2.page === "37b") {
-          l2.top = 14.5;
-          l2.left = 36.4;
-          l2.width = 29.2;
-          l2.height = 22;
-          l2.rects = [{ top: 14.5, left: 36.4, width: 29.2, height: 22 }];
-          syncPrimary(l2);
+          const r = zoneRects(l2);
+          const coarse = !r.length || (r.length === 1 && near(l2.left, 36.4) && near(l2.width, 29.2) && (near(l2.top, 28) || near(l2.top, 11) || near(l2.height, 17.9) || near(l2.height, 21)));
+          if (coarse) {
+            l2.top = 14.5; l2.left = 36.4; l2.width = 29.2; l2.height = 22;
+            l2.rects = [{ top: 14.5, left: 36.4, width: 29.2, height: 22 }];
+            syncPrimary(l2);
+          }
         }
         if (m2 && m2.page === "37b") {
-          m2.top = 12;
-          m2.left = 36.4;
-          m2.width = 29.2;
-          m2.height = 3.2;
-          m2.rects = [
-            { top: 12, left: 36.4, width: 29.2, height: 3.2 },
-            { top: 36.5, left: 36.4, width: 29.2, height: 17.8 }
-          ];
-          syncPrimary(m2);
+          const r = zoneRects(m2);
+          const coarse = !r.length || (near(m2.left, 36.4) && near(m2.width, 29.2) && (near(m2.top, 11) || near(m2.top, 30.7) || near(m2.height, 16.5) || near(m2.height, 46.1)));
+          if (coarse) {
+            m2.top = 12; m2.left = 36.4; m2.width = 29.2; m2.height = 3.2;
+            m2.rects = [
+              { top: 12, left: 36.4, width: 29.2, height: 3.2 },
+              { top: 36.5, left: 36.4, width: 29.2, height: 17.8 }
+            ];
+            syncPrimary(m2);
+          }
         }
       })(mapped);
       saved.forEach(function (z) {
@@ -4910,7 +4937,7 @@ function loadZones() {
       });
     }
   } catch (e) {}
-  return cloneZones(ALL_DEFAULT_ZONES).map(function (z) {
+  return cloneZones(ALL_DEFAULT_ZONES_DRAWN).map(function (z) {
     z.rects = Array.isArray(z.rects) && z.rects.length
       ? z.rects.map(cloneBox)
       : ((z.part || "gemara") === "gemara" && z.width > 0 && z.height > 0 ? [cloneBox(z)] : []);
@@ -9063,7 +9090,7 @@ document.getElementById("copyZonesBtn").addEventListener("click", function () {
 document.getElementById("resetZonesBtn").addEventListener("click", function () {
   localStorage.removeItem(zonesKey());
   ZONES.splice(0, ZONES.length);
-  cloneZones(ALL_DEFAULT_ZONES).forEach(function (z) {
+  cloneZones(ALL_DEFAULT_ZONES_DRAWN).forEach(function (z) {
     z.rects = (z.part || "gemara") === "gemara" ? [cloneBox(z)] : [];
     ZONES.push(z);
   });
@@ -9271,7 +9298,24 @@ function setTeacherMode(on) {
   window.TEACHER_MODE = !!on;
   document.documentElement.classList.toggle("teacher", !!on);
 }
+
+function migrateLegacyZonesToUser() {
+  if (!currentUsername()) return;
+  if (localStorage.getItem(zonesKey())) return;
+  const legacy = localStorage.getItem("tefillin-daf-zones-v5")
+    || localStorage.getItem("tefillin-daf-zones-v4")
+    || localStorage.getItem("tefillin-daf-zones-v3");
+  if (!legacy) return;
+  try {
+    const parsed = JSON.parse(legacy);
+    if (Array.isArray(parsed) && parsed.length) {
+      localStorage.setItem(zonesKey(), legacy);
+    }
+  } catch (e) {}
+}
+
 function reloadUserWorkspace() {
+  migrateLegacyZonesToUser();
   loadUserContent();
   ZONES = loadZones();
   try { MASTERY = JSON.parse(localStorage.getItem(masteryKey()) || "{}") || {}; } catch (e) { MASTERY = {}; }
