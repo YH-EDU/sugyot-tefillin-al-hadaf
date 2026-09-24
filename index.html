@@ -69,7 +69,9 @@
     }
     body.header-open .app-header { transform: translateY(0); }
     body.measure .app-header,
-    body.measure .header-hotzone { display: none !important; }
+    body.measure .header-hotzone,
+    body.overlay-lock .app-header,
+    body.overlay-lock .header-hotzone { display: none !important; }
     .brand { display: flex; flex-direction: column; min-width: 0; }
     .brand strong { font-size: 1.02rem; font-weight: 700; }
     .brand span { font-size: 0.78rem; opacity: 0.75; }
@@ -87,8 +89,6 @@
       gap: 6px;
     }
     .header-learn, .header-tools, .header-edit, .header-start { flex-wrap: wrap; }
-    body.editing .app-header { transform: translateY(0); }
-    body.editing .header-hotzone { pointer-events: none; }
     .header-tools::before {
       content: "";
       width: 1px;
@@ -5587,6 +5587,7 @@ function openSugya(id, tab, dh) {
   updateSugyaTabAvailability(id);
   setSugyaTab(SUGYA_TABS[tab] ? tab : "gemara");
   sugyaOverlay.classList.add("is-open");
+  if (typeof syncOverlayLock === "function") syncOverlayLock();
   requestAnimationFrame(function () {
     requestAnimationFrame(fitSugyaType);
   });
@@ -5598,6 +5599,7 @@ function closeSugya() {
     host.style.removeProperty("--g-size");
     host.classList.remove("is-short");
   }
+  if (typeof syncOverlayLock === "function") syncOverlayLock();
 }
 
 const SOUND_KEY = "tefillin-sound-v1";
@@ -8916,12 +8918,13 @@ function setEditor(on) {
     overlay.classList.add("is-open");
     overlay.classList.toggle("is-focused", editFocusOnly && !editAddOnly);
     overlay.classList.toggle("is-add-quiz", !!editAddOnly);
-    document.body.classList.add("editing", "header-open");
+    document.body.classList.add("editing");
     setMeasure(false);
     legend.classList.remove("is-open");
     document.getElementById("legendToggle").setAttribute("aria-pressed", "false");
     if (quizSugya && SUGYOT[quizSugya]) editSugyaId = quizSugya;
     renderEditor();
+    if (typeof syncOverlayLock === "function") syncOverlayLock();
     return;
   }
   if (!wasOn) return;
@@ -8942,6 +8945,7 @@ function setEditor(on) {
   overlay.classList.remove("is-open");
   void overlay.offsetWidth;
   overlay.style.transition = "";
+  if (typeof syncOverlayLock === "function") syncOverlayLock();
 }
 function openSugyaEditor(mode, src, opts) {
   if (!window.TEACHER_MODE) return;
@@ -9236,6 +9240,7 @@ function setFullscreen(on) {
 
 document.getElementById("startBtn").addEventListener("click", function () {
   document.getElementById("welcomeOverlay").classList.remove("is-open");
+  if (typeof syncOverlayLock === "function") syncOverlayLock();
 });
 document.getElementById("sugyaClose").addEventListener("click", closeSugya);
 document.getElementById("tabGemara").addEventListener("click", function () { setSugyaTab("gemara"); });
@@ -9278,15 +9283,24 @@ document.getElementById("aramaicNext").addEventListener("click", function () {
   const header = document.querySelector(".app-header");
   const zone = document.getElementById("headerHotzone");
   let hideTid = null;
+  window.syncOverlayLock = function syncOverlayLock() {
+    const ids = ["sugyaOverlay", "editorOverlay", "welcomeOverlay", "aidShow", "loginGate", "adminGate"];
+    const locked = ids.some(function (id) {
+      const el = document.getElementById(id);
+      return !!(el && el.classList.contains("is-open"));
+    });
+    document.body.classList.toggle("overlay-lock", locked);
+    if (locked) document.body.classList.remove("header-open");
+  };
   function showBar() {
-    if (measureOn) return;
+    if (measureOn || document.body.classList.contains("overlay-lock")) return;
     clearTimeout(hideTid);
     document.body.classList.add("header-open");
   }
   function hideBar() {
     clearTimeout(hideTid);
     hideTid = setTimeout(function () {
-      if (measureOn || editOn) return;
+      if (measureOn || document.body.classList.contains("overlay-lock")) return;
       document.body.classList.remove("header-open");
     }, 240);
   }
@@ -9294,6 +9308,7 @@ document.getElementById("aramaicNext").addEventListener("click", function () {
   header.addEventListener("mouseenter", showBar);
   zone.addEventListener("mouseleave", hideBar);
   header.addEventListener("mouseleave", hideBar);
+  syncOverlayLock();
 })();
 sugyaOverlay.addEventListener("click", function (event) {
   if (event.target === sugyaOverlay) closeSugya();
@@ -9435,6 +9450,7 @@ document.addEventListener("keydown", function (event) {
     if (editOn) { setEditor(false); return; }
     closeSugya();
     document.getElementById("welcomeOverlay").classList.remove("is-open");
+    if (typeof syncOverlayLock === "function") syncOverlayLock();
   }
   if (editOn) return;
   if (event.target && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return;
@@ -9513,6 +9529,7 @@ function closeAidShow() {
   stage.querySelectorAll("video").forEach(function (v) { try { v.pause(); } catch (e) {} });
   stage.innerHTML = "";
   document.getElementById("aidShow").classList.remove("is-open");
+  if (typeof syncOverlayLock === "function") syncOverlayLock();
 }
 function bindAidPan(page) {
   var stage = document.getElementById("aidShowStage");
@@ -9568,6 +9585,7 @@ function openAid(row) {
     bindAidPan(page);
   }
   document.getElementById("aidShow").classList.add("is-open");
+  if (typeof syncOverlayLock === "function") syncOverlayLock();
 }
 function currentUser() {
   return window.TefillinAccounts ? TefillinAccounts.session() : "";
@@ -9653,6 +9671,7 @@ function enterApp(name, pin) {
     document.getElementById("welcomeOverlay").classList.add("is-open");
     sessionStorage.setItem("tefillin-welcome-seen", "1");
   }
+  if (typeof syncOverlayLock === "function") syncOverlayLock();
 }
 function showLogin(clearSession) {
   sessionItems = [];
@@ -9669,6 +9688,7 @@ function showLogin(clearSession) {
     document.getElementById("loginUser").value = "";
   }
   showAuthPanel("panelLogin");
+  if (typeof syncOverlayLock === "function") syncOverlayLock();
 }
 function tryTeacherLogin() {
   var name = document.getElementById("loginUser").value.trim();
@@ -9763,6 +9783,7 @@ function closeAdmin() {
   document.getElementById("adminErr").textContent = "";
   document.getElementById("adminUser").value = "";
   document.getElementById("adminPin").value = "";
+  if (typeof syncOverlayLock === "function") syncOverlayLock();
 }
 function unlockAdmin(name, pin) {
   var user = TefillinAccounts.findUser(name, pin);
@@ -9781,6 +9802,7 @@ function openAdmin() {
   document.getElementById("adminErr").textContent = "";
   document.getElementById("adminLoginBox").hidden = false;
   document.getElementById("adminManageBox").hidden = true;
+  if (typeof syncOverlayLock === "function") syncOverlayLock();
 }
 function renderSaveBox() {
   var box = document.getElementById("saveBox");
