@@ -2328,7 +2328,7 @@
       <button class="icon-btn" id="legendClose" type="button" aria-label="סגור">×</button>
     </div>
     <div class="legend-body">
-      <p class="hint">לחיצה על סוגיא צובעת אותה על הדף עד ״ניקוי צבעים״. ריחוף מדגיש זמנית. לחיצה על הגמרא פותחת את הסוגיא; לחיצה על דיבור של רש״י או תוספות פותחת רק אותו, עם השאלות שעליו.</p>
+      <p class="hint">לחיצה על ריבוע בדף צובעת רק אותו עד ״ניקוי צבעים״. ריחוף מדגיש זמנית. לחיצה על הגמרא פותחת את הסוגיא; לחיצה על דיבור של רש״י או תוספות פותחת רק אותו, עם השאלות שעליו.</p>
       <div id="legendList"></div>
       <p class="credit">צורת הדף: הוצאת ח. וגשל, באמצעות daf-yomi.com</p>
     </div>
@@ -2358,7 +2358,7 @@
       <div class="gold-rule"></div>
       <p>שתי דרכים לראות את הסוגיא: הדף עצמו, כמו בבית המדרש; ולחיצה על האזור — לשון הגמרא מנוקדת ומחולקת לשלבים.</p>
       <ul class="welcome-list">
-        <li>רשימת הסוגיות א–יג נפתחת מהלשונית למעלה. לחיצה על סוגיא צובעת אותה עד ״ניקוי צבעים״</li>
+        <li>רשימת הסוגיות א–יג נפתחת מהלשונית למעלה. לחיצה על ריבוע בדף צובעת רק אותו עד ״ניקוי צבעים״</li>
         <li>לחיצה על דיבור בדף פותחת רק אותו — עם שם הדיבור והשאלות שעליו</li>
         <li>בלשון הגמרא ובתוספות אפשר ללחוץ על מילה ארמית או על מושג — הביאור עולה מעליה, בלי סימון מראש על המילה</li>
         <li>הסרגל למעלה מופיע כשמעבירים את העכבר. במיקוד אזורים הוא נעלם לגמרי</li>
@@ -8418,7 +8418,9 @@ function renderEditorQuiz() {
     const head = document.createElement("div");
     head.className = "editor-card-head";
     const title = document.createElement("strong");
-    title.textContent = "שאלה " + (visIndex + 1) + " · " + quizKindLabel(item);
+    title.textContent = (editFocusOnly || editAddOnly)
+      ? quizKindLabel(item)
+      : ("שאלה " + (visIndex + 1) + " · " + quizKindLabel(item));
     const actions = document.createElement("div");
     actions.className = "editor-actions";
     function move(dir) {
