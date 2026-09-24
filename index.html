@@ -9299,7 +9299,10 @@ document.getElementById("editorReset").addEventListener("click", function () {
   showToast("הסוגיא חזרה לתוכן המקורי", 2200);
 });
 document.getElementById("editorOverlay").addEventListener("click", function (event) {
-  if (event.target === this) setEditor(false);
+  if (event.target !== this) return;
+  event.preventDefault();
+  event.stopPropagation();
+  setEditor(false);
 });
 document.getElementById("measureClose").addEventListener("click", function () { setMeasure(false); });
 document.getElementById("copyZonesBtn").addEventListener("click", function () {
