@@ -1085,6 +1085,39 @@
     .multi-row.is-wrong, .type-in.is-wrong, .bank-chip.is-wrong { animation: quiz-shake 0.35s; }
     .quiz-opt.is-right, .stage-btn.is-right, .quiz-blank.is-right { animation: pop-in 0.35s ease both; }
     .quiz-note { animation: float-up 0.4s ease both; }
+    body.quiet-refresh .pop-in,
+    body.quiet-refresh .float-up,
+    body.quiet-refresh .shake,
+    body.quiet-refresh .quiz-opt.is-right,
+    body.quiet-refresh .quiz-opt.is-wrong,
+    body.quiet-refresh .stage-btn.is-right,
+    body.quiet-refresh .stage-btn.is-wrong,
+    body.quiet-refresh .quiz-blank.is-right,
+    body.quiet-refresh .quiz-blank.is-wrong,
+    body.quiet-refresh .pick-opt.is-right,
+    body.quiet-refresh .pick-opt.is-wrong,
+    body.quiet-refresh .multi-row.is-right,
+    body.quiet-refresh .multi-row.is-wrong,
+    body.quiet-refresh .type-in.is-right,
+    body.quiet-refresh .type-in.is-wrong,
+    body.quiet-refresh .bank-chip.is-right,
+    body.quiet-refresh .bank-chip.is-wrong,
+    body.quiet-refresh .quiz-slot.is-right,
+    body.quiet-refresh .quiz-slot.is-wrong,
+    body.quiet-refresh .order-box.is-right,
+    body.quiet-refresh .order-box.is-wrong,
+    body.quiet-refresh .match-card.is-right,
+    body.quiet-refresh .match-card.is-wrong,
+    body.quiet-refresh .quiz-note {
+      animation: none !important;
+    }
+    body.quiet-refresh .match-card {
+      transition: none !important;
+    }
+    body.editor-closing #sugyaOverlay,
+    body.editor-closing #sugyaQuiz {
+      pointer-events: none !important;
+    }
     @media (prefers-reduced-motion: reduce) {
       .pop-in, .float-up, .shake { animation: none; }
     }
@@ -1462,7 +1495,6 @@
     .editor-overlay.is-add-quiz .editor-foot { display: none !important; }
     .editor-overlay.is-focused .editor-shell { max-width: 720px; }
     .editor-overlay.is-add-quiz .editor-shell { max-width: 980px; }
-    body.editor-closing #sugyaOverlay { pointer-events: none; }
     .editor-shell {
       width: min(1180px, 100%);
       height: 100%;
@@ -6110,9 +6142,14 @@ function renderQuiz() {
   renderQuizCite(item);
   qEl.textContent = item.q;
   opts.innerHTML = "";
-  opts.classList.remove("pop-in");
-  void opts.offsetWidth;
-  opts.classList.add("pop-in");
+  const quiet = document.body.classList.contains("quiet-refresh");
+  if (!quiet) {
+    opts.classList.remove("pop-in");
+    void opts.offsetWidth;
+    opts.classList.add("pop-in");
+  } else {
+    opts.classList.remove("pop-in");
+  }
   if (item.type === "match") renderMatchQuiz(item, opts, note);
   else if (item.type === "cloze") renderClozeQuiz(item, opts, note);
   else if (item.type === "table") renderTableQuiz(item, opts, note);
@@ -7464,21 +7501,23 @@ function refreshOpenSugyaView() {
   if (!sugyaOverlay.classList.contains("is-open") || !quizSugya || !SUGYOT[quizSugya]) return;
   const keepTab = currentSugyaTab();
   const keepIndex = quizIndex;
-  document.body.classList.add("quiet-refresh");
+  document.body.classList.add("quiet-refresh", "editor-closing");
   try {
     const s = SUGYOT[quizSugya];
     document.getElementById("sugyaNum").textContent = s.num;
     document.getElementById("sugyaNum").style.background = s.color;
     applySugyaHead();
-    fillSugyaGemaraDom();
+    if (keepTab === "gemara" || keepTab === "quiz" || keepTab === "tosafot") {
+      fillSugyaGemaraDom();
+    }
     applyLayerTabs();
     updateSugyaTabAvailability(quizSugya);
     quizIndex = Math.min(keepIndex, Math.max(0, quizList().length - 1));
     setSugyaTab(keepTab);
   } finally {
-    requestAnimationFrame(function () {
-      document.body.classList.remove("quiet-refresh");
-    });
+    setTimeout(function () {
+      document.body.classList.remove("quiet-refresh", "editor-closing");
+    }, 450);
   }
 }
 function sanitizeCellHtml(html) {
@@ -8827,35 +8866,39 @@ function setEditor(on) {
   if (!window.TEACHER_MODE) return;
   const wasOn = editOn;
   if (wasOn === on) return;
-  editOn = on;
   const editBtn = document.getElementById("editBtn");
-  if (editBtn) editBtn.setAttribute("aria-pressed", String(on));
   const overlay = document.getElementById("editorOverlay");
-  overlay.classList.toggle("is-open", on);
-  overlay.classList.toggle("is-focused", on && editFocusOnly && !editAddOnly);
-  overlay.classList.toggle("is-add-quiz", on && !!editAddOnly);
-  document.body.classList.toggle("editing", on);
   if (on) {
+    editOn = true;
+    if (editBtn) editBtn.setAttribute("aria-pressed", "true");
+    overlay.classList.add("is-open");
+    overlay.classList.toggle("is-focused", editFocusOnly && !editAddOnly);
+    overlay.classList.toggle("is-add-quiz", !!editAddOnly);
+    document.body.classList.add("editing", "header-open");
     setMeasure(false);
     legend.classList.remove("is-open");
     document.getElementById("legendToggle").setAttribute("aria-pressed", "false");
     if (quizSugya && SUGYOT[quizSugya]) editSugyaId = quizSugya;
-    document.body.classList.add("header-open");
     renderEditor();
-  } else if (wasOn) {
-    syncPartsTableFromDom();
-    editQuizAllowAdd = true;
-    editFocusAramaic = false;
-    editFocusOnly = false;
-    editAddOnly = false;
-    editFocusQuizItem = null;
-    overlay.classList.remove("is-focused", "is-add-quiz");
-    document.body.classList.add("editor-closing");
-    refreshOpenSugyaView();
-    setTimeout(function () {
-      document.body.classList.remove("editor-closing");
-    }, 280);
+    return;
   }
+  if (!wasOn) return;
+  editOn = false;
+  if (editBtn) editBtn.setAttribute("aria-pressed", "false");
+  syncPartsTableFromDom();
+  editQuizAllowAdd = true;
+  editFocusAramaic = false;
+  editFocusOnly = false;
+  editAddOnly = false;
+  editFocusQuizItem = null;
+  document.body.classList.add("editor-closing", "quiet-refresh");
+  document.body.classList.remove("editing");
+  overlay.classList.remove("is-focused", "is-add-quiz");
+  // משאירים את שכבת העריכה רגע כדי שלא ייפול הלחיצה על השאלות מתחת
+  setTimeout(function () {
+    overlay.classList.remove("is-open");
+    refreshOpenSugyaView();
+  }, 40);
 }
 function openSugyaEditor(mode, src, opts) {
   if (!window.TEACHER_MODE) return;
