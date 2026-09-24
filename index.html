@@ -681,8 +681,8 @@
     .sugya-teacher-tools {
       display: none;
       gap: 6px;
-      margin-inline-start: auto;
       align-items: center;
+      flex-shrink: 0;
     }
     html.teacher .sugya-teacher-tools { display: flex; }
     .sugya-teacher-tools .edit-btn {
@@ -1147,7 +1147,12 @@
     }
     .quiz-src.is-rashi { background: #dbeafe; color: #1e40af; }
     .sugya-tab.tab-sound {
-      margin-inline-start: auto; padding: 8px 12px; font-size: 1.05rem; line-height: 1;
+      margin-inline-start: auto;
+      order: 99;
+      padding: 8px 12px;
+      font-size: 1.05rem;
+      line-height: 1;
+      flex-shrink: 0;
     }
     .sugya-tab.tab-sound[aria-pressed="false"] { opacity: 0.45; }
 
@@ -1485,6 +1490,13 @@
     }
     .quiz-nav button:disabled { opacity: 0.4; cursor: default; }
 
+    .editor-overlay {
+      z-index: 60;
+      padding: 18px;
+      align-items: stretch;
+      background: rgba(18, 12, 6, 0.58);
+      transition: none;
+    }
     .editor-overlay.is-focused .editor-pick,
     .editor-overlay.is-focused .editor-modes,
     .editor-overlay.is-focused .editor-sub,
@@ -2424,11 +2436,11 @@
         <button type="button" class="sugya-tab" id="tabAramaic" role="tab" aria-selected="false">ארמית</button>
         <button type="button" class="sugya-tab" id="tabQuiz" role="tab" aria-selected="false">שאלות</button>
         <button type="button" class="sugya-tab" id="tabAids" role="tab" aria-selected="false">עזרים</button>
-        <button type="button" class="sugya-tab tab-sound" id="soundToggle" title="צלילים" aria-pressed="true">🔊</button>
         <div class="sugya-teacher-tools" id="sugyaTeacherTools">
           <button type="button" class="edit-btn" id="editBtn" aria-pressed="false">עריכה</button>
           <button type="button" class="edit-btn primary" id="addQuizBtn" hidden>הוספת שאלות</button>
         </div>
+        <button type="button" class="sugya-tab tab-sound" id="soundToggle" title="צלילים" aria-pressed="true">🔊</button>
       </div>
       <div class="tag-legend" id="tagLegend">
         <i class="tag">דין</i>
@@ -6388,18 +6400,19 @@ function renderMatchQuiz(item, opts, note, store, storeKey, rerender) {
     placed.forEach(function (item) { maxH = Math.max(maxH, item.btn.offsetHeight || MIN_H); });
     const step = maxH + GAP;
     const nextPos = { ar: {}, he: {} };
+    const quiet = document.body.classList.contains("quiet-refresh");
     tracks.forEach(function (track) {
       track.style.height = Math.max(0, pairs.length * step - GAP) + "px";
     });
     placed.forEach(function (item) {
       const top = item.row * step;
       item.btn.style.minHeight = maxH + "px";
-      item.btn.style.transition = hasPrev ? "" : "none";
+      item.btn.style.transition = (hasPrev && !quiet) ? "" : "none";
       item.btn.style.top = top + "px";
       nextPos[item.side][item.i] = top;
     });
     if (store[storeKey] === st) st.pos = nextPos;
-    if (!hasPrev) {
+    if (!hasPrev && !quiet) {
       requestAnimationFrame(function () {
         placed.forEach(function (item) { item.btn.style.transition = ""; });
       });
@@ -7507,17 +7520,30 @@ function refreshOpenSugyaView() {
     document.getElementById("sugyaNum").textContent = s.num;
     document.getElementById("sugyaNum").style.background = s.color;
     applySugyaHead();
-    if (keepTab === "gemara" || keepTab === "quiz" || keepTab === "tosafot") {
-      fillSugyaGemaraDom();
-    }
     applyLayerTabs();
     updateSugyaTabAvailability(quizSugya);
     quizIndex = Math.min(keepIndex, Math.max(0, quizList().length - 1));
-    setSugyaTab(keepTab);
+    if (keepTab === "gemara") {
+      const host = document.getElementById("sugyaGemara");
+      const keepSize = host ? host.style.getPropertyValue("--g-size") : "";
+      fillSugyaGemaraDom();
+      if (host && keepSize) host.style.setProperty("--g-size", keepSize);
+    } else if (keepTab === "rashi" || keepTab === "tosafot") {
+      renderMefarshim(keepTab);
+    } else if (keepTab === "quiz") {
+      renderQuiz();
+    } else if (keepTab === "aramaic") {
+      renderAramaic();
+    } else if (keepTab === "aids") {
+      if (typeof hideKindPick === "function") hideKindPick();
+      if (typeof renderSaveBox === "function") renderSaveBox();
+      if (typeof renderAids === "function") renderAids();
+    }
+    updateSugyaTeacherTools();
   } finally {
     setTimeout(function () {
       document.body.classList.remove("quiet-refresh", "editor-closing");
-    }, 450);
+    }, 120);
   }
 }
 function sanitizeCellHtml(html) {
@@ -8894,11 +8920,12 @@ function setEditor(on) {
   document.body.classList.add("editor-closing", "quiet-refresh");
   document.body.classList.remove("editing");
   overlay.classList.remove("is-focused", "is-add-quiz");
-  // משאירים את שכבת העריכה רגע כדי שלא ייפול הלחיצה על השאלות מתחת
-  setTimeout(function () {
-    overlay.classList.remove("is-open");
-    refreshOpenSugyaView();
-  }, 40);
+  // מעדכנים מתחת לשכבה, ואז מסירים אותה בבת אחת בלי פייד
+  refreshOpenSugyaView();
+  overlay.style.transition = "none";
+  overlay.classList.remove("is-open");
+  void overlay.offsetWidth;
+  overlay.style.transition = "";
 }
 function openSugyaEditor(mode, src, opts) {
   if (!window.TEACHER_MODE) return;
