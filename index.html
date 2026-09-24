@@ -39,7 +39,7 @@
     html:not(.teacher) #measureBtn,
     html:not(.teacher) #measurePanel,
     html:not(.teacher) .zone-tools,
-    html:not(.teacher) #headerEdit,
+    html:not(.teacher) #sugyaTeacherTools,
     html:not(.teacher) #editorOverlay { display: none !important; }
 
     .header-hotzone {
@@ -87,18 +87,6 @@
       gap: 6px;
     }
     .header-learn, .header-tools, .header-edit, .header-start { flex-wrap: wrap; }
-    .header-edit {
-      display: none;
-      padding-inline-end: 10px;
-      margin-inline-end: 2px;
-      border-inline-end: 1px solid rgba(230, 200, 106, 0.28);
-    }
-    html.teacher .header-edit { display: flex; }
-    html.teacher #editBtn {
-      border-color: rgba(230, 200, 106, 0.7);
-      background: rgba(230, 200, 106, 0.16);
-      color: #f3e7c8;
-    }
     body.editing .app-header { transform: translateY(0); }
     body.editing .header-hotzone { pointer-events: none; }
     .header-tools::before {
@@ -236,7 +224,8 @@
       stroke-miterlimit: 2;
       vector-effect: non-scaling-stroke;
     }
-    .zone.is-hot .zone-shape path {
+    .zone.is-hot .zone-shape path,
+    .zone.is-seen .zone-shape path {
       fill: var(--zone-fill);
       stroke: var(--zone-color);
     }
@@ -676,7 +665,7 @@
     }
     .sugya-head small { display: block; margin-top: 1px; font-size: clamp(0.88rem, 1.15vw, 1.05rem); font-weight: 600; color: #6b6460; }
     .sugya-tabs {
-      display: flex; gap: 8px;
+      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
       margin: 0 0 8px;
       flex-shrink: 0;
     }
@@ -689,6 +678,32 @@
     .sugya-tab.is-on {
       background: var(--navy); color: #fff; border-color: var(--navy);
     }
+    .sugya-teacher-tools {
+      display: none;
+      gap: 6px;
+      margin-inline-start: auto;
+      align-items: center;
+    }
+    html.teacher .sugya-teacher-tools { display: flex; }
+    .sugya-teacher-tools .edit-btn {
+      appearance: none;
+      border: 1px solid #c9a227;
+      background: #fff8dc;
+      color: #1c140c;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: clamp(0.88rem, 1.15vw, 1rem);
+      padding: 7px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      line-height: 1.2;
+    }
+    .sugya-teacher-tools .edit-btn.primary {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+    }
+    .sugya-teacher-tools .edit-btn[hidden] { display: none !important; }
     .quiz {
       flex: 1 1 auto; min-height: 0; overflow: auto;
       display: flex; flex-direction: column; gap: 14px;
@@ -2267,9 +2282,6 @@
       <div class="header-start">
         <span class="user-chip" id="userChip"></span>
         <button class="ghost-btn" id="switchUserBtn" type="button">החלף מורה</button>
-        <div class="header-edit" id="headerEdit">
-          <button class="ghost-btn" id="editBtn" type="button" aria-pressed="false">עריכת תוכן</button>
-        </div>
         <div class="header-learn">
           <button class="ghost-btn" id="legendToggle" type="button" aria-pressed="false">רשימת הסוגיות</button>
           <button class="ghost-btn" id="clearColorsBtn" type="button">ניקוי צבעים</button>
@@ -2317,7 +2329,7 @@
       <button class="icon-btn" id="legendClose" type="button" aria-label="סגור">×</button>
     </div>
     <div class="legend-body">
-      <p class="hint">הדף נשאר נקי. ריחוף מדגיש רק את הקטע. לחיצה על הגמרא פותחת את הסוגיא; לחיצה על דיבור של רש״י או תוספות פותחת רק אותו, עם השאלות שעליו.</p>
+      <p class="hint">לחיצה על סוגיא צובעת אותה על הדף עד ״ניקוי צבעים״. ריחוף מדגיש זמנית. לחיצה על הגמרא פותחת את הסוגיא; לחיצה על דיבור של רש״י או תוספות פותחת רק אותו, עם השאלות שעליו.</p>
       <div id="legendList"></div>
       <p class="credit">צורת הדף: הוצאת ח. וגשל, באמצעות daf-yomi.com</p>
     </div>
@@ -2347,11 +2359,11 @@
       <div class="gold-rule"></div>
       <p>שתי דרכים לראות את הסוגיא: הדף עצמו, כמו בבית המדרש; ולחיצה על האזור — לשון הגמרא מנוקדת ומחולקת לשלבים.</p>
       <ul class="welcome-list">
-        <li>רשימת הסוגיות א–יג נפתחת מהלשונית למעלה. הדף עצמו נשאר נקי לקריאה</li>
+        <li>רשימת הסוגיות א–יג נפתחת מהלשונית למעלה. לחיצה על סוגיא צובעת אותה עד ״ניקוי צבעים״</li>
         <li>לחיצה על דיבור בדף פותחת רק אותו — עם שם הדיבור והשאלות שעליו</li>
         <li>בלשון הגמרא ובתוספות אפשר ללחוץ על מילה ארמית או על מושג — הביאור עולה מעליה, בלי סימון מראש על המילה</li>
         <li>הסרגל למעלה מופיע כשמעבירים את העכבר. במיקוד אזורים הוא נעלם לגמרי</li>
-        <li>כניסת מורה שומרת עריכות ועזרים לפי משתמש; בלשונית ״עזרים״ בסוגיא אפשר להעלות דפי עבודה וסרטונים</li>
+        <li>כניסת מורה: עריכה והוספת שאלות מתוך סרגל חלון הסוגיא; בלשונית ״עזרים״ אפשר להעלות דפי עבודה וסרטונים</li>
       </ul>
       <button class="start-btn" id="startBtn" type="button">בואו נתחיל</button>
     </div>
@@ -2376,6 +2388,10 @@
         <button type="button" class="sugya-tab" id="tabQuiz" role="tab" aria-selected="false">שאלות</button>
         <button type="button" class="sugya-tab" id="tabAids" role="tab" aria-selected="false">עזרים</button>
         <button type="button" class="sugya-tab tab-sound" id="soundToggle" title="צלילים" aria-pressed="true">🔊</button>
+        <div class="sugya-teacher-tools" id="sugyaTeacherTools">
+          <button type="button" class="edit-btn" id="editBtn" aria-pressed="false">עריכה</button>
+          <button type="button" class="edit-btn primary" id="addQuizBtn" hidden>הוספת שאלות</button>
+        </div>
       </div>
       <div class="tag-legend" id="tagLegend">
         <i class="tag">דין</i>
@@ -5019,6 +5035,8 @@ let editOn = false;
 let editSugyaId = "a";
 let editMode = "content";
 let editSrc = "gemara";
+let editQuizAllowAdd = true;
+let editFocusAramaic = false;
 let editRowIndex = 0;
 let selectedZoneId = null;
 let drawSlot = 0;
@@ -5117,7 +5135,8 @@ function renderZones() {
     const part = zone.part || "gemara";
     const el = document.createElement("div");
     el.className = "zone is-" + part
-      + (selectedZoneId === zone.id ? " is-selected" : "");
+      + (selectedZoneId === zone.id ? " is-selected" : "")
+      + (visited[zone.sugya] ? " is-seen" : "");
     el.setAttribute("role", "group");
     el.setAttribute("aria-label", zoneAria(zone, s));
     el.style.setProperty("--zone-color", s.color);
@@ -5464,9 +5483,18 @@ function applySugyaHead() {
     kicker.textContent = "סוגיא " + s.num + " · מנחות " + s.daf;
   }
 }
+function markSugyaVisited(id) {
+  if (!id || !SUGYOT[id]) return;
+  visited[id] = true;
+  Object.keys(zoneEls).forEach(function (key) {
+    const zone = ZONES.find(function (z) { return z.id === key; });
+    if (zone && zone.sugya === id) zoneEls[key].classList.add("is-seen");
+  });
+  renderSugyaBar();
+}
 function openSugya(id, tab, dh) {
   const s = SUGYOT[id];
-  visited[id] = true;
+  markSugyaVisited(id);
   quizSugya = id;
   openLayer = (tab === "rashi" || tab === "tosafot") ? tab : "gemara";
   if (openLayer === "rashi" || openLayer === "tosafot") {
@@ -5478,7 +5506,6 @@ function openSugya(id, tab, dh) {
   document.getElementById("sugyaNum").textContent = s.num;
   document.getElementById("sugyaNum").style.background = s.color;
   applySugyaHead();
-  renderSugyaBar();
   const tagLegend = document.getElementById("tagLegend");
   tagLegend.innerHTML = "";
   const seenTags = {};
@@ -5858,6 +5885,46 @@ function updateSugyaTabAvailability(id) {
     }
   });
 }
+function currentSugyaTab() {
+  let which = "gemara";
+  Object.keys(SUGYA_TABS).forEach(function (key) {
+    const tab = document.getElementById(SUGYA_TABS[key][0]);
+    if (tab && tab.classList.contains("is-on")) which = key;
+  });
+  return which;
+}
+function contentSrcForTab(which) {
+  if (which === "rashi" || which === "tosafot") return which;
+  if (which === "quiz") return (openLayer === "rashi" || openLayer === "tosafot") ? openLayer : "gemara";
+  return "gemara";
+}
+function updateSugyaTeacherTools() {
+  const tools = document.getElementById("sugyaTeacherTools");
+  const editBtn = document.getElementById("editBtn");
+  const addBtn = document.getElementById("addQuizBtn");
+  if (!tools || !editBtn || !addBtn) return;
+  const which = currentSugyaTab();
+  const canEdit = which !== "aids";
+  const canAdd = which !== "aids";
+  editBtn.hidden = !canEdit;
+  addBtn.hidden = !canAdd;
+  if (which === "quiz") {
+    editBtn.textContent = "עריכת שאלות";
+    addBtn.textContent = "הוספת שאלות";
+  } else if (which === "aramaic") {
+    editBtn.textContent = "עריכת ארמית";
+    addBtn.textContent = "הוספת שאלות";
+  } else if (which === "rashi") {
+    editBtn.textContent = "עריכת רש״י";
+    addBtn.textContent = "הוספת שאלות";
+  } else if (which === "tosafot") {
+    editBtn.textContent = "עריכת תוספות";
+    addBtn.textContent = "הוספת שאלות";
+  } else {
+    editBtn.textContent = "עריכת הלשון";
+    addBtn.textContent = "הוספת שאלות";
+  }
+}
 function setSugyaTab(which) {
   const mef = openLayer === "rashi" || openLayer === "tosafot";
   if (mef && which === "aramaic") which = openLayer;
@@ -5882,6 +5949,7 @@ function setSugyaTab(which) {
     if (typeof renderAids === "function") renderAids();
   }
   else renderAramaic();
+  updateSugyaTeacherTools();
 }
 function quizKindLabel(item) {
   if (item.type === "tf") return "נכון / לא נכון";
@@ -7687,6 +7755,10 @@ function renderEditorGemara(host) {
 
   const details = document.createElement("details");
   details.className = "editor-details";
+  if (editFocusAramaic) {
+    details.open = true;
+    editFocusAramaic = false;
+  }
   const sum = document.createElement("summary");
   sum.textContent = "מילים לתרגום בלחיצה (ארמית)";
   details.appendChild(sum);
@@ -8229,7 +8301,9 @@ function renderEditorQuiz() {
   const intro = document.createElement("p");
   intro.className = "hint";
   intro.style.margin = "0 0 10px";
-  intro.textContent = "שאלות על " + srcTitle + " בלבד. טבלה נערכת כמו ב-Word: Tab בתא האחרון מוסיף שורה.";
+  intro.textContent = editQuizAllowAdd
+    ? ("שאלות על " + srcTitle + " בלבד. בחרו סוג שאלה ולחצו ״שאלה חדשה״. טבלה נערכת כמו ב-Word: Tab בתא האחרון מוסיף שורה.")
+    : ("עריכת שאלות קיימות על " + srcTitle + ". להוספת שאלה חדשה סגרו ולחצו ״הוספת שאלות״ בחלון הסוגיא.");
   host.appendChild(intro);
 
   const addBar = document.createElement("div");
@@ -8257,11 +8331,13 @@ function renderEditorQuiz() {
   });
   addBar.appendChild(typeSel);
   addBar.appendChild(addBtn);
-  host.appendChild(addBar);
+  if (editQuizAllowAdd) host.appendChild(addBar);
   if (!list.length) {
     const empty = document.createElement("p");
     empty.className = "editor-empty";
-    empty.textContent = "אין עדיין שאלות על " + srcTitle + ". בחרו סוג למעלה ולחצו שאלה חדשה.";
+    empty.textContent = editQuizAllowAdd
+      ? ("אין עדיין שאלות על " + srcTitle + ". בחרו סוג למעלה ולחצו שאלה חדשה.")
+      : ("אין עדיין שאלות על " + srcTitle + ". לחצו ״הוספת שאלות״ בחלון הסוגיא כדי להוסיף.");
     host.appendChild(empty);
   }
 
@@ -8675,7 +8751,8 @@ function setEditor(on) {
   const wasOn = editOn;
   if (wasOn === on) return;
   editOn = on;
-  document.getElementById("editBtn").setAttribute("aria-pressed", String(on));
+  const editBtn = document.getElementById("editBtn");
+  if (editBtn) editBtn.setAttribute("aria-pressed", String(on));
   document.getElementById("editorOverlay").classList.toggle("is-open", on);
   document.body.classList.toggle("editing", on);
   if (on) {
@@ -8687,8 +8764,24 @@ function setEditor(on) {
     renderEditor();
   } else if (wasOn) {
     syncPartsTableFromDom();
+    editQuizAllowAdd = true;
+    editFocusAramaic = false;
     refreshOpenSugyaView();
   }
+}
+function openSugyaEditor(mode, src, opts) {
+  if (!window.TEACHER_MODE) return;
+  opts = opts || {};
+  if (quizSugya && SUGYOT[quizSugya]) editSugyaId = quizSugya;
+  editMode = mode === "quiz" ? "quiz" : "content";
+  editSrc = src === "rashi" || src === "tosafot" ? src : "gemara";
+  editQuizAllowAdd = opts.allowAdd !== false;
+  editFocusAramaic = !!opts.focusAramaic;
+  if (editOn) {
+    renderEditor();
+    return;
+  }
+  setEditor(true);
 }
 
 function sugyaContentHeight(host) {
@@ -9035,7 +9128,24 @@ document.getElementById("measureBtn").addEventListener("click", function () {
   setMeasure(!measureOn);
 });
 document.getElementById("editBtn").addEventListener("click", function () {
-  setEditor(!editOn);
+  if (!window.TEACHER_MODE || !quizSugya) return;
+  const which = currentSugyaTab();
+  if (which === "aids") return;
+  if (which === "quiz") {
+    openSugyaEditor("quiz", contentSrcForTab(which), { allowAdd: false });
+    return;
+  }
+  if (which === "aramaic") {
+    openSugyaEditor("content", "gemara", { allowAdd: false, focusAramaic: true });
+    return;
+  }
+  openSugyaEditor("content", contentSrcForTab(which), { allowAdd: false });
+});
+document.getElementById("addQuizBtn").addEventListener("click", function () {
+  if (!window.TEACHER_MODE || !quizSugya) return;
+  const which = currentSugyaTab();
+  if (which === "aids") return;
+  openSugyaEditor("quiz", contentSrcForTab(which), { allowAdd: true });
 });
 document.getElementById("editorClose").addEventListener("click", function () { setEditor(false); });
 document.getElementById("editorSugya").addEventListener("change", function () {
