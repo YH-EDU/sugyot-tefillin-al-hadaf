@@ -1455,8 +1455,14 @@
     .editor-overlay.is-focused .editor-pick,
     .editor-overlay.is-focused .editor-modes,
     .editor-overlay.is-focused .editor-sub,
-    .editor-overlay.is-focused .editor-foot { display: none !important; }
+    .editor-overlay.is-focused .editor-foot,
+    .editor-overlay.is-add-quiz .editor-pick,
+    .editor-overlay.is-add-quiz .editor-modes,
+    .editor-overlay.is-add-quiz .editor-sub,
+    .editor-overlay.is-add-quiz .editor-foot { display: none !important; }
     .editor-overlay.is-focused .editor-shell { max-width: 720px; }
+    .editor-overlay.is-add-quiz .editor-shell { max-width: 980px; }
+    body.editor-closing #sugyaOverlay { pointer-events: none; }
     .editor-shell {
       width: min(1180px, 100%);
       height: 100%;
@@ -5511,30 +5517,7 @@ function openSugya(id, tab, dh) {
   document.getElementById("sugyaNum").textContent = s.num;
   document.getElementById("sugyaNum").style.background = s.color;
   applySugyaHead();
-  const tagLegend = document.getElementById("tagLegend");
-  tagLegend.innerHTML = "";
-  const seenTags = {};
-  s.rows.forEach(function (row) {
-    if (!row.tag || seenTags[row.tag]) return;
-    seenTags[row.tag] = true;
-    const chip = document.createElement("i");
-    chip.className = "tag " + (row.kind || "");
-    chip.textContent = row.tag;
-    applyTagStyle(chip, row);
-    tagLegend.appendChild(chip);
-  });
-  const host = document.getElementById("sugyaGemara");
-  host.innerHTML = "";
-  s.rows.forEach(function (row) {
-    const wrap = document.createElement("div");
-    wrap.className = "row";
-    wrap.innerHTML = "<div class=\"tag " + (row.kind || "") + "\"></div><div class=\"g-text\"></div>";
-    wrap.querySelector(".tag").textContent = row.tag;
-    applyTagStyle(wrap.querySelector(".tag"), row);
-    wrap.querySelector(".g-text").innerHTML = row.html;
-    host.appendChild(wrap);
-  });
-  applyGlossTooltips(host);
+  fillSugyaGemaraDom();
   quizSrc = openLayer;
   quizIndex = 0;
   quizPicked = {};
@@ -5601,7 +5584,7 @@ function setSoundOn(on) {
 let MASTERY = {};
 try { MASTERY = JSON.parse(localStorage.getItem(masteryKey()) || "{}") || {}; } catch (e) { MASTERY = {}; }
 function noteAttempt(sugyaId, ok) {
-  if (!sugyaId) return;
+  if (!sugyaId || editOn || document.body.classList.contains("editor-closing")) return;
   const rec = MASTERY[sugyaId] || { c: 0, w: 0 };
   if (ok) rec.c += 1; else rec.w += 1;
   MASTERY[sugyaId] = rec;
@@ -5910,25 +5893,11 @@ function updateSugyaTeacherTools() {
   if (!tools || !editBtn || !addBtn) return;
   const which = currentSugyaTab();
   const canEdit = which !== "aids";
-  const canAdd = which !== "aids";
+  const canAdd = which === "quiz";
   editBtn.hidden = !canEdit;
   addBtn.hidden = !canAdd;
-  if (which === "quiz") {
-    editBtn.textContent = "עריכת שאלות";
-    addBtn.textContent = "הוספת שאלות";
-  } else if (which === "aramaic") {
-    editBtn.textContent = "עריכת ארמית";
-    addBtn.textContent = "הוספת שאלות";
-  } else if (which === "rashi") {
-    editBtn.textContent = "עריכת רש״י";
-    addBtn.textContent = "הוספת שאלות";
-  } else if (which === "tosafot") {
-    editBtn.textContent = "עריכת תוספות";
-    addBtn.textContent = "הוספת שאלות";
-  } else {
-    editBtn.textContent = "עריכת הלשון";
-    addBtn.textContent = "הוספת שאלות";
-  }
+  editBtn.textContent = "עריכה";
+  addBtn.textContent = "הוספת שאלות";
 }
 function setSugyaTab(which) {
   const mef = openLayer === "rashi" || openLayer === "tosafot";
@@ -7389,6 +7358,7 @@ function renderMefarshim(who) {
 let lastWinKey = null;
 // צליל סיום מתנגן פעם אחת לכל שאלה שהושלמה.
 function playWinOnce() {
+  if (editOn || document.body.classList.contains("editor-closing") || document.body.classList.contains("quiet-refresh")) return;
   const key = quizSugya + ":" + quizKeyAt(quizIndex);
   if (lastWinKey === key) return;
   lastWinKey = key;
@@ -7438,12 +7408,8 @@ function setEditorView(mode, src) {
   });
   const title = document.getElementById("editorTitle");
   if (title) {
-    if (editAddOnly) title.textContent = "הוספת שאלה";
-    else if (!contentOn && editFocusOnly) title.textContent = "עריכת השאלה";
-    else if (contentOn && editFocusAramaic) title.textContent = "עריכת ארמית";
-    else if (contentOn && editFocusOnly && editSrc === "rashi") title.textContent = "עריכת רש״י";
-    else if (contentOn && editFocusOnly && editSrc === "tosafot") title.textContent = "עריכת תוספות";
-    else if (contentOn && editFocusOnly) title.textContent = "עריכת הלשון";
+    if (editAddOnly) title.textContent = "הוספת שאלות";
+    else if (editFocusOnly) title.textContent = "עריכה";
     else title.textContent = contentOn ? "עריכת הלשון" : "עריכת השאלות";
   }
   const catLabel = document.getElementById("editorCatLabel");
@@ -7453,7 +7419,10 @@ function setEditorView(mode, src) {
   if (contentHost) contentHost.hidden = !contentOn;
   if (quizHost) quizHost.hidden = contentOn;
   const overlay = document.getElementById("editorOverlay");
-  if (overlay) overlay.classList.toggle("is-focused", editFocusOnly || editAddOnly);
+  if (overlay) {
+    overlay.classList.toggle("is-focused", editFocusOnly && !editAddOnly);
+    overlay.classList.toggle("is-add-quiz", !!editAddOnly);
+  }
   if (contentOn) renderEditorContent();
   else renderEditorQuiz();
 }
@@ -7463,24 +7432,54 @@ function persistAndRefresh() {
   saveZones();
   if (measureOn) renderLists();
 }
+function fillSugyaGemaraDom() {
+  const s = SUGYOT[quizSugya];
+  if (!s) return;
+  const tagLegend = document.getElementById("tagLegend");
+  tagLegend.innerHTML = "";
+  const seenTags = {};
+  s.rows.forEach(function (row) {
+    if (!row.tag || seenTags[row.tag]) return;
+    seenTags[row.tag] = true;
+    const chip = document.createElement("i");
+    chip.className = "tag " + (row.kind || "");
+    chip.textContent = row.tag;
+    applyTagStyle(chip, row);
+    tagLegend.appendChild(chip);
+  });
+  const host = document.getElementById("sugyaGemara");
+  host.innerHTML = "";
+  s.rows.forEach(function (row) {
+    const wrap = document.createElement("div");
+    wrap.className = "row";
+    wrap.innerHTML = "<div class=\"tag " + (row.kind || "") + "\"></div><div class=\"g-text\"></div>";
+    wrap.querySelector(".tag").textContent = row.tag;
+    applyTagStyle(wrap.querySelector(".tag"), row);
+    wrap.querySelector(".g-text").innerHTML = row.html;
+    host.appendChild(wrap);
+  });
+  applyGlossTooltips(host);
+}
 function refreshOpenSugyaView() {
   if (!sugyaOverlay.classList.contains("is-open") || !quizSugya || !SUGYOT[quizSugya]) return;
-  let keepTab = "gemara";
-  Object.keys(SUGYA_TABS).forEach(function (key) {
-    if (document.getElementById(SUGYA_TABS[key][0]).classList.contains("is-on")) keepTab = key;
-  });
+  const keepTab = currentSugyaTab();
   const keepIndex = quizIndex;
-  const keepSrc = quizSrc;
-  const keepPicked = quizPicked;
-  const keepArRound = aramaicRound;
-  const keepArPicked = aramaicPicked;
-  openSugya(quizSugya, openLayer, openDh);
-  quizSrc = keepSrc;
-  quizIndex = Math.min(keepIndex, Math.max(0, quizList().length - 1));
-  quizPicked = keepPicked;
-  aramaicRound = keepArRound;
-  aramaicPicked = keepArPicked;
-  setSugyaTab(keepTab);
+  document.body.classList.add("quiet-refresh");
+  try {
+    const s = SUGYOT[quizSugya];
+    document.getElementById("sugyaNum").textContent = s.num;
+    document.getElementById("sugyaNum").style.background = s.color;
+    applySugyaHead();
+    fillSugyaGemaraDom();
+    applyLayerTabs();
+    updateSugyaTabAvailability(quizSugya);
+    quizIndex = Math.min(keepIndex, Math.max(0, quizList().length - 1));
+    setSugyaTab(keepTab);
+  } finally {
+    requestAnimationFrame(function () {
+      document.body.classList.remove("quiet-refresh");
+    });
+  }
 }
 function sanitizeCellHtml(html) {
   const d = document.createElement("div");
@@ -8350,7 +8349,7 @@ function renderEditorQuiz() {
   const focusLabel = editSrc !== "gemara" && openDh ? ("ד״ה " + openDh) : srcTitle;
 
   if (editAddOnly) {
-    list = editFocusQuizItem && all.indexOf(editFocusQuizItem) >= 0 ? [editFocusQuizItem] : [];
+    // כל השאלות הרלוונטיות לסוגיא/מקור — בלי לפתוח חומר אחר
   } else if (editFocusOnly) {
     const current = (typeof quizList === "function" ? quizList() : [])[quizIndex];
     if (current && srcOf(current) === editSrc) list = [current];
@@ -8361,10 +8360,8 @@ function renderEditorQuiz() {
   const intro = document.createElement("p");
   intro.className = "hint";
   intro.style.margin = "0 0 10px";
-  if (editAddOnly && !list.length) {
-    intro.textContent = "הוספת שאלה על " + focusLabel + ". בחרו סוג ולחצו ״שאלה חדשה״.";
-  } else if (editAddOnly) {
-    intro.textContent = "שאלה חדשה על " + focusLabel + " — ערכו כאן. אפשר להוסיף עוד למטה.";
+  if (editAddOnly) {
+    intro.textContent = "כל השאלות על " + focusLabel + ". בחרו סוג ולחצו ״שאלה חדשה״ כדי להוסיף.";
   } else if (editFocusOnly) {
     intro.textContent = "עריכת השאלה שמוצגת כעת על " + focusLabel + ".";
   } else {
@@ -8397,6 +8394,11 @@ function renderEditorQuiz() {
     editFocusQuizItem = item;
     persistAndRefresh();
     renderEditorQuiz();
+    requestAnimationFrame(function () {
+      const cards = host.querySelectorAll(".editor-card");
+      const last = cards[cards.length - 1];
+      if (last) last.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   });
   addBar.appendChild(typeSel);
   addBar.appendChild(addBtn);
@@ -8405,7 +8407,7 @@ function renderEditorQuiz() {
     const empty = document.createElement("p");
     empty.className = "editor-empty";
     empty.textContent = (editQuizAllowAdd || editAddOnly)
-      ? ("אין עדיין שאלה כאן. בחרו סוג ולחצו שאלה חדשה.")
+      ? ("אין עדיין שאלות על " + focusLabel + ". בחרו סוג ולחצו שאלה חדשה.")
       : ("אין שאלה להצגה כרגע.");
     host.appendChild(empty);
   }
@@ -8418,13 +8420,13 @@ function renderEditorQuiz() {
     const head = document.createElement("div");
     head.className = "editor-card-head";
     const title = document.createElement("strong");
-    title.textContent = (editFocusOnly || editAddOnly)
+    title.textContent = editFocusOnly && !editAddOnly
       ? quizKindLabel(item)
       : ("שאלה " + (visIndex + 1) + " · " + quizKindLabel(item));
     const actions = document.createElement("div");
     actions.className = "editor-actions";
     function move(dir) {
-      if (editFocusOnly || editAddOnly) return;
+      if (editFocusOnly && !editAddOnly) return;
       const vis = visIndex + dir;
       if (vis < 0 || vis >= list.length) return;
       const other = all.indexOf(list[vis]);
@@ -8438,13 +8440,13 @@ function renderEditorQuiz() {
     up.type = "button";
     up.className = "edit-btn";
     up.textContent = "למעלה";
-    up.disabled = visIndex === 0 || editFocusOnly || editAddOnly;
+    up.disabled = visIndex === 0 || (editFocusOnly && !editAddOnly);
     up.addEventListener("click", function () { move(-1); });
     const down = document.createElement("button");
     down.type = "button";
     down.className = "edit-btn";
     down.textContent = "למטה";
-    down.disabled = visIndex === list.length - 1 || editFocusOnly || editAddOnly;
+    down.disabled = visIndex === list.length - 1 || (editFocusOnly && !editAddOnly);
     down.addEventListener("click", function () { move(1); });
     const del = document.createElement("button");
     del.type = "button";
@@ -8456,7 +8458,7 @@ function renderEditorQuiz() {
       persistAndRefresh();
       renderEditorQuiz();
     });
-    if (!(editFocusOnly || editAddOnly)) {
+    if (!(editFocusOnly && !editAddOnly)) {
       actions.appendChild(up);
       actions.appendChild(down);
     }
@@ -8830,7 +8832,8 @@ function setEditor(on) {
   if (editBtn) editBtn.setAttribute("aria-pressed", String(on));
   const overlay = document.getElementById("editorOverlay");
   overlay.classList.toggle("is-open", on);
-  overlay.classList.toggle("is-focused", on && (editFocusOnly || editAddOnly));
+  overlay.classList.toggle("is-focused", on && editFocusOnly && !editAddOnly);
+  overlay.classList.toggle("is-add-quiz", on && !!editAddOnly);
   document.body.classList.toggle("editing", on);
   if (on) {
     setMeasure(false);
@@ -8846,8 +8849,12 @@ function setEditor(on) {
     editFocusOnly = false;
     editAddOnly = false;
     editFocusQuizItem = null;
-    overlay.classList.remove("is-focused");
+    overlay.classList.remove("is-focused", "is-add-quiz");
+    document.body.classList.add("editor-closing");
     refreshOpenSugyaView();
+    setTimeout(function () {
+      document.body.classList.remove("editor-closing");
+    }, 280);
   }
 }
 function openSugyaEditor(mode, src, opts) {
@@ -8867,15 +8874,16 @@ function openSugyaEditor(mode, src, opts) {
   }
   const title = document.getElementById("editorTitle");
   if (title) {
-    if (editAddOnly) title.textContent = "הוספת שאלה";
-    else if (editMode === "quiz") title.textContent = "עריכת השאלה";
-    else if (editFocusAramaic) title.textContent = "עריכת ארמית";
-    else if (editSrc === "rashi") title.textContent = "עריכת רש״י";
-    else if (editSrc === "tosafot") title.textContent = "עריכת תוספות";
-    else title.textContent = "עריכת הלשון";
+    if (editAddOnly) title.textContent = "הוספת שאלות";
+    else if (editMode === "quiz") title.textContent = "עריכה";
+    else if (editFocusAramaic) title.textContent = "עריכה";
+    else if (editSrc === "rashi") title.textContent = "עריכה";
+    else if (editSrc === "tosafot") title.textContent = "עריכה";
+    else title.textContent = "עריכה";
   }
   if (editOn) {
-    document.getElementById("editorOverlay").classList.toggle("is-focused", editFocusOnly || editAddOnly);
+    document.getElementById("editorOverlay").classList.toggle("is-focused", editFocusOnly && !editAddOnly);
+    document.getElementById("editorOverlay").classList.toggle("is-add-quiz", !!editAddOnly);
     renderEditor();
     return;
   }
@@ -9245,7 +9253,11 @@ document.getElementById("addQuizBtn").addEventListener("click", function () {
   if (which === "aids") return;
   openSugyaEditor("quiz", contentSrcForTab(which), { allowAdd: true, addOnly: true, focusOnly: true });
 });
-document.getElementById("editorClose").addEventListener("click", function () { setEditor(false); });
+document.getElementById("editorClose").addEventListener("click", function (event) {
+  event.preventDefault();
+  event.stopPropagation();
+  setEditor(false);
+});
 document.getElementById("editorSugya").addEventListener("change", function () {
   syncPartsTableFromDom();
   editSugyaId = this.value;
