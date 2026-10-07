@@ -4185,6 +4185,20 @@ function migrateDafOrderSugyot() {
   });
 }
 migrateDafOrderSugyot();
+function migrateSugyaAOpening() {
+  const s = SUGYOT.a;
+  const fresh = DEFAULT_SUGYA_CONTENT.a;
+  if (!s || !fresh || !s.rows || !s.rows.length || !fresh.rows) return;
+  const html = s.rows[0].html || "";
+  const bad = html.indexOf("רַב חִסְדָּא") !== -1 && html.indexOf("שְׁמוּאֵל בַּר בֵּידָרֵי") === -1;
+  if (!bad) return;
+  s.subtitle = fresh.subtitle;
+  s.color = fresh.color;
+  s.fill = fresh.fill;
+  s.rows = JSON.parse(JSON.stringify(fresh.rows));
+  saveContentEdits();
+}
+migrateSugyaAOpening();
 Object.keys(SUGYOT).forEach(function (id) { migrateShaklaTags(SUGYOT[id].rows); });
 if (typeof TOSAFOT_ROWS !== "undefined") {
   Object.keys(TOSAFOT_ROWS).forEach(function (dh) { migrateShaklaTags(TOSAFOT_ROWS[dh]); });
