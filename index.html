@@ -2083,6 +2083,86 @@
       background: #140f0a;
       box-shadow: 0 18px 50px rgba(40, 24, 8, 0.22);
     }
+    .quote-box {
+      border: 1px solid #e4d3ae;
+      background: #fffdf8;
+      border-radius: 16px;
+      padding: 14px 14px 12px;
+      margin: 0 0 14px;
+    }
+    html:not(.teacher) .quote-box { display: none !important; }
+    .quote-box h3 {
+      margin: 0 0 4px;
+      font-family: "Frank Ruhl Libre", serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+    }
+    .quote-box p {
+      margin: 0 0 10px;
+      font-weight: 700;
+      color: #5a4718;
+      line-height: 1.45;
+    }
+    .quote-box input,
+    .quote-box textarea {
+      width: 100%;
+      border: 1px solid #d8c6a0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      margin: 0 0 8px;
+      background: #fff;
+      color: #1c140c;
+    }
+    .quote-box textarea {
+      min-height: 128px;
+      resize: vertical;
+      font-family: "Frank Ruhl Libre", "Times New Roman", serif;
+      font-size: 1.2rem;
+      line-height: 1.55;
+    }
+    .quote-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .aid-quote-preview {
+      height: 148px;
+      padding: 16px 12px;
+      overflow: hidden;
+      background: #fffdf8;
+      color: #1c140c;
+      font-family: "Frank Ruhl Libre", serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      line-height: 1.45;
+      text-align: center;
+      direction: rtl;
+    }
+    .aid-show-stage.is-quote {
+      align-items: center;
+      justify-content: center;
+      background: #140f0a;
+      direction: rtl;
+      padding: 28px 32px 36px;
+    }
+    .aid-quote {
+      width: min(1180px, 94vw);
+      max-height: 100%;
+      overflow: auto;
+      background: #fffdf8;
+      color: #1c140c;
+      border-radius: 22px;
+      padding: clamp(28px, 4.5vw, 64px) clamp(28px, 5vw, 80px);
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.35);
+      direction: rtl;
+      text-align: center;
+    }
+    .aid-quote.is-prose { text-align: right; }
+    .aid-quote-text {
+      margin: 0;
+      font-family: "Frank Ruhl Libre", "Times New Roman", serif;
+      font-weight: 700;
+      font-size: 1em;
+      line-height: 1.65;
+      white-space: pre-wrap;
+    }
     .yt-row {
       display: flex;
       gap: 8px;
@@ -2465,7 +2545,7 @@
         <li>לחיצה על דיבור בדף פותחת רק אותו — עם שם הדיבור והשאלות שעליו</li>
         <li>בלשון הגמרא ובתוספות אפשר ללחוץ על מילה ארמית או על מושג — הביאור עולה מעליה, בלי סימון מראש על המילה</li>
         <li>הסרגל למעלה מופיע כשמעבירים את העכבר. במיקוד אזורים הוא נעלם לגמרי</li>
-        <li>כניסת מורה: עריכה והוספת שאלות מתוך סרגל חלון הסוגיא; בלשונית ״עזרים״ אפשר להעלות דפי עבודה וסרטונים</li>
+        <li>כניסת מורה: עריכה והוספת שאלות מתוך סרגל חלון הסוגיא; בלשונית ״עזרים״ אפשר להעלות דפי עבודה וסרטונים, ולהדביק פסוק או ציטוט להקרנה</li>
       </ul>
       <button class="start-btn" id="startBtn" type="button">בואו נתחיל</button>
     </div>
@@ -2550,6 +2630,15 @@
       </div>
       <div class="quiz" id="sugyaAids" hidden>
         <div class="save-box" id="saveBox"></div>
+        <div class="quote-box" id="quoteBox">
+          <h3>פסוק או ציטוט להקרנה</h3>
+          <p>הדביקו פסוק במלואו, או כל טקסט אחר. הוא נשמר לסוגיא הזו ומוקרן גדול מול הכיתה.</p>
+          <input id="quoteTitle" type="text" placeholder="כותרת לזיהוי, למשל: וקשרתם — לא חובה" />
+          <textarea id="quoteText" rows="4" placeholder="הדביקו כאן את הפסוק או את הציטוט"></textarea>
+          <div class="quote-actions">
+            <button type="button" class="ghost-btn" id="quoteProject" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">הקרן מול הכיתה</button>
+          </div>
+        </div>
         <div class="yt-row">
           <input id="ytUrl" type="url" placeholder="קישור יוטיוב" />
           <button type="button" class="ghost-btn" id="ytAdd" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">הוסף</button>
@@ -9602,6 +9691,7 @@ var KIND_ROLE = {
   "מבחן": "מבחנים"
 };
 function kindOf(row) {
+  if (row && row.type === "quote") return "ציטוט";
   if (row && row.kind) return row.kind;
   if (row && (row.type === "youtube" || row.type === "video" || row.role === "youtube" || row.role === "סרטונים")) return "סרטון";
   if (row && row.role === "מבחנים") return "מבחן";
@@ -9612,6 +9702,11 @@ function setAidZoom(next) {
   aidZoom = Math.max(0.45, Math.min(2.4, next));
   var page = document.querySelector(".aid-page");
   if (page) page.style.transform = "scale(" + aidZoom + ")";
+  var quote = document.querySelector(".aid-quote");
+  if (quote) {
+    var base = Number(quote.getAttribute("data-base")) || 52;
+    quote.style.fontSize = Math.round(base * aidZoom) + "px";
+  }
   var readout = document.getElementById("aidZoomReadout");
   if (readout) readout.textContent = Math.round(aidZoom * 100) + "%";
 }
@@ -9623,6 +9718,7 @@ function closeAidShow() {
   if (!stage) return;
   stage.querySelectorAll("video").forEach(function (v) { try { v.pause(); } catch (e) {} });
   stage.innerHTML = "";
+  stage.classList.remove("is-quote");
   document.getElementById("aidShow").classList.remove("is-open");
   if (typeof syncOverlayLock === "function") syncOverlayLock();
 }
@@ -9650,7 +9746,22 @@ function openAid(row) {
   var stage = document.getElementById("aidShowStage");
   document.getElementById("aidShowTitle").textContent = row.name || "עזר";
   stage.innerHTML = "";
-  if (row.type === "youtube" && row.youtubeId) {
+  stage.classList.toggle("is-quote", row.type === "quote");
+  if (row.type === "quote") {
+    aidZoom = 1;
+    var board = document.createElement("div");
+    board.className = "aid-quote" + (quoteIsProse(row.text) ? " is-prose" : "");
+    var base = quoteBaseSize(row.text);
+    board.setAttribute("data-base", String(base));
+    board.style.fontSize = base + "px";
+    var body = document.createElement("p");
+    body.className = "aid-quote-text";
+    body.textContent = row.text || "";
+    board.appendChild(body);
+    stage.appendChild(board);
+    var readout = document.getElementById("aidZoomReadout");
+    if (readout) readout.textContent = "100%";
+  } else if (row.type === "youtube" && row.youtubeId) {
     var wrap = document.createElement("div");
     wrap.className = "yt-wrap";
     var frame = document.createElement("iframe");
@@ -9961,6 +10072,75 @@ function readLocalLinks() {
 function writeLocalLinks(list) {
   try { localStorage.setItem(ytStorageKey(), JSON.stringify(list)); } catch (e) {}
 }
+function quoteStorageKey() {
+  return "tefillin-quotes:" + (currentUsername() || "_guest");
+}
+function readLocalQuotes() {
+  try { return JSON.parse(localStorage.getItem(quoteStorageKey()) || "[]"); } catch (e) { return []; }
+}
+function writeLocalQuotes(list) {
+  try { localStorage.setItem(quoteStorageKey(), JSON.stringify(list)); } catch (e) {}
+}
+function normalizeQuoteText(raw) {
+  return String(raw || "").replace(/\u00a0/g, " ").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+function quoteTitleFrom(text, given) {
+  var title = String(given || "").trim();
+  if (title) return title.slice(0, 80);
+  var line = text.split("\n").map(function (s) { return s.trim(); }).filter(Boolean)[0] || "ציטוט";
+  return line.length > 42 ? line.slice(0, 42) + "…" : line;
+}
+function quoteIsProse(text) {
+  var raw = String(text || "");
+  return raw.length > 220 || raw.split("\n").length > 5;
+}
+function quoteBaseSize(text) {
+  var raw = String(text || "");
+  var n = raw.replace(/\s+/g, "").length;
+  var lines = raw.split("\n").length;
+  if (n < 50 && lines < 3) return 68;
+  if (n < 140 && lines < 5) return 50;
+  if (n < 320) return 36;
+  return 28;
+}
+function projectQuote() {
+  var user = currentUser();
+  if (!user) {
+    showToast("צריך להתחבר כמורה");
+    return;
+  }
+  if (!quizSugya) {
+    showToast("פתחו סוגיא קודם");
+    return;
+  }
+  var text = normalizeQuoteText(document.getElementById("quoteText").value);
+  if (!text) {
+    showToast("הדביקו פסוק או טקסט");
+    return;
+  }
+  var existing = readLocalQuotes().filter(function (row) {
+    return row.sugya === quizSugya && normalizeQuoteText(row.text) === text;
+  })[0];
+  var item = existing || {
+    id: "q-" + user + "-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7),
+    username: user,
+    name: quoteTitleFrom(text, document.getElementById("quoteTitle").value),
+    role: "עזרים",
+    kind: "ציטוט",
+    type: "quote",
+    text: text,
+    sugya: quizSugya,
+    personal: true
+  };
+  if (!existing) {
+    writeLocalQuotes(readLocalQuotes().concat([item]));
+    sessionItems.push(item);
+  }
+  document.getElementById("quoteText").value = "";
+  document.getElementById("quoteTitle").value = "";
+  renderAids();
+  openAid(item);
+}
 function belongsToCurrent(row) {
   return row && row.sugya === quizSugya;
 }
@@ -10018,7 +10198,7 @@ function loadMaterials() {
       if (items.some(function (x) { return (x.id && x.id === row.id) || (x.youtubeId && x.youtubeId === row.youtubeId); })) return;
       items.push(row);
     }
-    sessionItems.concat(readLocalLinks()).forEach(mergeRow);
+    sessionItems.concat(readLocalLinks()).concat(readLocalQuotes()).forEach(mergeRow);
     items.forEach(function (row) {
       if (row.pages) row.pages = row.pages.map(function (src) { return typeof src === "string" ? asset(src) : src; });
       if (row.file && typeof row.file === "string") row.file = asset(row.file);
@@ -10069,6 +10249,11 @@ function renderAids() {
         media.src = row.file;
         media.muted = true;
         card.appendChild(media);
+      } else if (row.type === "quote") {
+        var preview = document.createElement("div");
+        preview.className = "aid-quote-preview";
+        preview.textContent = row.text || "";
+        card.appendChild(preview);
       } else if (row.pages && row.pages[0]) {
         var img = document.createElement("img");
         img.alt = "";
@@ -10093,6 +10278,12 @@ function renderAids() {
       del.onclick = function (e) {
         e.stopPropagation();
         var done = function () { renderAids(); };
+        if (row.type === "quote") {
+          writeLocalQuotes(readLocalQuotes().filter(function (x) { return x.id !== row.id; }));
+          sessionItems = sessionItems.filter(function (x) { return x.id !== row.id; });
+          done();
+          return;
+        }
         if (row.youtubeId) {
           writeLocalLinks(readLocalLinks().filter(function (x) { return x.id !== row.id && x.youtubeId !== row.youtubeId; }));
         }
@@ -10216,6 +10407,13 @@ function addFiles(files, kind) {
   document.getElementById("aidShowClose").onclick = closeAidShow;
   document.getElementById("aidZoomIn").onclick = function () { setAidZoom(aidZoom + 0.15); };
   document.getElementById("aidZoomOut").onclick = function () { setAidZoom(aidZoom - 0.15); };
+  document.getElementById("quoteProject").onclick = projectQuote;
+  document.getElementById("quoteText").addEventListener("keydown", function (event) {
+    if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault();
+      projectQuote();
+    }
+  });
   document.getElementById("ytAdd").onclick = function () {
     addYoutubeLink(document.getElementById("ytUrl").value);
   };
