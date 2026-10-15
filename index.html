@@ -4273,6 +4273,7 @@ function loadUserContent() {
   try { applyContentSave(JSON.parse(localStorage.getItem(contentKey()) || "null")); } catch (e) {}
   migrateDafOrderSugyot();
   migrateSugyaAOpening();
+  migrateShiftedSugyaOpenings();
   migrateTosafotVekeshartem();
 }
 loadUserContent();
@@ -4299,6 +4300,39 @@ function migrateSugyaAOpening() {
   s.fill = fresh.fill;
   s.rows = JSON.parse(JSON.stringify(fresh.rows));
   saveContentEdits();
+}
+function sugyaPlainOpen(html) {
+  return String(html || "").replace(/<[^>]+>/g, "").replace(/[\u0591-\u05C7]/g, "").replace(/\s+/g, " ").trim();
+}
+function migrateShiftedSugyaOpenings() {
+  const order = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"];
+  const sig = {};
+  order.forEach(function (id) {
+    const fresh = DEFAULT_SUGYA_CONTENT[id];
+    const row = fresh && fresh.rows && fresh.rows[0];
+    sig[id] = row ? sugyaPlainOpen(row.html).slice(0, 42) : "";
+  });
+  let changed = false;
+  order.forEach(function (id) {
+    const s = SUGYOT[id];
+    const fresh = DEFAULT_SUGYA_CONTENT[id];
+    if (!s || !fresh || !s.rows || !s.rows.length || !sig[id]) return;
+    const got = sugyaPlainOpen(s.rows[0].html).slice(0, 42);
+    if (got.length < 16) return;
+    const own = sig[id];
+    if (got.indexOf(own.slice(0, 22)) === 0 || own.indexOf(got.slice(0, 22)) === 0) return;
+    const stolen = order.some(function (other) {
+      if (other === id || !sig[other] || sig[other].length < 16) return false;
+      return got.indexOf(sig[other].slice(0, 22)) === 0 || sig[other].indexOf(got.slice(0, 22)) === 0;
+    });
+    if (!stolen) return;
+    s.subtitle = fresh.subtitle;
+    s.color = fresh.color;
+    s.fill = fresh.fill;
+    s.rows = JSON.parse(JSON.stringify(fresh.rows));
+    changed = true;
+  });
+  if (changed) saveContentEdits();
 }
 function migrateTosafotVekeshartem() {
   const dh = "וקשרתם לאות על ידך והדר והיו לטוטפת בין עיניך";
