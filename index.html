@@ -4274,6 +4274,7 @@ function loadUserContent() {
   migrateDafOrderSugyot();
   migrateSugyaAOpening();
   migrateShiftedSugyaOpenings();
+  migrateSugyaDOpening();
   migrateTosafotVekeshartem();
 }
 loadUserContent();
@@ -4317,13 +4318,14 @@ function migrateShiftedSugyaOpenings() {
     const s = SUGYOT[id];
     const fresh = DEFAULT_SUGYA_CONTENT[id];
     if (!s || !fresh || !s.rows || !s.rows.length || !sig[id]) return;
-    const got = sugyaPlainOpen(s.rows[0].html).slice(0, 42);
-    if (got.length < 16) return;
+    const got = sugyaPlainOpen(s.rows.map(function (r) { return (r && r.html) || ""; }).join(" ")).slice(0, 80);
+    if (got.length < 8) return;
     const own = sig[id];
-    if (got.indexOf(own.slice(0, 22)) === 0 || own.indexOf(got.slice(0, 22)) === 0) return;
+    if (got.indexOf(own.slice(0, 12)) === 0 || own.indexOf(got.slice(0, 12)) === 0) return;
     const stolen = order.some(function (other) {
-      if (other === id || !sig[other] || sig[other].length < 16) return false;
-      return got.indexOf(sig[other].slice(0, 22)) === 0 || sig[other].indexOf(got.slice(0, 22)) === 0;
+      if (other === id || !sig[other] || sig[other].length < 8) return false;
+      const needle = sig[other].slice(0, 12);
+      return got.indexOf(needle) === 0 || needle.indexOf(got.slice(0, 12)) === 0;
     });
     if (!stolen) return;
     s.subtitle = fresh.subtitle;
@@ -4333,6 +4335,18 @@ function migrateShiftedSugyaOpenings() {
     changed = true;
   });
   if (changed) saveContentEdits();
+}
+function migrateSugyaDOpening() {
+  const s = SUGYOT.d;
+  const fresh = DEFAULT_SUGYA_CONTENT.d;
+  if (!s || !fresh || !s.rows || !s.rows.length || !fresh.rows) return;
+  const open = sugyaPlainOpen(s.rows.map(function (r) { return (r && r.html) || ""; }).join(" ")).slice(0, 80);
+  if (open.indexOf("תנו רבנן") === 0) return;
+  s.subtitle = fresh.subtitle;
+  s.color = fresh.color;
+  s.fill = fresh.fill;
+  s.rows = JSON.parse(JSON.stringify(fresh.rows));
+  saveContentEdits();
 }
 function migrateTosafotVekeshartem() {
   const dh = "וקשרתם לאות על ידך והדר והיו לטוטפת בין עיניך";
