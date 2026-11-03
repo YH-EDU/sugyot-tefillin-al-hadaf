@@ -7,6 +7,22 @@
   ],
   "tokens": [
     {
+      "surface": "וְכֵיוָן",
+      "prefix": "ו",
+      "lemmaId": "כיונ",
+      "ctxGloss": "והואיל",
+      "confidence": 1,
+      "row": 0,
+      "occurrence": 0,
+      "base": "כיונ",
+      "prefixGloss": "ו",
+      "prefixNote": "",
+      "explain": "",
+      "source": "hand",
+      "start": 138,
+      "end": 146
+    },
+    {
       "surface": "דִּקְשִׁירָה",
       "prefix": "",
       "lemmaId": "דקשירה",
