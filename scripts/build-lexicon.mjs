@@ -1583,7 +1583,7 @@ async function main() {
   };
   fs.writeFileSync(path.join(ROOT, "data", "report.json"), JSON.stringify(report, null, 2));
   const ini = (sugyaOut.a.tokens || []).find((t) => skeleton(t.surface) === "איני");
-  if (!ini || ini.ctxGloss !== "וכי כך") {
+  if (!ini || ini.ctxGloss !== "האם כך") {
     console.error("hand gloss for איני was overwritten", ini);
     process.exit(1);
   }

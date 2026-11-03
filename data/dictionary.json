@@ -1,7 +1,7 @@
 {
   "license": "CC-BY-NC",
   "credit": "ביאור שטיינזלץ, תלמוד מהדורת ויליאם דוידסון, ספריא. ערכים ידניים גוברים.",
-  "generated": "2026-11-03T15:48:15.641Z",
+  "generated": "2026-11-03T15:54:51.086Z",
   "lemmas": [
     {
       "id": "אביי",
@@ -34,7 +34,7 @@
       "phrases": [
         {
           "ar": "מצלובהובאורתא",
-          "gloss_he": "מתפללים בהם בלילה",
+          "gloss_he": "היו מתפללים בהם בערב",
           "sources": [
             "hand"
           ]
@@ -57,7 +57,7 @@
       "phrases": [
         {
           "ar": "תניאאידכ",
-          "gloss_he": "שנויה אחרת",
+          "gloss_he": "נשנתה ברייתא אחרת",
           "sources": [
             "hand"
           ]
@@ -86,7 +86,7 @@
       "id": "אימא",
       "lemma": "אִימָּא",
       "root": "",
-      "gloss_he": "ואמור",
+      "gloss_he": "שמא תאמר",
       "phrases": [],
       "sources": [
         "hand",
@@ -111,7 +111,7 @@
       "id": "איני",
       "lemma": "אֵינִי",
       "root": "אין",
-      "gloss_he": "וכי כך",
+      "gloss_he": "האם כך",
       "phrases": [],
       "sources": [
         "hand",
@@ -130,7 +130,7 @@
       "phrases": [
         {
           "ar": "סתמאלאאיקרי",
-          "gloss_he": "סתם לא נקרא",
+          "gloss_he": "סתם אינה נקראת",
           "sources": [
             "hand"
           ]
@@ -267,7 +267,7 @@
       "phrases": [
         {
           "ar": "הוהציריאבידיה",
-          "gloss_he": "היתה רטיה בידו",
+          "gloss_he": "היה קרע בשרוול",
           "sources": [
             "hand"
           ]
@@ -281,7 +281,7 @@
       "id": "בעי",
       "lemma": "בְּעֵי",
       "root": "בעי",
-      "gloss_he": "צריך",
+      "gloss_he": "רוצה",
       "phrases": [],
       "sources": [
         "hand",
@@ -311,7 +311,7 @@
       "id": "בשלמא",
       "lemma": "בִּשְׁלָמָא",
       "root": "שלם",
-      "gloss_he": "מובן",
+      "gloss_he": "נניח",
       "phrases": [],
       "sources": [
         "hand",
@@ -330,7 +330,7 @@
       "phrases": [
         {
           "ar": "ההואגברא",
-          "gloss_he": "אותו אדם",
+          "gloss_he": "אדם אחד",
           "sources": [
             "hand"
           ]
@@ -353,7 +353,7 @@
       "phrases": [
         {
           "ar": "קומגלי",
-          "gloss_he": "עמוד גלה",
+          "gloss_he": "צא לגלות",
           "sources": [
             "hand"
           ]
@@ -382,7 +382,7 @@
       "id": "דבגולגולת",
       "lemma": "דבגולגולת",
       "root": "",
-      "gloss_he": "שבגולגולת",
+      "gloss_he": "בגלגולת",
       "phrases": [],
       "sources": [
         "hand"
@@ -396,14 +396,14 @@
       "phrases": [
         {
           "ar": "אמרידבי",
-          "gloss_he": "אומרים של בית",
+          "gloss_he": "אומרים בבית מדרשו",
           "sources": [
             "hand"
           ]
         },
         {
           "ar": "תנאדבי",
-          "gloss_he": "שנה של בית",
+          "gloss_he": "שנו בבית מדרשו",
           "sources": [
             "hand"
           ]
@@ -446,7 +446,7 @@
       "phrases": [
         {
           "ar": "וחזיתיהלדעתיה",
-          "gloss_he": "וראיתי דעתו",
+          "gloss_he": "ראיתי את דעתו",
           "sources": [
             "hand"
           ]
@@ -460,7 +460,7 @@
       "id": "דקשירה",
       "lemma": "דקשירה",
       "root": "",
-      "gloss_he": "שקשירה",
+      "gloss_he": "שהקשירה",
       "phrases": [],
       "sources": [
         "hand",
@@ -547,7 +547,7 @@
       "phrases": [
         {
           "ar": "כיתניאההיא",
-          "gloss_he": "כששנויה אותה",
+          "gloss_he": "כשנשנתה הברייתא הזו",
           "sources": [
             "hand"
           ]
@@ -566,7 +566,7 @@
       "id": "היכא",
       "lemma": "הֵיכָא",
       "root": "היכ",
-      "gloss_he": "איפה",
+      "gloss_he": "היכן",
       "phrases": [],
       "sources": [
         "hand",
@@ -639,7 +639,7 @@
       "id": "התניא",
       "lemma": "התניא",
       "root": "",
-      "gloss_he": "והרי שנויה",
+      "gloss_he": "והרי שנויה ברייתא",
       "phrases": [],
       "sources": [
         "hand"
@@ -648,16 +648,6 @@
     {
       "id": "והא",
       "lemma": "והא",
-      "root": "",
-      "gloss_he": "והרי",
-      "phrases": [],
-      "sources": [
-        "hand"
-      ]
-    },
-    {
-      "id": "וקא",
-      "lemma": "וקא",
       "root": "",
       "gloss_he": "והרי",
       "phrases": [],
@@ -698,7 +688,7 @@
       "phrases": [
         {
           "ar": "מיכתיב",
-          "gloss_he": "וכי כתוב",
+          "gloss_he": "האם כתוב",
           "sources": [
             "hand"
           ]
@@ -717,7 +707,7 @@
       "id": "כתנאי",
       "lemma": "כתנאי",
       "root": "",
-      "gloss_he": "כתנאים",
+      "gloss_he": "כמחלוקת תנאים",
       "phrases": [],
       "sources": [
         "hand"
@@ -742,7 +732,7 @@
       "id": "לאו",
       "lemma": "לַאו",
       "root": "",
-      "gloss_he": "שלא",
+      "gloss_he": "של לאו",
       "phrases": [],
       "sources": [
         "hand",
@@ -784,14 +774,7 @@
       "phrases": [
         {
           "ar": "דכוליעלמאאיתלהו",
-          "gloss_he": "שכל העולם יש להם",
-          "sources": [
-            "hand"
-          ]
-        },
-        {
-          "ar": "קאבעילהו",
-          "gloss_he": "צריך אותם",
+          "gloss_he": "שכולם סוברים",
           "sources": [
             "hand"
           ]
@@ -846,7 +829,7 @@
       "phrases": [
         {
           "ar": "ומנחליהלהדיליביה",
-          "gloss_he": "ומניח אותו כלפי לבו",
+          "gloss_he": "מניח אותו מול הלב",
           "sources": [
             "hand"
           ]
@@ -864,7 +847,7 @@
       "phrases": [
         {
           "ar": "נפקאליהמהיכאדנפקאליה",
-          "gloss_he": "יוצא לו מאיפה שיוצא לו",
+          "gloss_he": "יוצא לו מאותו מקום",
           "sources": [
             "hand"
           ]
@@ -937,7 +920,7 @@
       "phrases": [
         {
           "ar": "כמהבעינאלמיתב",
-          "gloss_he": "כמה אני צריך לתת",
+          "gloss_he": "כמה עליי לתת",
           "sources": [
             "hand"
           ]
@@ -951,7 +934,7 @@
       "id": "מהיכא",
       "lemma": "מֵהֵיכָא",
       "root": "",
-      "gloss_he": "שמאיפה",
+      "gloss_he": "שמאותו מקום",
       "phrases": [],
       "sources": [
         "hand",
@@ -970,7 +953,7 @@
       "phrases": [
         {
           "ar": "בעאמיניה",
-          "gloss_he": "שאל ממנו",
+          "gloss_he": "שאל אותו",
           "sources": [
             "hand"
           ]
@@ -993,14 +976,14 @@
       "phrases": [
         {
           "ar": "והכאבהאקאמיפלגי",
-          "gloss_he": "וכאן בזה נחלקים",
+          "gloss_he": "וכאן חולקים בזה",
           "sources": [
             "hand"
           ]
         },
         {
           "ar": "קאמיפלגי",
-          "gloss_he": "נחלקים",
+          "gloss_he": "חולקים",
           "sources": [
             "hand"
           ]
@@ -1044,11 +1027,18 @@
       "id": "מר",
       "lemma": "מַר",
       "root": "",
-      "gloss_he": "אדון",
+      "gloss_he": "החכם",
       "phrases": [
         {
+          "ar": "קאבעילהומר",
+          "gloss_he": "רוצה אותם אדוני",
+          "sources": [
+            "hand"
+          ]
+        },
+        {
           "ar": "לאסברלהמר",
-          "gloss_he": "לא סובר לה האדון",
+          "gloss_he": "אינך סובר כך",
           "sources": [
             "hand"
           ]
@@ -1067,7 +1057,7 @@
       "id": "מרבי",
       "lemma": "מֵרַבִּי",
       "root": "",
-      "gloss_he": "מאת רבי",
+      "gloss_he": "את רבי",
       "phrases": [],
       "sources": [
         "hand",
@@ -1098,7 +1088,15 @@
       "lemma": "מתחזיינ",
       "root": "",
       "gloss_he": "נראים",
-      "phrases": [],
+      "phrases": [
+        {
+          "ar": "וקאמתחזיינ",
+          "gloss_he": "ונראו",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
       "sources": [
         "hand"
       ]
@@ -1126,7 +1124,7 @@
       "phrases": [
         {
           "ar": "ההואסבא",
-          "gloss_he": "אותו זקן",
+          "gloss_he": "זקן אחד",
           "sources": [
             "hand"
           ]
@@ -1149,14 +1147,14 @@
       "phrases": [
         {
           "ar": "ומרסבר",
-          "gloss_he": "והאדון סובר",
+          "gloss_he": "וזה סובר",
           "sources": [
             "hand"
           ]
         },
         {
           "ar": "מרסבר",
-          "gloss_he": "האדון סובר",
+          "gloss_he": "זה סובר",
           "sources": [
             "hand"
           ]
@@ -1179,7 +1177,7 @@
       "phrases": [
         {
           "ar": "קבלעלכ",
-          "gloss_he": "קבל עליך",
+          "gloss_he": "קבל על עצמך",
           "sources": [
             "hand"
           ]
@@ -1197,7 +1195,7 @@
       "phrases": [
         {
           "ar": "ההואפליגא",
-          "gloss_he": "אותו חולק",
+          "gloss_he": "הוא חולק",
           "sources": [
             "hand"
           ]
@@ -1245,14 +1243,14 @@
       "phrases": [
         {
           "ar": "מאיקסבר",
-          "gloss_he": "מה סובר",
+          "gloss_he": "מה הוא סובר",
           "sources": [
             "hand"
           ]
         },
         {
           "ar": "איקסבר",
-          "gloss_he": "אם סובר",
+          "gloss_he": "אם הוא סובר",
           "sources": [
             "hand"
           ]
@@ -1275,7 +1273,7 @@
       "phrases": [
         {
           "ar": "אמרקרא",
-          "gloss_he": "אמר הכתוב",
+          "gloss_he": "הפסוק אומר",
           "sources": [
             "hand"
           ]
@@ -1323,7 +1321,7 @@
       "phrases": [
         {
           "ar": "תלארחמנא",
-          "gloss_he": "תלה הרחמן",
+          "gloss_he": "התורה תלתה",
           "sources": [
             "hand"
           ]
@@ -1390,7 +1388,7 @@
       "id": "תניא",
       "lemma": "תַּנְיָא",
       "root": "תני",
-      "gloss_he": "ששנינו",
+      "gloss_he": "ששנינו בברייתא",
       "phrases": [],
       "sources": [
         "hand",
@@ -1409,7 +1407,7 @@
       "phrases": [
         {
           "ar": "דאמריתרוייהו",
-          "gloss_he": "שאומרים שניהם",
+          "gloss_he": "שאמרו שניהם",
           "sources": [
             "hand"
           ]
