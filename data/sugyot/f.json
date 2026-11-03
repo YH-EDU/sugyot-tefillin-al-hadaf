@@ -23,22 +23,6 @@
       "end": 6
     },
     {
-      "surface": "בְּרַבִּי",
-      "prefix": "",
-      "lemmaId": "ברבי",
-      "ctxGloss": "על רבי",
-      "confidence": 1,
-      "row": 1,
-      "occurrence": 0,
-      "base": "ברבי",
-      "prefixGloss": "",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 7,
-      "end": 16
-    },
-    {
       "surface": "קָא מִיפַּלְגִי",
       "prefix": "",
       "lemmaId": "מיפלגי",
@@ -119,35 +103,19 @@
       "end": 44
     },
     {
-      "surface": "וְהָכָא בְּהָא",
+      "surface": "וְהָכָא בְּהָא קָא מִיפַּלְגִי",
       "prefix": "ו",
-      "lemmaId": "בהא",
-      "ctxGloss": "וכאן בזה",
+      "lemmaId": "מיפלגי",
+      "ctxGloss": "וכאן בזה נחלקים",
       "confidence": 1,
       "row": 2,
       "occurrence": 0,
-      "base": "בהא",
+      "base": "מיפלגי",
       "prefixGloss": "ו",
       "prefixNote": "",
       "explain": "",
       "source": "hand",
       "start": 53,
-      "end": 67
-    },
-    {
-      "surface": "קָא מִיפַּלְגִי",
-      "prefix": "",
-      "lemmaId": "מיפלגי",
-      "ctxGloss": "נחלקים",
-      "confidence": 1,
-      "row": 2,
-      "occurrence": 0,
-      "base": "מיפלגי",
-      "prefixGloss": "",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 68,
       "end": 83
     },
     {

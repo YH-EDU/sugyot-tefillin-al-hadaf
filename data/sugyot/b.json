@@ -7,38 +7,6 @@
   ],
   "tokens": [
     {
-      "surface": "סָח",
-      "prefix": "",
-      "lemmaId": "סח",
-      "ctxGloss": "דיבר",
-      "confidence": 1,
-      "row": 0,
-      "occurrence": 0,
-      "base": "סח",
-      "prefixGloss": "",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 20,
-      "end": 23
-    },
-    {
-      "surface": "סָח",
-      "prefix": "",
-      "lemmaId": "סח",
-      "ctxGloss": "דיבר",
-      "confidence": 1,
-      "row": 1,
-      "occurrence": 0,
-      "base": "סח",
-      "prefixGloss": "",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 0,
-      "end": 3
-    },
-    {
       "surface": "אִין",
       "prefix": "",
       "lemmaId": "אינ",
@@ -53,22 +21,6 @@
       "source": "hand",
       "start": 6,
       "end": 10
-    },
-    {
-      "surface": "סָח",
-      "prefix": "",
-      "lemmaId": "סח",
-      "ctxGloss": "דיבר",
-      "confidence": 1,
-      "row": 1,
-      "occurrence": 1,
-      "base": "סח",
-      "prefixGloss": "",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 16,
-      "end": 19
     },
     {
       "surface": "לָא",
@@ -167,38 +119,6 @@
       "end": 42
     },
     {
-      "surface": "סָח",
-      "prefix": "",
-      "lemmaId": "סח",
-      "ctxGloss": "דיבר",
-      "confidence": 1,
-      "row": 3,
-      "occurrence": 0,
-      "base": "סח",
-      "prefixGloss": "",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 48,
-      "end": 51
-    },
-    {
-      "surface": "סָח",
-      "prefix": "",
-      "lemmaId": "סח",
-      "ctxGloss": "דיבר",
-      "confidence": 1,
-      "row": 3,
-      "occurrence": 1,
-      "base": "סח",
-      "prefixGloss": "",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 70,
-      "end": 73
-    },
-    {
       "surface": "תָּנָא",
       "prefix": "",
       "lemmaId": "תנא",
@@ -213,22 +133,6 @@
       "source": "hand",
       "start": 0,
       "end": 6
-    },
-    {
-      "surface": "סָח",
-      "prefix": "",
-      "lemmaId": "סח",
-      "ctxGloss": "דיבר",
-      "confidence": 1,
-      "row": 4,
-      "occurrence": 0,
-      "base": "סח",
-      "prefixGloss": "",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 8,
-      "end": 11
     }
   ]
 }

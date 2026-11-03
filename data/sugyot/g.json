@@ -7,22 +7,6 @@
   ],
   "tokens": [
     {
-      "surface": "לְשׇׁמְרָן",
-      "prefix": "ל",
-      "lemmaId": "שמרנ",
-      "ctxGloss": "לשומרן",
-      "confidence": 1,
-      "row": 0,
-      "occurrence": 0,
-      "base": "שמרנ",
-      "prefixGloss": "ל",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 32,
-      "end": 42
-    },
-    {
       "surface": "הֲוָה יָתֵיבְנָא קַמֵּיהּ",
       "prefix": "",
       "lemmaId": "קמיה",
@@ -69,22 +53,6 @@
       "source": "hand",
       "start": 93,
       "end": 108
-    },
-    {
-      "surface": "לְשׇׁמְרָן",
-      "prefix": "ל",
-      "lemmaId": "שמרנ",
-      "ctxGloss": "לשומרן",
-      "confidence": 1,
-      "row": 1,
-      "occurrence": 0,
-      "base": "שמרנ",
-      "prefixGloss": "ל",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 110,
-      "end": 120
     },
     {
       "surface": "קָא בָעֵי לְהוּ",
@@ -181,22 +149,6 @@
       "source": "hand",
       "start": 187,
       "end": 194
-    },
-    {
-      "surface": "לְשׇׁמְרָן",
-      "prefix": "ל",
-      "lemmaId": "שמרנ",
-      "ctxGloss": "לשומרן",
-      "confidence": 1,
-      "row": 1,
-      "occurrence": 1,
-      "base": "שמרנ",
-      "prefixGloss": "ל",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 195,
-      "end": 205
     },
     {
       "surface": "בָּעֵי",
