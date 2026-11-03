@@ -10,7 +10,7 @@
       "surface": "תָּנָא",
       "prefix": "",
       "lemmaId": "תנא",
-      "ctxGloss": "שנינו בברייתא",
+      "ctxGloss": "שנה",
       "confidence": 1,
       "row": 0,
       "occurrence": 0,
@@ -23,26 +23,10 @@
       "end": 6
     },
     {
-      "surface": "וּכְשֶׁהוּא חוֹלֵץ",
-      "prefix": "",
-      "lemmaId": "חולצ",
-      "ctxGloss": "מוריד",
-      "confidence": 1,
-      "row": 0,
-      "occurrence": 0,
-      "base": "חולצ",
-      "prefixGloss": "",
-      "prefixNote": "",
-      "explain": "",
-      "source": "hand",
-      "start": 84,
-      "end": 102
-    },
-    {
       "surface": "בִּשְׁלָמָא",
       "prefix": "",
       "lemmaId": "בשלמא",
-      "ctxGloss": "מובן ש",
+      "ctxGloss": "נניח",
       "confidence": 1,
       "row": 1,
       "occurrence": 0,
@@ -58,13 +42,13 @@
       "surface": "דִּכְתִיב",
       "prefix": "ד",
       "lemmaId": "כתיב",
-      "ctxGloss": "שכתוב",
+      "ctxGloss": "שנאמר",
       "confidence": 1,
       "row": 1,
       "occurrence": 0,
       "base": "כתיב",
       "prefixGloss": "ש",
-      "prefixNote": "דִּ = ש + כתיב = כתוב",
+      "prefixNote": "דִּ = ש + כתיב = נאמר",
       "explain": "",
       "source": "hand",
       "start": 89,
@@ -122,7 +106,7 @@
       "surface": "אָמַר קְרָא",
       "prefix": "",
       "lemmaId": "קרא",
-      "ctxGloss": "אמר הכתוב",
+      "ctxGloss": "הפסוק אומר",
       "confidence": 1,
       "row": 3,
       "occurrence": 0,
@@ -131,8 +115,8 @@
       "prefixNote": "",
       "explain": "",
       "source": "hand",
-      "start": 43,
-      "end": 54
+      "start": 42,
+      "end": 53
     }
   ]
 }
