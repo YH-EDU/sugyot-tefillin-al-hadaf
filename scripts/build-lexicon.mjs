@@ -902,6 +902,7 @@ async function main() {
   const sugyot = evalLiteral(extractConst(index, "SUGYOT"));
   const aramaic = evalLiteral(extractConst(index, "ARAMAIC"));
   const extra = evalLiteral(extractConst(index, "GLOSS_EXTRA"));
+  const literal = evalLiteral(extractConst(index, "LITERAL"));
   const refsFile = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "sugya-refs.json"), "utf8"));
   const corrections = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "corrections.json"), "utf8"));
   const ids = Object.keys(sugyot).filter((id) => Array.isArray(sugyot[id]?.rows));
@@ -990,7 +991,7 @@ async function main() {
   for (const id of ids) {
     const sugya = sugyot[id];
     const segments = sugyaDafim[id].flatMap((d) => byDaf[d] || []);
-    const hands = handEntries(aramaic, extra, id, sugya.rows.map((r) => r.html));
+    const hands = handEntries({ dict: literal }, [], "dict", []);
     const tokens = [];
     let wordTotal = 0;
     let aramaicN = 0;
@@ -1252,7 +1253,8 @@ async function main() {
         const baseGloss = baseGlossFrom(singleGloss, stripPrefixes(skeleton(firstSurface)).base, c.ctxGloss);
         const pref = makePrefixNote(firstSurface, c.words.length === 1 ? c.ctxGloss : "", baseGloss);
         const note = usefulPrefix(pref.note, c.words.length);
-        const show = c.source === "hand" || c.confidence >= SHOW_AT;
+        if (c.source !== "hand" && c.source !== "teacher") return;
+        const show = true;
         const token = {
           surface: c.surface,
           prefix: pref.prefix,
@@ -1590,7 +1592,7 @@ async function main() {
   };
   fs.writeFileSync(path.join(ROOT, "data", "report.json"), JSON.stringify(report, null, 2));
   const ini = (sugyaOut.a.tokens || []).find((t) => skeleton(t.surface) === "איני");
-  if (!ini || !/באמת/.test(ini.ctxGloss)) {
+  if (!ini || ini.ctxGloss !== "וכי כך") {
     console.error("hand gloss for איני was overwritten", ini);
     process.exit(1);
   }
