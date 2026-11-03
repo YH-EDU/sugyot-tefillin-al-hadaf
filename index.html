@@ -6123,9 +6123,15 @@ function okGlossBoundary(text, start, end) {
   if (before >= 0 && isHeLetterChar(text.charAt(before))) return false;
   return true;
 }
+// תרגומים שנערכו באתר (data/gloss-overrides.json) — משותפים לכל המשתמשים ולכל הסוגיות.
+window.GLOSS_OVERRIDES = window.GLOSS_OVERRIDES || {};
+function glossFor(tok) {
+  const key = window.TefillinStore ? TefillinStore.glossKey(tok.surface) : "";
+  return (key && window.GLOSS_OVERRIDES[key]) || tok.ctxGloss || "";
+}
 function tipForParts(tok) {
   const tip = document.createElement("i");
-  tip.textContent = tok.ctxGloss || "";
+  tip.textContent = glossFor(tok);
   return tip;
 }
 function textNodesIn(box) {
@@ -8132,7 +8138,95 @@ function renderEditorContent() {
   host.innerHTML = "";
   if (editSrc === "rashi") renderEditorRashi(host);
   else if (editSrc === "tosafot") renderEditorTosafot(host);
-  else renderEditorGemara(host);
+  else {
+    renderEditorGemara(host);
+    renderLexiconGlossEditor(host);
+  }
+}
+// עריכת תרגומי המילון: שינוי של מילה חל בכל 13 הסוגיות ואצל כל המשתמשים.
+function renderLexiconGlossEditor(host) {
+  const sid = editSugyaId;
+  const pack = window.LEXICON && window.LEXICON.sugyot && window.LEXICON.sugyot[sid];
+  if (!pack || lexiconMode(sid) !== "new") return;
+  const box = document.createElement("div");
+  box.className = "lexicon-gloss-editor";
+  box.style.cssText = "margin-top:16px;border-top:1px solid #d8cfc0;padding-top:10px";
+  const h = document.createElement("p");
+  h.className = "hint";
+  h.style.margin = "0 0 8px";
+  const canShare = isAdmin() && window.TefillinStore && TefillinStore.canSave();
+  h.textContent = canShare
+    ? "תרגומי המילון בסוגיא זו. שינוי נשמר באתר לכל המשתמשים, וחל על המילה בכל הסוגיות."
+    : "כדי לשנות תרגום לכל המשתמשים צריך להיכנס כמנהל ולהפעיל שמירה באתר (מפתח גיטהאב).";
+  box.appendChild(h);
+  const table = document.createElement("table");
+  table.className = "word-grid";
+  table.innerHTML = "<thead><tr><th>ארמית</th><th>תרגום</th><th></th></tr></thead>";
+  const body = document.createElement("tbody");
+  const seen = {};
+  (pack.tokens || []).forEach(function (tok) {
+    if (!tok.surface || !tok.ctxGloss) return;
+    const key = TefillinStore.glossKey(tok.surface);
+    if (seen[key]) return;
+    seen[key] = true;
+    const tr = document.createElement("tr");
+    const a = document.createElement("td");
+    a.textContent = tok.surface;
+    const b = document.createElement("td");
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = glossFor(tok);
+    input.disabled = !canShare;
+    input.setAttribute("data-gloss-key", key);
+    input.style.width = "100%";
+    b.appendChild(input);
+    const c = document.createElement("td");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "ghost-btn";
+    btn.textContent = "שמור";
+    btn.disabled = !canShare;
+    btn.onclick = function () {
+      const val = input.value.trim();
+      const text = val === tok.ctxGloss ? "" : val;
+      btn.disabled = true;
+      showToast("שומר את התרגום באתר...");
+      TefillinStore.saveGlossOverride(tok.surface, text).then(function (items) {
+        window.GLOSS_OVERRIDES = items || {};
+        refreshGlossTips();
+        showToast("נשמר. התרגום עודכן בכל הסוגיות (אצל אחרים תוך כדקה)");
+      }).catch(function () {
+        showToast("השמירה נכשלה. בדקו את מפתח הגיטהאב");
+      }).then(function () { btn.disabled = false; });
+    };
+    c.appendChild(btn);
+    tr.appendChild(a); tr.appendChild(b); tr.appendChild(c);
+    body.appendChild(tr);
+  });
+  table.appendChild(body);
+  box.appendChild(table);
+  host.appendChild(box);
+}
+// מעדכן את הטולטיפים שכבר מוצגים, בלי לבנות את הדף מחדש.
+function refreshGlossTips() {
+  const sid = typeof quizSugya !== "undefined" ? quizSugya : "";
+  const pack = window.LEXICON && window.LEXICON.sugyot && window.LEXICON.sugyot[sid];
+  const host = document.getElementById("sugyaGemara");
+  if (!pack || !host || lexiconMode(sid) !== "new") return;
+  const bySurface = {};
+  (pack.tokens || []).forEach(function (t) { bySurface[t.surface] = t; });
+  host.querySelectorAll(".gw").forEach(function (el) {
+    const tip = el.querySelector(":scope > i");
+    const word = el.firstChild && el.firstChild.nodeType === 3 ? el.firstChild.nodeValue : "";
+    const tok = bySurface[word];
+    if (tip && tok) tip.textContent = glossFor(tok);
+  });
+}
+if (window.TefillinStore) {
+  TefillinStore.loadGlossOverrides().then(function (items) {
+    window.GLOSS_OVERRIDES = items || {};
+    if (typeof refreshGlossTips === "function") refreshGlossTips();
+  });
 }
 function renderEditorParts() {
   renderEditorContent();

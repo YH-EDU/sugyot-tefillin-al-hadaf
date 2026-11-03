@@ -260,7 +260,37 @@
     }).then(function (data) { return data.items || []; }).catch(function () { return []; });
   }
 
+
+  // תרגומי מילון משותפים: מפתח = אותיות המילה/הביטוי בלי ניקוד, ערך = תרגום.
+  var GLOSS_PATH = "data/gloss-overrides.json";
+  function glossKey(surface) { return String(surface || "").replace(/[^\u05D0-\u05EA ]/g, "").replace(/\s+/g, " ").trim(); }
+  function loadGlossOverrides() {
+    var site = fetch(GLOSS_PATH + "?t=" + Date.now(), { cache: "no-store" }).then(function (res) {
+      return res.ok ? res.json() : {};
+    }).catch(function () { return {}; });
+    if (!canSave()) return site.then(function (d) { return (d && d.items) || {}; });
+    // לעורך: קוראים ישר מגיטהאב כדי לראות שינוי מיד, גם לפני שהאתר מתעדכן.
+    return getJson(GLOSS_PATH).then(function (info) {
+      return (info.json && info.json.items) || {};
+    }).catch(function () { return site.then(function (d) { return (d && d.items) || {}; }); });
+  }
+  function saveGlossOverride(surface, text) {
+    if (!canSave()) return Promise.reject(new Error("no-token"));
+    var key = glossKey(surface);
+    if (!key) return Promise.reject(new Error("no-key"));
+    return getJson(GLOSS_PATH).then(function (info) {
+      var data = info.json && info.json.items ? info.json : { _note: "תרגומים שנערכו באתר. גוברים על המילון בכל הסוגיות.", items: {} };
+      text = String(text || "").trim();
+      if (text) data.items[key] = text; else delete data.items[key];
+      return putFile(GLOSS_PATH, textToBase64(JSON.stringify(data, null, 2) + "\n"), "עדכון תרגום: " + key, info.sha)
+        .then(function () { return data.items; });
+    });
+  }
+
   global.TefillinStore = {
+    glossKey: glossKey,
+    loadGlossOverrides: loadGlossOverrides,
+    saveGlossOverride: saveGlossOverride,
     canSave: canSave,
     token: token,
     setToken: setToken,
