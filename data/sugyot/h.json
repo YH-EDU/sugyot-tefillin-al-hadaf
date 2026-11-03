@@ -1,0 +1,42 @@
+{
+  "sugya": "h",
+  "title": "הסחת דעת מן התפילין",
+  "daf": "לו ע״ב",
+  "refs": [
+    "Menachot.36b"
+  ],
+  "tokens": [
+    {
+      "surface": "לְמַשְׁמֵשׁ",
+      "prefix": "",
+      "lemmaId": "למשמש",
+      "ctxGloss": "לגעת ולבדוק",
+      "confidence": 1,
+      "row": 0,
+      "occurrence": 0,
+      "base": "למשמש",
+      "prefixGloss": "",
+      "prefixNote": "",
+      "explain": "",
+      "source": "hand",
+      "start": 44,
+      "end": 55
+    },
+    {
+      "surface": "עַל אַחַת כַּמָּה וְכַמָּה",
+      "prefix": "",
+      "lemmaId": "כמה",
+      "ctxGloss": "קל וחומר",
+      "confidence": 1,
+      "row": 1,
+      "occurrence": 0,
+      "base": "כמה",
+      "prefixGloss": "",
+      "prefixNote": "",
+      "explain": "",
+      "source": "hand",
+      "start": 208,
+      "end": 234
+    }
+  ]
+}

@@ -1,0 +1,1630 @@
+{
+  "license": "CC-BY-NC",
+  "credit": "ביאור שטיינזלץ, תלמוד מהדורת ויליאם דוידסון, ספריא. ערכים ידניים גוברים.",
+  "generated": "2026-11-03T00:29:20.769Z",
+  "lemmas": [
+    {
+      "id": "אומר",
+      "lemma": "אוֹמָר",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "אתהאומר",
+          "gloss_he": "אתה אומר — הברייתא מבררת",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "אוֹמָר",
+        "language": "x-pn"
+      }
+    },
+    {
+      "id": "אורתא",
+      "lemma": "אוּרְתָּא",
+      "root": "אורת",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "מצלובהובאורתא",
+          "gloss_he": "והרי התפללו בהם בלילה",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "אוּרְתָּא",
+        "language": ""
+      }
+    },
+    {
+      "id": "אידכ",
+      "lemma": "אידכ",
+      "root": "",
+      "gloss_he": "שנויה",
+      "phrases": [
+        {
+          "ar": "תניאאידכ",
+          "gloss_he": "שנינו ברייתא אחרת",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "איכא",
+      "lemma": "אִיכָּא",
+      "root": "אית",
+      "gloss_he": "שיש שם",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "steinsaltz",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "אִיכָּא",
+        "language": ""
+      }
+    },
+    {
+      "id": "אימא",
+      "lemma": "אִימָּא",
+      "root": "",
+      "gloss_he": "ואולי תאמר",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "אִימָּא II",
+        "language": "ch."
+      }
+    },
+    {
+      "id": "אינ",
+      "lemma": "אינ",
+      "root": "",
+      "gloss_he": "כן",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "איני",
+      "lemma": "אֵינִי",
+      "root": "אין",
+      "gloss_he": "האם באמת כך?",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "אֵינִי",
+        "language": ""
+      }
+    },
+    {
+      "id": "איקרי",
+      "lemma": "איקרי",
+      "root": "קרא",
+      "gloss_he": "סתם",
+      "phrases": [
+        {
+          "ar": "סתמאלאאיקרי",
+          "gloss_he": "רק כשכתוב במפורש ״יד ימינו״. המילה ״יד״ לבד אינה ימין",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "קְרֵי II",
+        "language": "ch."
+      }
+    },
+    {
+      "id": "איתמר",
+      "lemma": "אִיתָמָר",
+      "root": "אמר",
+      "gloss_he": "נאמר",
+      "phrases": [
+        {
+          "ar": "בערבשבתאיתמר",
+          "gloss_he": "שם, דין ספק חשיכה, מדובר בערב שבת",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "אִיתָמָר",
+        "language": "x-pn"
+      }
+    },
+    {
+      "id": "אלא",
+      "lemma": "אֶלָּא",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "אואינואלא",
+          "gloss_he": "או שמא רק...",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "אֶלָּא",
+        "language": ""
+      }
+    },
+    {
+      "id": "אמרי",
+      "lemma": "אִמְרִי",
+      "root": "אמר",
+      "gloss_he": "יש שם",
+      "phrases": [
+        {
+          "ar": "איכאדאמרי",
+          "gloss_he": "יש אומרים",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "אִמְרִי",
+        "language": "x-pn"
+      }
+    },
+    {
+      "id": "אפוקי",
+      "lemma": "אֲפוּקֵי",
+      "root": "נפק",
+      "gloss_he": "להוציא, למעט",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "אֲפוּקֵי",
+        "language": ""
+      }
+    },
+    {
+      "id": "אתא",
+      "lemma": "אֲתָא",
+      "root": "אתי",
+      "gloss_he": "בא",
+      "phrases": [
+        {
+          "ar": "אדהכיאתא",
+          "gloss_he": "בינתיים בא",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "אֲתָא",
+        "language": "ch."
+      }
+    },
+    {
+      "id": "בהנ",
+      "lemma": "בהנ",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "ממשמשבהנ",
+          "gloss_he": "נוגע בהן ובודק",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "בעי",
+      "lemma": "בְּעֵי",
+      "root": "בעי",
+      "gloss_he": "צריך",
+      "phrases": [
+        {
+          "ar": "קאבעי",
+          "gloss_he": "הוא צריך / מתכוון",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "steinsaltz",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "בְּעֵי I",
+        "language": "ch."
+      }
+    },
+    {
+      "id": "בריה",
+      "lemma": "בְּרִיָּה",
+      "root": "בר",
+      "gloss_he": "בנו",
+      "phrases": [],
+      "sources": [
+        "steinsaltz",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "בְּרִיָּה",
+        "language": "PBH"
+      }
+    },
+    {
+      "id": "בשלמא",
+      "lemma": "בִּשְׁלָמָא",
+      "root": "שלם",
+      "gloss_he": "מובן ש",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "בִּשְׁלָמָא",
+        "language": ""
+      }
+    },
+    {
+      "id": "גברא",
+      "lemma": "גִּבָּרָא",
+      "root": "גבר",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "ההואגברא",
+          "gloss_he": "אותו אדם",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "גִּבָּרָא",
+        "language": ""
+      }
+    },
+    {
+      "id": "גידמ",
+      "lemma": "גידמ",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "לרבותאתהגידמ",
+          "gloss_he": "גידם = מי שנקטעה ידו",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "גלי",
+      "lemma": "גְּלֵי",
+      "root": "גלי",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "קומגלי",
+          "gloss_he": "צא מכאן / לך לגלות",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "גְּלֵי",
+        "language": "ch."
+      }
+    },
+    {
+      "id": "דבי",
+      "lemma": "דְּבִי",
+      "root": "",
+      "gloss_he": "מבית מדרשו",
+      "phrases": [
+        {
+          "ar": "אמרידבי",
+          "gloss_he": "אומרים בבית",
+          "sources": [
+            "steinsaltz"
+          ]
+        }
+      ],
+      "sources": [
+        "steinsaltz",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "*דְּבִי",
+        "language": ""
+      }
+    },
+    {
+      "id": "דברי",
+      "lemma": "דִּבְרִי",
+      "root": "",
+      "gloss_he": "זו דעת",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "דִּבְרִי",
+        "language": "x-pn"
+      }
+    },
+    {
+      "id": "דעשה",
+      "lemma": "דעשה",
+      "root": "",
+      "gloss_he": "של עשה",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "דעתיה",
+      "lemma": "דעתיה",
+      "root": "ידע",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "וחזיתיהלדעתיה",
+          "gloss_he": "וראיתי מה דעתו",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "הא",
+      "lemma": "הֵא",
+      "root": "",
+      "gloss_he": "הרי",
+      "phrases": [],
+      "sources": [
+        "steinsaltz",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "הֵא",
+        "language": "arc"
+      }
+    },
+    {
+      "id": "הדר",
+      "lemma": "הֲדַר",
+      "root": "הדר",
+      "gloss_he": "ואחר כך",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "הֲדַר",
+        "language": "arc"
+      }
+    },
+    {
+      "id": "ההוא",
+      "lemma": "הַהוּא",
+      "root": "הוא",
+      "gloss_he": "אותו",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "הַהוּא",
+        "language": ""
+      }
+    },
+    {
+      "id": "ההיא",
+      "lemma": "ההיא",
+      "root": "היא",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "כיתניאההיא",
+          "gloss_he": "כששנינו אותה, מדובר ב...",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "הוּא",
+        "language": "arc"
+      }
+    },
+    {
+      "id": "היכא",
+      "lemma": "הֵיכָא",
+      "root": "היכ",
+      "gloss_he": "איפה?",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "הֵיכָא",
+        "language": ""
+      }
+    },
+    {
+      "id": "הכא",
+      "lemma": "הָכָא",
+      "root": "הכא",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "שאניהכא",
+          "gloss_he": "כאן שונה",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "הָכָא",
+        "language": ""
+      }
+    },
+    {
+      "id": "הכי",
+      "lemma": "הָכִי",
+      "root": "הכי",
+      "gloss_he": "כך",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "הָכִי",
+        "language": ""
+      }
+    },
+    {
+      "id": "הנחתנ",
+      "lemma": "הנחתנ",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "משעתהנחתנ",
+          "gloss_he": "כאן: משעת זמן הנחתן בבוקר — לא אותו דין של יחידה א",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "השוק",
+      "lemma": "השוק",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "רגלמנהשוק",
+          "gloss_he": "עד שמתפזרים מהרחוב",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "התמ",
+      "lemma": "התמ",
+      "root": "",
+      "gloss_he": "שם",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "התני",
+      "lemma": "התני",
+      "root": "",
+      "gloss_he": "והרי שנה",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "התניא",
+      "lemma": "התניא",
+      "root": "",
+      "gloss_he": "והרי שנינו",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "והא",
+      "lemma": "והא",
+      "root": "",
+      "gloss_he": "והרי",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "חולצ",
+      "lemma": "חולצ",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "וכשהואחולצ",
+          "gloss_he": "מוריד",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "חשיכה",
+      "lemma": "חֲשֵׁיכָה",
+      "root": "חשך",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "ודאיחשיכה",
+          "gloss_he": "ודאי שחשכה",
+          "sources": [
+            "hand"
+          ]
+        },
+        {
+          "ar": "ספקחשיכה",
+          "gloss_he": "ספק אם כבר חשכה",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "חֲשֵׁיכָה",
+        "language": "(b. h.;"
+      }
+    },
+    {
+      "id": "ינוקא",
+      "lemma": "יָנוּקָא",
+      "root": "ינוק",
+      "gloss_he": "תינוק",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "יָנוּקָא I",
+        "language": ""
+      }
+    },
+    {
+      "id": "יצאו",
+      "lemma": "יצאו",
+      "root": "",
+      "gloss_he": "הוצאו מן הכלל",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "כיצד",
+      "lemma": "כֵּיצַד",
+      "root": "",
+      "gloss_he": "איך?",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "כֵּיצַד",
+        "language": "PBH"
+      }
+    },
+    {
+      "id": "כמה",
+      "lemma": "כַּמָּה",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "עלאחתכמהוכמה",
+          "gloss_he": "קל וחומר",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "כַּמָּה",
+        "language": ""
+      }
+    },
+    {
+      "id": "כנ",
+      "lemma": "כנ",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "הלכהואינמורינכנ",
+          "gloss_he": "הלכה, ואין מורים כך לרבים",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "כתיב",
+      "lemma": "כְּתִיב",
+      "root": "כתב",
+      "gloss_he": "שכתוב",
+      "phrases": [
+        {
+          "ar": "מיכתיב",
+          "gloss_he": "וכי כתוב?",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "כְּתִיב",
+        "language": ""
+      }
+    },
+    {
+      "id": "כתנאי",
+      "lemma": "כתנאי",
+      "root": "",
+      "gloss_he": "זו מחלוקת תנאים",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "לא",
+      "lemma": "לָא",
+      "root": "",
+      "gloss_he": "רק אם דיבר — מברך שוב? משמע: אם לא דיבר, לא מברך שוב",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "לָא",
+        "language": "arc"
+      }
+    },
+    {
+      "id": "לאו",
+      "lemma": "לַאו",
+      "root": "",
+      "gloss_he": "שלא",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "לַאו",
+        "language": "h."
+      }
+    },
+    {
+      "id": "לה",
+      "lemma": "לָהּ",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "ואמרילה",
+          "gloss_he": "ויש אומרים שכך נמסר",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "לָהּ",
+        "language": ""
+      }
+    },
+    {
+      "id": "להו",
+      "lemma": "להו",
+      "root": "להו",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "דכוליעלמאאיתלהו",
+          "gloss_he": "כולם סוברים",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "לומר",
+      "lemma": "לומר",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "תלמודלומר",
+          "gloss_he": "לכן הכתוב אומר",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "לי",
+      "lemma": "לִי",
+      "root": "",
+      "gloss_he": "הסביר",
+      "phrases": [
+        {
+          "ar": "איתילידלי",
+          "gloss_he": "נולד לי",
+          "sources": [
+            "hand"
+          ]
+        },
+        {
+          "ar": "אסבראלי",
+          "gloss_he": "הסביר לי",
+          "sources": [
+            "hand"
+          ]
+        },
+        {
+          "ar": "ואמרלי",
+          "gloss_he": "ואמר לי",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "לִי",
+        "language": ""
+      }
+    },
+    {
+      "id": "ליביה",
+      "lemma": "ליביה",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "ומנחליהלהדיליביה",
+          "gloss_he": "ומניח אותו כנגד ליבו",
+          "sources": [
+            "steinsaltz"
+          ]
+        }
+      ],
+      "sources": [
+        "steinsaltz"
+      ]
+    },
+    {
+      "id": "ליה",
+      "lemma": "לֹיָה",
+      "root": "ליה",
+      "gloss_he": "לו",
+      "phrases": [
+        {
+          "ar": "נפקאליהמהיכאדנפקאליה",
+          "gloss_he": "לומד ממקום אחר, כמו חכם פלוני",
+          "sources": [
+            "hand"
+          ]
+        },
+        {
+          "ar": "סבאתנאליה",
+          "gloss_he": "בא זקן אחד ושנה לו",
+          "sources": [
+            "steinsaltz"
+          ]
+        },
+        {
+          "ar": "ואמריליה",
+          "gloss_he": "ואמרתי לו",
+          "sources": [
+            "hand"
+          ]
+        },
+        {
+          "ar": "מנאליה",
+          "gloss_he": "מניין לו",
+          "sources": [
+            "hand"
+          ]
+        },
+        {
+          "ar": "אמרליה",
+          "gloss_he": "אמר לו",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "steinsaltz",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "לֹיָה I",
+        "language": ""
+      }
+    },
+    {
+      "id": "לילות",
+      "lemma": "לילות",
+      "root": "",
+      "gloss_he": "שם",
+      "phrases": [
+        {
+          "ar": "מהתמממעטילילות",
+          "gloss_he": "מאיפה ששבת יוצאת — משם יוצאים גם הלילות",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "לימא",
+      "lemma": "לֵימָא",
+      "root": "אמר",
+      "gloss_he": "האם נאמר",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "לֵימָא",
+        "language": ""
+      }
+    },
+    {
+      "id": "למיתב",
+      "lemma": "למיתב",
+      "root": "יהב",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "כמהבעינאלמיתב",
+          "gloss_he": "כמה אני צריך לתת",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "למשמש",
+      "lemma": "למשמש",
+      "root": "",
+      "gloss_he": "לגעת ולבדוק",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "מַשְׁמֵשׁ",
+        "language": "ch."
+      }
+    },
+    {
+      "id": "לעשייתנ",
+      "lemma": "לעשייתנ",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "עליהנעוברלעשייתנ",
+          "gloss_he": "לפני שעושים אותן",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "מהיכא",
+      "lemma": "מֵהֵיכָא",
+      "root": "",
+      "gloss_he": "שממקום",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "מֵהֵיכָא",
+        "language": ""
+      }
+    },
+    {
+      "id": "מודימ",
+      "lemma": "מודימ",
+      "root": "",
+      "gloss_he": "ומסכימים",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "מותר",
+      "lemma": "מוֹתָר",
+      "root": "",
+      "gloss_he": "אם מניח רק כדי שלא ייגנבו",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "מוֹתָר ²",
+        "language": "ch."
+      }
+    },
+    {
+      "id": "מיניה",
+      "lemma": "מיניה",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "בעאמיניה",
+          "gloss_he": "שאל ממנו",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "מִן ²",
+        "language": "ch."
+      }
+    },
+    {
+      "id": "מיפלגי",
+      "lemma": "מיפלגי",
+      "root": "פלג",
+      "gloss_he": "כאן",
+      "phrases": [
+        {
+          "ar": "והכאבהאקאמיפלגי",
+          "gloss_he": "וכאן בזה נחלקו",
+          "sources": [
+            "hand"
+          ]
+        },
+        {
+          "ar": "קאמיפלגי",
+          "gloss_he": "נחלקים",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "מלחמה",
+      "lemma": "מִלְחָמָה",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "עליהמערכיהמלחמה",
+          "gloss_he": "יורד משורות היוצאים למלחמה",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "מִלְחָמָה",
+        "language": "heb"
+      }
+    },
+    {
+      "id": "מנלנ",
+      "lemma": "מנלנ",
+      "root": "",
+      "gloss_he": "מניין לנו?",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "מר",
+      "lemma": "מַר",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "לאסברלהמר",
+          "gloss_he": "וכי אין מר סובר",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "מַר IV",
+        "language": ""
+      }
+    },
+    {
+      "id": "משמיה",
+      "lemma": "משמיה",
+      "root": "שמע",
+      "gloss_he": "משמו של",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "שֵׁם",
+        "language": "ch."
+      }
+    },
+    {
+      "id": "מתחזיינ",
+      "lemma": "מתחזיינ",
+      "root": "",
+      "gloss_he": "היו נראים",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "נמי",
+      "lemma": "נַמִּי",
+      "root": "נמי",
+      "gloss_he": "גם",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "נַמִּי",
+        "language": ""
+      }
+    },
+    {
+      "id": "סבר",
+      "lemma": "סְבַר",
+      "root": "סבר",
+      "gloss_he": "החכם",
+      "phrases": [
+        {
+          "ar": "ומרסבר",
+          "gloss_he": "והשני סובר",
+          "sources": [
+            "hand"
+          ]
+        },
+        {
+          "ar": "מרסבר",
+          "gloss_he": "אחד סובר",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "סְבַר",
+        "language": "ch."
+      }
+    },
+    {
+      "id": "סח",
+      "lemma": "סח",
+      "root": "סיח",
+      "gloss_he": "דיבר",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "פליגא",
+      "lemma": "פְּלִיגָא",
+      "root": "פלג",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "ההואפליגא",
+          "gloss_he": "אותו מעשה חולק על מי שסובר שאין מניחים בלילה",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "פְּלִיגָא I",
+        "language": ""
+      }
+    },
+    {
+      "id": "ציריא",
+      "lemma": "צִירְיָא",
+      "root": "צרר",
+      "gloss_he": "חבוש",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "צִירְיָא",
+        "language": ""
+      }
+    },
+    {
+      "id": "קמיה",
+      "lemma": "קמיה",
+      "root": "קדם",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "הוהיתיבנאקמיה",
+          "gloss_he": "הייתי יושב לפניו",
+          "sources": [
+            "hand"
+          ]
+        },
+        {
+          "ar": "הוהיתיבקמיה",
+          "gloss_he": "היה יושב לפניו",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "קסבר",
+      "lemma": "קסבר",
+      "root": "סבר",
+      "gloss_he": "הוא סובר",
+      "phrases": [
+        {
+          "ar": "מאיקסבר",
+          "gloss_he": "מה הוא סובר?",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "סְבַר",
+        "language": "ch."
+      }
+    },
+    {
+      "id": "קרא",
+      "lemma": "קְרָא",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "אמרקרא",
+          "gloss_he": "אמר הכתוב",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "קְרָא",
+        "language": "arc"
+      }
+    },
+    {
+      "id": "רבננ",
+      "lemma": "רבננ",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "דתנורבננ",
+          "gloss_he": "ששנו חכמים",
+          "sources": [
+            "steinsaltz"
+          ]
+        },
+        {
+          "ar": "תנורבננ",
+          "gloss_he": "שנו חכמים",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "steinsaltz"
+      ]
+    },
+    {
+      "id": "רחמנא",
+      "lemma": "רַחֲמָנָא",
+      "root": "רחם",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "תלארחמנא",
+          "gloss_he": "התורה תלתה",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "רַחֲמָנָא",
+        "language": "PBH"
+      }
+    },
+    {
+      "id": "רישי",
+      "lemma": "רישי",
+      "root": "ראש",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "תרירישי",
+          "gloss_he": "שני ראשים",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "שלח",
+      "lemma": "שְׁלַח",
+      "root": "",
+      "gloss_he": "והרי",
+      "phrases": [
+        {
+          "ar": "והאשלח",
+          "gloss_he": "והרי שלח",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "שְׁלַח",
+        "language": "arc"
+      }
+    },
+    {
+      "id": "שמאלו",
+      "lemma": "שמאלו",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "שהואשמאלו",
+          "gloss_he": "היד החלשה שלו",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "שמרנ",
+      "lemma": "שמרנ",
+      "root": "",
+      "gloss_he": "כדי לשמור אותן",
+      "phrases": [],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "שמתא",
+      "lemma": "שַׁמְתָּא",
+      "root": "שמת",
+      "gloss_he": "נידוי",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "שַׁמְתָּא",
+        "language": ""
+      }
+    },
+    {
+      "id": "תנא",
+      "lemma": "תַּנָּא",
+      "root": "תני",
+      "gloss_he": "שנינו בברייתא",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "תַּנָּא",
+        "language": ""
+      }
+    },
+    {
+      "id": "תניא",
+      "lemma": "תַּנְיָא",
+      "root": "תני",
+      "gloss_he": "ששנינו בברייתא",
+      "phrases": [],
+      "sources": [
+        "hand",
+        "jastrow"
+      ],
+      "jastrow": {
+        "headword": "תַּנְיָא",
+        "language": "PBH"
+      }
+    },
+    {
+      "id": "תפילינ",
+      "lemma": "תפילינ",
+      "root": "",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "זמנתפילינ",
+          "gloss_he": "זמן הראוי לתפילין",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    },
+    {
+      "id": "תרוייהו",
+      "lemma": "תרוייהו",
+      "root": "תרי",
+      "gloss_he": "",
+      "phrases": [
+        {
+          "ar": "דאמריתרוייהו",
+          "gloss_he": "שניהם אומרים",
+          "sources": [
+            "hand"
+          ]
+        }
+      ],
+      "sources": [
+        "hand"
+      ]
+    }
+  ]
+}

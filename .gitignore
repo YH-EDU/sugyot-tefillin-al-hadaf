@@ -11,5 +11,6 @@ _*.png
 _*.txt
 _*.json
 _backup.html
+data/cache/
 _raw_dump.txt
 _mefarshim_draft.js

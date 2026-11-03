@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>רשימת בדיקה · ביאורי ארמית</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@500;700;800&family=Frank+Ruhl+Libre:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --ink: #1c140c; --navy: #1e3a5f; --line: #e4dccf; --paper: #f7f0e2; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--paper); color: var(--ink);
+      font-family: "Assistant", sans-serif;
+    }
+    main { width: min(980px, calc(100% - 28px)); margin: 28px auto 64px; }
+    h1 { font-size: 1.7rem; margin: 0 0 8px; color: var(--navy); }
+    p { line-height: 1.55; }
+    .lead { max-width: 42rem; }
+    code { font-family: ui-monospace, monospace; font-size: 0.92em; }
+    .bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 16px 0; }
+    button {
+      appearance: none; border: 0; background: var(--navy); color: #fff;
+      font: inherit; font-weight: 800; border-radius: 999px; padding: 8px 16px; cursor: pointer;
+    }
+    button.ghost { background: #fff; color: var(--navy); border: 1px solid #c9bba6; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 14px; overflow: hidden; }
+    th, td { text-align: right; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-size: 0.82rem; color: #6b6460; }
+    .ar { font-family: "Frank Ruhl Libre", serif; font-size: 1.2rem; }
+    input[type="text"] { width: 100%; font: inherit; padding: 6px 8px; border: 1px solid #d9d0c4; border-radius: 8px; }
+    .empty { background: #fff; border-radius: 14px; padding: 18px; }
+    .count { font-weight: 800; color: var(--navy); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>רשימת בדיקה לביאורי הארמית</h1>
+    <p class="lead">כאן מופיעים רק פריטים שהבנייה לא הייתה בטוחה בהם. אין צורך לאשר כל מילה. תיקון נשמר לקובץ, ואחרי הרצה מחדש הוא גובר על התרגום האוטומטי.</p>
+    <p>סוגיא חדשה: מוסיפים את הלשון ל־<code>SUGYOT</code> ודף ספריא ב־<code>data/sugya-refs.json</code>, ואז <code>node scripts/build-lexicon.mjs</code>.</p>
+    <div class="bar">
+      <span class="count" id="count"></span>
+      <button type="button" id="download">הורדת תיקונים</button>
+      <a href="index.html"><button type="button" class="ghost">חזרה לסוגיות</button></a>
+    </div>
+    <div id="host"></div>
+  </main>
+  <script>
+    const host = document.getElementById("host");
+    const count = document.getElementById("count");
+    fetch("data/review.json").then(function (res) { return res.json(); }).then(function (data) {
+      const items = data.items || [];
+      count.textContent = items.length ? items.length + " פריטים" : "אין פריטים שממתינים לתיקון";
+      if (!items.length) {
+        host.innerHTML = "<div class=\"empty\">הרשימה ריקה. הביאורים שמוצגים בסוגיא עברו את סף הביטחון, או שכבר תוקנו.</div>";
+        return;
+      }
+      const table = document.createElement("table");
+      table.innerHTML = "<thead><tr><th>סוגיא</th><th>מילה</th><th>הקשר</th><th>תרגום</th><th>הסבר</th><th>למה ברשימה</th><th>הסתר</th></tr></thead>";
+      const body = document.createElement("tbody");
+      items.forEach(function (item, i) {
+        const tr = document.createElement("tr");
+        tr.dataset.i = String(i);
+        tr.innerHTML = "<td></td><td class=\"ar\"></td><td></td><td><input type=\"text\" data-k=\"ctxGloss\" /></td><td><input type=\"text\" data-k=\"explain\" /></td><td></td><td><input type=\"checkbox\" data-k=\"hide\" /></td>";
+        tr.children[0].textContent = item.sugya || "";
+        tr.children[1].textContent = item.surface || "";
+        tr.children[2].textContent = item.context || "";
+        tr.querySelector("[data-k=ctxGloss]").value = item.proposed || "";
+        tr.querySelector("[data-k=explain]").value = item.explain || "";
+        tr.children[5].textContent = item.reason || "";
+        body.appendChild(tr);
+      });
+      table.appendChild(body);
+      host.appendChild(table);
+      document.getElementById("download").onclick = function () {
+        const out = { items: [] };
+        body.querySelectorAll("tr").forEach(function (tr) {
+          const item = items[Number(tr.dataset.i)];
+          out.items.push({
+            sugya: item.sugya,
+            row: item.row,
+            surface: item.surface,
+            ctxGloss: tr.querySelector("[data-k=ctxGloss]").value.trim(),
+            explain: tr.querySelector("[data-k=explain]").value.trim(),
+            hide: tr.querySelector("[data-k=hide]").checked
+          });
+        });
+        const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "corrections.json";
+        a.click();
+      };
+    }).catch(function () {
+      count.textContent = "לא נטענה הרשימה";
+      host.innerHTML = "<div class=\"empty\">פתחו את הדף דרך השרת המקומי, מתוך תיקיית הפרויקט.</div>";
+    });
+  </script>
+</body>
+</html>

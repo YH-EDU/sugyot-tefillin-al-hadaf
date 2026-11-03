@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>סוגיות התפילין על הדף · מנחות לה:–לז:</title>
+  <script src="data/lexicon.js"></script>
   <script>
     (function () {
       window.TEACHER_MODE = false;
@@ -1197,8 +1198,33 @@
     }
     .quiz-src.is-rashi { background: #dbeafe; color: #1e40af; }
 
-    .gw { position: relative; font-weight: inherit; color: inherit; cursor: pointer; }
+    .gw {
+      position: relative; font-weight: inherit; color: inherit;
+      text-decoration: none; background: none; border: 0; box-shadow: none;
+      cursor: pointer;
+    }
     .gw:focus { outline: none; }
+    .gw > i .tip-he { font-weight: 800; }
+    .gw > i.is-rich {
+      width: max-content;
+      max-width: min(22rem, 90vw);
+      white-space: normal;
+    }
+    .gw > i .tip-he,
+    .gw > i .tip-pre,
+    .gw > i .tip-ex { display: block; }
+    .gw > i .tip-pre {
+      margin-top: 2px; font-weight: 650; font-size: 0.84em; color: #1e3a5f;
+    }
+    .gw > i .tip-ex {
+      margin-top: 3px; font-weight: 600; font-size: 0.82em; color: #57534e;
+    }
+    .gloss-credit {
+      margin: 10px 12px 2px;
+      font-family: "Assistant", sans-serif;
+      font-size: 0.78rem; font-weight: 600; line-height: 1.45; color: #6b6460;
+    }
+    .gloss-credit a { color: #1e3a5f; }
     .gw > i {
       position: absolute; bottom: 118%; inset-inline-start: 50%;
       transform: translateX(50%) translateY(6px);
@@ -5901,6 +5927,29 @@ function masteryColor(pct) {
   return "hsl(" + Math.round((pct / 100) * 130) + ", 68%, 46%)";
 }
 
+// "new" = המילון שנבנה (data/lexicon.js). "old" = הרשימות הידניות בלבד.
+// אפשר גם לדף אחד: LEXICON_FALLBACK_SUGYOT.a = "old"
+// או בכתובת: ?gloss=old  |  ?gloss=new  |  ?gloss=old:a,c
+const LEXICON_MODE = "new";
+const LEXICON_FALLBACK_SUGYOT = {};
+function lexiconMode(id) {
+  let q = "";
+  try { q = new URLSearchParams(location.search).get("gloss") || ""; } catch (e) { q = ""; }
+  if (q === "old") return "old";
+  if (q === "new") return "new";
+  if (q.indexOf("old:") === 0) {
+    const set = q.slice(4).split(",");
+    return id && set.indexOf(id) >= 0 ? "old" : "new";
+  }
+  if (q.indexOf("new:") === 0) {
+    const set = q.slice(4).split(",");
+    return id && set.indexOf(id) >= 0 ? "new" : "old";
+  }
+  if (id && LEXICON_FALLBACK_SUGYOT[id] === "old") return "old";
+  if (LEXICON_MODE === "old") return "old";
+  if (!window.LEXICON || !window.LEXICON.sugyot || !window.LEXICON.sugyot[id]) return "old";
+  return "new";
+}
 // הופך [גלוס] שאחרי מילה לטולטיפ מרחף מעל אותה מילה, ומצמיד גם מילים מן המילון.
 // המילה עצמה נשארת בלי הדגשה — רק לחיצה פותחת את הביאור.
 const GLOSS_WORD = /([\u0590-\u05FF"'״׳]+(?:[\s\u00A0]+[\u0590-\u05FF"'״׳]+){0,2}[?!.,;:]?)\s*$/;
@@ -5961,11 +6010,95 @@ function okGlossBoundary(text, start, end) {
   if (before >= 0 && isHeLetterChar(text.charAt(before))) return false;
   return true;
 }
+function tipForParts(tok) {
+  const tip = document.createElement("i");
+  if (tok.prefixNote || tok.explain) tip.classList.add("is-rich");
+  const main = document.createElement("b");
+  main.className = "tip-he";
+  main.textContent = tok.ctxGloss || "";
+  tip.appendChild(main);
+  if (tok.prefixNote) {
+    const pre = document.createElement("span");
+    pre.className = "tip-pre";
+    pre.textContent = tok.prefixNote;
+    tip.appendChild(pre);
+  }
+  if (tok.explain) {
+    const ex = document.createElement("span");
+    ex.className = "tip-ex";
+    ex.textContent = tok.explain;
+    tip.appendChild(ex);
+  }
+  return tip;
+}
+function textNodesIn(box) {
+  const texts = [];
+  const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT, {
+    acceptNode: function (n) {
+      if (!n.nodeValue || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      if (n.parentElement && n.parentElement.closest(".gw, i")) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  while (walker.nextNode()) texts.push(walker.currentNode);
+  return texts;
+}
+function applyLexiconTokens(host, sid) {
+  const pack = window.LEXICON && window.LEXICON.sugyot && window.LEXICON.sugyot[sid];
+  if (!pack || !pack.tokens) return false;
+  const boxes = host.querySelectorAll(".g-text");
+  boxes.forEach(function (box, rowIndex) {
+    const tokens = (pack.tokens || []).filter(function (t) {
+      return t.row === rowIndex && t.ctxGloss && t.surface;
+    });
+    const groups = {};
+    tokens.forEach(function (t) {
+      if (!groups[t.surface]) groups[t.surface] = [];
+      groups[t.surface].push(t);
+    });
+    Object.keys(groups).sort(function (a, b) { return b.length - a.length; }).forEach(function (surface) {
+      const list = groups[surface].slice().sort(function (a, b) {
+        return (a.occurrence || 0) - (b.occurrence || 0);
+      });
+      list.forEach(function (tok) {
+        const nodes = textNodesIn(box);
+        for (let n = 0; n < nodes.length; n++) {
+          const node = nodes[n];
+          const text = node.nodeValue;
+          let from = 0;
+          while (from < text.length) {
+            const idx = text.indexOf(surface, from);
+            if (idx < 0) break;
+            const end = idx + surface.length;
+            if (isHeLetterChar(text.charAt(idx - 1)) || isHeLetterChar(text.charAt(end))) {
+              from = end;
+              continue;
+            }
+            const frag = document.createDocumentFragment();
+            if (idx) frag.appendChild(document.createTextNode(text.slice(0, idx)));
+            const wrap = document.createElement("span");
+            wrap.className = "gw";
+            wrap.appendChild(document.createTextNode(text.slice(idx, end)));
+            wrap.appendChild(tipForParts(tok));
+            frag.appendChild(wrap);
+            if (end < text.length) frag.appendChild(document.createTextNode(text.slice(end)));
+            node.parentNode.replaceChild(frag, node);
+            return;
+          }
+        }
+      });
+    });
+  });
+  return true;
+}
 function applyGlossTooltips(host) {
   if (!host) return;
   function tipFor(text) {
     const tip = document.createElement("i");
-    tip.textContent = text;
+    const main = document.createElement("b");
+    main.className = "tip-he";
+    main.textContent = text;
+    tip.appendChild(main);
     return tip;
   }
   function closeOpen() {
@@ -5987,7 +6120,7 @@ function applyGlossTooltips(host) {
     const hr = box.getBoundingClientRect();
     const avail = Math.max(180, Math.min(hr.width, window.innerWidth) - 20);
     tip.style.maxWidth = avail + "px";
-    if (tip.scrollWidth > avail + 2) tip.classList.add("is-wrap");
+    if (tip.classList.contains("is-rich") || tip.scrollWidth > avail + 2) tip.classList.add("is-wrap");
     const th = tip.getBoundingClientRect().height;
     const word = el.getBoundingClientRect();
     if (word.top - hr.top < th + 10) tip.classList.add("is-below");
@@ -6043,7 +6176,12 @@ function applyGlossTooltips(host) {
   host.querySelectorAll("span.gloss, span.paren").forEach(function (g) {
     attachGloss(g);
   });
-  const pairs = glossPairsFor(typeof quizSugya !== "undefined" ? quizSugya : "");
+  const sid = typeof quizSugya !== "undefined" ? quizSugya : "";
+  if (host.id === "sugyaGemara" && lexiconMode(sid) === "new" && applyLexiconTokens(host, sid)) {
+    host.querySelectorAll(".gw").forEach(wireOpen);
+    return;
+  }
+  const pairs = glossPairsFor(sid);
   const texts = [];
   host.querySelectorAll(".g-text").forEach(function (box) {
     const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT, {
@@ -7760,6 +7898,12 @@ function fillSugyaGemaraDom() {
     host.appendChild(wrap);
   });
   applyGlossTooltips(host);
+  if (lexiconMode(quizSugya) === "new") {
+    const credit = document.createElement("p");
+    credit.className = "gloss-credit";
+    credit.innerHTML = "ביאור המילים הארמיות: ביאור שטיינזלץ, תלמוד מהדורת ויליאם דוידסון (ספריא), CC-BY-NC. תרגום שנכתב ביד גובר. <a href=\"review.html\">רשימת בדיקה</a>";
+    host.appendChild(credit);
+  }
 }
 function refreshOpenSugyaView() {
   if (!sugyaOverlay.classList.contains("is-open") || !quizSugya || !SUGYOT[quizSugya]) return;
@@ -9937,6 +10081,13 @@ function enterApp(name, pin) {
     document.getElementById("welcomeOverlay").classList.add("is-open");
     sessionStorage.setItem("tefillin-welcome-seen", "1");
   }
+  try {
+    const openId = new URLSearchParams(location.search).get("sugya");
+    if (openId && SUGYOT[openId]) {
+      document.getElementById("welcomeOverlay").classList.remove("is-open");
+      openSugya(openId);
+    }
+  } catch (e) {}
   if (typeof syncOverlayLock === "function") syncOverlayLock();
 }
 function showLogin(clearSession) {
