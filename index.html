@@ -1198,27 +1198,8 @@
     }
     .quiz-src.is-rashi { background: #dbeafe; color: #1e40af; }
 
-    .gw {
-      position: relative; font-weight: inherit; color: inherit;
-      text-decoration: none; background: none; border: 0; box-shadow: none;
-      cursor: pointer;
-    }
+    .gw { position: relative; font-weight: inherit; color: inherit; cursor: pointer; }
     .gw:focus { outline: none; }
-    .gw > i .tip-he { font-weight: 800; }
-    .gw > i.is-rich {
-      width: max-content;
-      max-width: min(22rem, 90vw);
-      white-space: normal;
-    }
-    .gw > i .tip-he,
-    .gw > i .tip-pre,
-    .gw > i .tip-ex { display: block; }
-    .gw > i .tip-pre {
-      margin-top: 2px; font-weight: 650; font-size: 0.84em; color: #1e3a5f;
-    }
-    .gw > i .tip-ex {
-      margin-top: 3px; font-weight: 600; font-size: 0.82em; color: #57534e;
-    }
     .gloss-credit {
       margin: 10px 12px 2px;
       font-family: "Assistant", sans-serif;
@@ -6012,23 +5993,7 @@ function okGlossBoundary(text, start, end) {
 }
 function tipForParts(tok) {
   const tip = document.createElement("i");
-  if (tok.prefixNote || tok.explain) tip.classList.add("is-rich");
-  const main = document.createElement("b");
-  main.className = "tip-he";
-  main.textContent = tok.ctxGloss || "";
-  tip.appendChild(main);
-  if (tok.prefixNote) {
-    const pre = document.createElement("span");
-    pre.className = "tip-pre";
-    pre.textContent = tok.prefixNote;
-    tip.appendChild(pre);
-  }
-  if (tok.explain) {
-    const ex = document.createElement("span");
-    ex.className = "tip-ex";
-    ex.textContent = tok.explain;
-    tip.appendChild(ex);
-  }
+  tip.textContent = tok.ctxGloss || "";
   return tip;
 }
 function textNodesIn(box) {
@@ -6095,10 +6060,7 @@ function applyGlossTooltips(host) {
   if (!host) return;
   function tipFor(text) {
     const tip = document.createElement("i");
-    const main = document.createElement("b");
-    main.className = "tip-he";
-    main.textContent = text;
-    tip.appendChild(main);
+    tip.textContent = text;
     return tip;
   }
   function closeOpen() {
@@ -6120,7 +6082,7 @@ function applyGlossTooltips(host) {
     const hr = box.getBoundingClientRect();
     const avail = Math.max(180, Math.min(hr.width, window.innerWidth) - 20);
     tip.style.maxWidth = avail + "px";
-    if (tip.classList.contains("is-rich") || tip.scrollWidth > avail + 2) tip.classList.add("is-wrap");
+    if (tip.scrollWidth > avail + 2) tip.classList.add("is-wrap");
     const th = tip.getBoundingClientRect().height;
     const word = el.getBoundingClientRect();
     if (word.top - hr.top < th + 10) tip.classList.add("is-below");
