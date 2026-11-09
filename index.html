@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="notes.css?v=20261109" />
   <style>
     :root {
       --ink: #1c140c;
@@ -2367,6 +2368,24 @@
     .user-chip { font-size: 0.78rem; font-weight: 700; opacity: 0.85; color: var(--parchment); }
     html:not(.teacher) #switchUserBtn { display: none !important; }
 
+    /* Writing and drawing (notes.js). The tool panel must sit above the worksheet viewer. */
+    .ink-panel { z-index: 115; }
+    body.is-annotating .page { cursor: default; }
+    .aid-page canvas.pdf-sheet {
+      width: 720px;
+      background: #fff;
+      box-shadow: 0 18px 50px rgba(40, 24, 8, 0.22);
+      pointer-events: none;
+    }
+    .aid-page iframe.aid-pdf-frame {
+      display: block;
+      width: 720px;
+      height: calc(100vh - 140px);
+      border: 0;
+      background: #fff;
+    }
+    .aid-loading { margin: 40px auto; font-weight: 700; color: #5a4718; }
+
   </style>
 </head>
 <body>
@@ -2487,6 +2506,8 @@
           <button class="ghost-btn" id="legendToggle" type="button" aria-pressed="false">רשימת הסוגיות</button>
           <button class="ghost-btn" id="clearColorsBtn" type="button">ניקוי צבעים</button>
           <button class="ghost-btn" id="measureBtn" type="button" aria-pressed="false">מיקוד אזורים</button>
+          <button class="ghost-btn" id="writeBtn" type="button" aria-pressed="false">כתיבה</button>
+          <button class="ghost-btn" id="drawBtn" type="button" aria-pressed="false">ציור</button>
         </div>
       </div>
       <div class="header-tools">
@@ -2685,6 +2706,8 @@
         <button type="button" class="ghost-btn icon-only" id="aidZoomOut" title="הקטן">−</button>
         <div class="zoom-readout" id="aidZoomReadout">100%</div>
         <button type="button" class="ghost-btn icon-only" id="aidZoomIn" title="הגדל">+</button>
+        <button type="button" class="ghost-btn" id="aidWriteBtn" aria-pressed="false">כתיבה</button>
+        <button type="button" class="ghost-btn" id="aidDrawBtn" aria-pressed="false">ציור</button>
         <button type="button" class="ghost-btn" id="aidShowClose">חזרה לסוגיא</button>
         <button class="fs-win-btn" id="aidFsBtn" type="button" title="מסך מלא" aria-label="מסך מלא" aria-pressed="false">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -2729,7 +2752,9 @@
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="vendor/pdfjs/pdf.min.js"></script>
+  <script src="pdf-sheets.js?v=20261109"></script>
+  <script src="notes.js?v=20261109"></script>
   <script src="accounts.js"></script>
   <script src="store.js"></script>
   <script>
@@ -9645,6 +9670,7 @@ function goToPage(index) {
   const sel = selectedZoneId ? ZONES.find(function (z) { return z.id === selectedZoneId; }) : null;
   const status = document.getElementById("measurePickStatus");
   if (status) status.textContent = measureStatusText(sel);
+  mountDafNotes();
 }
 
 function setMeasure(on) {
@@ -10048,6 +10074,94 @@ function onFullscreenChange() {
 document.addEventListener("fullscreenchange", onFullscreenChange);
 document.addEventListener("webkitfullscreenchange", onFullscreenChange);
 
+/* ===== writing and drawing (notes.js) on the daf and on worksheets =====
+   The daf's layers are added inside #page, above the sugya boxes. They take clicks only while
+   כתיבה or ציור is on; otherwise they are pointer-events:none and the boxes work exactly as before.
+   Annotations are temporary: a new page, a worksheet, or leaving it starts clean. */
+var DAF_NOTE_RATIO = 0.015;
+var AID_NOTE_RATIO = 0.027;
+var aidNotesToken = 0;
+function aidShowOpen() {
+  var el = document.getElementById("aidShow");
+  return !!(el && el.classList.contains("is-open"));
+}
+// No annotating while the zone editor or a window (sugya, login, editor...) covers the daf.
+// The worksheet viewer is the exception: it is an annotation surface itself.
+function notesBlocked() {
+  var cls = document.body.classList;
+  return cls.contains("measure") || (cls.contains("overlay-lock") && !aidShowOpen());
+}
+function mountDafNotes() {
+  if (!window.PageNotes || aidShowOpen()) return;
+  PageNotes.mount("daf:" + currentPage().id,
+    [{ host: page, media: document.getElementById("talmudImage") }],
+    { fontRatio: DAF_NOTE_RATIO });
+}
+// Worksheets whose pages could not be converted to images: drawn here with pdf.js.
+function isPdfAidRow(row) {
+  if (!row || (row.pages && row.pages.length)) return false;
+  var blobType = row.fileBlob && row.fileBlob.type ? row.fileBlob.type : "";
+  return row.type === "pdf" || /pdf/i.test(blobType) || /\.pdf($|[?#])/i.test(String(row.file || ""));
+}
+function showAidPdfFrame(row, sheetEl) {
+  sheetEl.innerHTML = "";
+  var frame = document.createElement("iframe");
+  frame.className = "aid-pdf-frame";
+  frame.title = row.name || "דף עבודה";
+  frame.src = row.file;
+  sheetEl.appendChild(frame);
+}
+function renderAidPdf(row, sheetEl, key) {
+  var token = ++aidNotesToken;
+  if (!row.file || !window.PdfSheets || !PdfSheets.available()) {
+    PageNotes.mount(key, []);
+    if (row.file) showAidPdfFrame(row, sheetEl);
+    return;
+  }
+  PageNotes.mount(key, [], { pending: true });
+  sheetEl.innerHTML = '<p class="aid-loading">טוען את דף העבודה…</p>';
+  var isCurrent = function () { return token === aidNotesToken && sheetEl.isConnected; };
+  PdfSheets.render(row.file, sheetEl, isCurrent, function (canvas, i) {
+    if (i === 0) {
+      var loading = sheetEl.querySelector(".aid-loading");
+      if (loading) loading.remove();
+    }
+  }).then(function (canvases) {
+    if (isCurrent()) PageNotes.mount(key, canvases, { fontRatio: AID_NOTE_RATIO });
+  }).catch(function () {
+    if (!isCurrent()) return;
+    showAidPdfFrame(row, sheetEl);
+    PageNotes.mount(key, []);
+  });
+}
+// sheetEl is the worksheet's .aid-page; videos, YouTube and quote boards have none.
+function mountAidNotes(row, sheetEl) {
+  if (!window.PageNotes) return;
+  aidNotesToken += 1;
+  if (!sheetEl) {
+    PageNotes.mount(null, null);
+    return;
+  }
+  var key = "aid:" + (row.id || row.file || row.name);
+  if (isPdfAidRow(row)) {
+    renderAidPdf(row, sheetEl, key);
+    return;
+  }
+  PageNotes.mount(key, sheetEl.querySelectorAll("img"), { fontRatio: AID_NOTE_RATIO });
+}
+if (window.PageNotes) {
+  PageNotes.init({
+    getUser: function () { return currentUser(); },
+    toast: function (text) { showToast(text); },
+    isBlocked: notesBlocked,
+    writeButton: [document.getElementById("writeBtn"), document.getElementById("aidWriteBtn")],
+    drawButton: [document.getElementById("drawBtn"), document.getElementById("aidDrawBtn")]
+  });
+  new MutationObserver(function () {
+    if (PageNotes.getMode() && notesBlocked()) PageNotes.setMode(null);
+  }).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+}
+
 dragPanel(legend, document.getElementById("legendHandle"));
 dragPanel(measurePanel, measurePanel.querySelector(".legend-head"));
 goToPage(0);
@@ -10057,7 +10171,7 @@ fitDafSize();
 /* ===== auth + materials (sugya-scoped) ===== */
 window.showToast = showToast;
 if (window.pdfjsLib) {
-  window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc = "vendor/pdfjs/pdf.worker.min.js";
 }
 var BASE = (function () {
   var path = location.pathname || "/";
@@ -10113,6 +10227,7 @@ function closeAidShow() {
   stage.classList.remove("is-quote");
   document.getElementById("aidShow").classList.remove("is-open");
   if (typeof syncOverlayLock === "function") syncOverlayLock();
+  mountDafNotes();
 }
 function bindAidPan(page) {
   var stage = document.getElementById("aidShowStage");
@@ -10171,7 +10286,7 @@ function openAid(row) {
   } else {
     var page = document.createElement("div");
     page.className = "aid-page";
-    var srcs = (row.pages && row.pages.length ? row.pages : [row.file]).filter(Boolean);
+    var srcs = isPdfAidRow(row) ? [] : (row.pages && row.pages.length ? row.pages : [row.file]).filter(Boolean);
     srcs.forEach(function (src) {
       var img = document.createElement("img");
       img.alt = "";
@@ -10184,6 +10299,7 @@ function openAid(row) {
   }
   document.getElementById("aidShow").classList.add("is-open");
   if (typeof syncOverlayLock === "function") syncOverlayLock();
+  mountAidNotes(row, page);
 }
 function currentUser() {
   return window.TefillinAccounts ? TefillinAccounts.session() : "";
@@ -10265,6 +10381,7 @@ function enterApp(name, pin) {
   document.getElementById("userChip").textContent = (user && user.name) ? user.name : name;
   setTeacherMode(true);
   reloadUserWorkspace();
+  if (window.PageNotes) PageNotes.onAuthChange();
   if (!sessionStorage.getItem("tefillin-welcome-seen")) {
     document.getElementById("welcomeOverlay").classList.add("is-open");
     sessionStorage.setItem("tefillin-welcome-seen", "1");
@@ -10281,6 +10398,7 @@ function enterApp(name, pin) {
 function showLogin(clearSession) {
   sessionItems = [];
   if (clearSession && window.TefillinAccounts) TefillinAccounts.setSession("");
+  if (window.PageNotes) PageNotes.onAuthChange();
   setTeacherMode(false);
   document.getElementById("userChip").textContent = "";
   document.getElementById("loginGate").classList.add("is-open");
@@ -10395,6 +10513,7 @@ function unlockAdmin(name, pin) {
   if (!user || !user.admin) return false;
   TefillinAccounts.setAdminRemember(user.username, pin);
   TefillinAccounts.setSession("");
+  if (window.PageNotes) PageNotes.onAuthChange();
   setTeacherMode(false);
   document.getElementById("userChip").textContent = "";
   showAdminManage();
