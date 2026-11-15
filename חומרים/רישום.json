@@ -1,3 +1,19 @@
 {
-  "items": []
+  "items": [
+    {
+      "id": "20261115144946-yad-smol-tefillin-student",
+      "name": "דף מסכם – יד שמאל בתפילין",
+      "role": "עזרים",
+      "type": "pages",
+      "pages": [
+        "/חומרים/סוגיא ט/עזרים/20261115144946-yad-smol-tefillin-student/p01.jpg",
+        "/חומרים/סוגיא ט/עזרים/20261115144946-yad-smol-tefillin-student/p02.jpg"
+      ],
+      "file": "/חומרים/סוגיא ט/עזרים/20261115144946-yad-smol-tefillin-student/yad-smol-tefillin-student.pdf",
+      "path": "חומרים/סוגיא ט/עזרים/20261115144946-yad-smol-tefillin-student",
+      "sugya": "i",
+      "youtubeId": "",
+      "url": ""
+    }
+  ]
 }
