@@ -2002,6 +2002,41 @@
       color: #5a4718;
       font: 800 1.1rem "Frank Ruhl Libre", serif;
     }
+    .aid-card .aid-icon {
+      height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(180deg, #fffaf0 0%, #f3e6c4 100%);
+      color: #5a4718;
+    }
+    .aid-icon-host {
+      direction: ltr;
+      font-size: 0.75rem;
+      font-weight: 700;
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .yt-row { flex-wrap: wrap; }
+    .yt-row .ghost-btn { white-space: nowrap; }
+    .add-hint {
+      margin: -8px 0 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #5a4718;
+    }
+    #aidPrintBtn { display: none; align-items: center; gap: 6px; }
+    #aidShow.is-open.can-print-aid #aidPrintBtn { display: inline-flex; }
+    #aidPrintBtn .print-label { font-weight: 800; font-size: 0.92rem; }
+    html:not(.teacher) .add-extra,
+    html:not(.teacher) .add-hint { display: none !important; }
+    @media (max-width: 720px) {
+      .yt-row { flex-direction: column; }
+    }
     .aid-card figcaption {
       padding: 7px 9px 9px;
       font-size: 0.78rem;
@@ -2684,8 +2719,19 @@
           <input id="ytUrl" type="url" placeholder="קישור יוטיוב" />
           <button type="button" class="ghost-btn" id="ytAdd" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">הוסף</button>
         </div>
+        <div class="yt-row add-extra" id="siteRow">
+          <input id="siteTitle" type="text" placeholder="כותרת הקישור" />
+          <input id="siteUrl" type="url" dir="ltr" placeholder="https://..." />
+          <button type="button" class="ghost-btn" id="siteAdd" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">הוסף קישור לאתר</button>
+        </div>
+        <div class="yt-row add-extra" id="lomdaRow">
+          <input id="lomdaTitle" type="text" placeholder="שם הלומדה" />
+          <input id="lomdaUrl" type="url" dir="ltr" placeholder="קישור ללומדה, אם יש" />
+          <button type="button" class="ghost-btn" id="lomdaAdd" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">הוסף לומדה</button>
+        </div>
+        <p class="add-hint">אפשר גם לגרור קובץ HTML או ZIP של לומדה לתיבה למטה.</p>
         <div class="dropzone" id="dropzone">גררו לכאן קובץ
-          <input type="file" id="aidFiles" accept="image/*,video/*,application/pdf,.pdf" multiple hidden />
+          <input type="file" id="aidFiles" accept="image/*,video/*,application/pdf,.pdf,text/html,.html,.htm,.zip,application/zip" multiple hidden />
         </div>
         <div class="kind-pick" id="kindPick" hidden>
           <span>מה לשמור?</span>
@@ -2693,6 +2739,7 @@
           <button type="button" class="ghost-btn" data-kind="סרטון" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">סרטון</button>
           <button type="button" class="ghost-btn" data-kind="תמונה" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">תמונה</button>
           <button type="button" class="ghost-btn" data-kind="מבחן" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">מבחן</button>
+          <button type="button" class="ghost-btn" data-kind="לומדה" style="color:#1c140c;border-color:#c9a227;background:#fff8dc">לומדה</button>
           <button type="button" class="ghost-btn" id="kindCancel" style="color:#1c140c;border-color:#c9a227">ביטול</button>
         </div>
       </div>
@@ -2706,6 +2753,10 @@
         <button type="button" class="ghost-btn icon-only" id="aidZoomOut" title="הקטן">−</button>
         <div class="zoom-readout" id="aidZoomReadout">100%</div>
         <button type="button" class="ghost-btn icon-only" id="aidZoomIn" title="הגדל">+</button>
+        <button type="button" class="ghost-btn" id="aidPrintBtn" title="הדפסת דף העבודה" aria-label="הדפסה">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M7 13h10v8H7z"/></svg>
+          <span class="print-label">הדפסה</span>
+        </button>
         <button type="button" class="ghost-btn" id="aidWriteBtn" aria-pressed="false">כתיבה</button>
         <button type="button" class="ghost-btn" id="aidDrawBtn" aria-pressed="false">ציור</button>
         <button type="button" class="ghost-btn" id="aidShowClose">חזרה לסוגיא</button>
@@ -2752,6 +2803,7 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="vendor/pdfjs/pdf.min.js"></script>
   <script src="pdf-sheets.js?v=20261109"></script>
   <script src="notes.js?v=20261111c"></script>
@@ -10194,16 +10246,95 @@ var KIND_ROLE = {
   "דף עבודה": "עזרים",
   "סרטון": "סרטונים",
   "תמונה": "תמונה",
-  "מבחן": "מבחנים"
+  "מבחן": "מבחנים",
+  "לומדה": "לומדות"
 };
 function kindOf(row) {
   if (row && row.type === "quote") return "ציטוט";
+  if (row && (row.type === "link" || row.kind === "קישור לאתר")) return "קישור לאתר";
+  if (row && (row.type === "lomda" || row.kind === "לומדה" || row.role === "לומדות")) return "לומדה";
   if (row && row.kind) return row.kind;
   if (row && (row.type === "youtube" || row.type === "video" || row.role === "youtube" || row.role === "סרטונים")) return "סרטון";
   if (row && row.role === "מבחנים") return "מבחן";
   if (row && row.role === "תמונה") return "תמונה";
   return "דף עבודה";
 }
+function isWorksheetAid(row) {
+  if (!row) return false;
+  if (row.type === "youtube" || row.type === "video" || row.type === "quote" || row.type === "link" || row.type === "lomda") return false;
+  return kindOf(row) === "דף עבודה";
+}
+function worksheetPdfUrl(row) {
+  if (!row) return "";
+  if (row.fileBlob && /pdf/i.test(row.fileBlob.type || "")) return row.file || "";
+  var file = String(row.file || "");
+  if (row.type === "pdf" || /\.pdf($|\?)/i.test(file)) return file;
+  return "";
+}
+function isCoarsePointer() {
+  return !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+}
+function syncPrintButton(row) {
+  var show = document.getElementById("aidShow");
+  if (show) show.classList.toggle("can-print-aid", isWorksheetAid(row));
+}
+function printAid(row) {
+  if (!isWorksheetAid(row)) {
+    showToast("אפשר להדפיס רק דפי עבודה");
+    return;
+  }
+  var pdf = worksheetPdfUrl(row);
+  if (pdf) {
+    var pdfWin = window.open(pdf, "printAid");
+    if (!pdfWin) {
+      showToast("יש לאפשר חלון חדש כדי להדפיס את קובץ ה-PDF");
+      return;
+    }
+    if (!isCoarsePointer()) {
+      setTimeout(function () {
+        try { pdfWin.focus(); } catch (e) {}
+        try { pdfWin.print(); } catch (e) {}
+      }, 700);
+    }
+    return;
+  }
+  var srcs = ((row && row.pages && row.pages.length) ? row.pages : [row && row.file]).filter(Boolean);
+  if (!srcs.length) {
+    showToast("אין דף להדפסה");
+    return;
+  }
+  var win = window.open("", "printAid");
+  if (!win) {
+    showToast("יש לאפשר חלון הדפסה");
+    return;
+  }
+  var title = String((row && row.name) || "דף עבודה").replace(/[<>&]/g, "");
+  var sheets = srcs.map(function (src) {
+    return '<div class="sheet"><img src="' + String(src).replace(/"/g, "") + '" alt="" /></div>';
+  }).join("");
+  win.document.open();
+  win.document.write('<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>' + title + "</title><style>@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff}.sheet{width:210mm;height:297mm;display:flex;align-items:center;justify-content:center;page-break-after:always;break-after:page}img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block}.sheet:last-child{page-break-after:auto;break-after:auto}</style></head><body>" + sheets + "</body></html>");
+  win.document.close();
+  var list = win.document.images;
+  var left = list.length;
+  function go() {
+    try { win.focus(); } catch (e) {}
+    try { win.print(); } catch (e) {}
+  }
+  if (!left) { go(); return; }
+  Array.prototype.forEach.call(list, function (img) {
+    if (img.complete) {
+      left -= 1;
+      if (!left) go();
+    } else {
+      img.onload = img.onerror = function () {
+        left -= 1;
+        if (!left) go();
+      };
+    }
+  });
+}
+
 function setAidZoom(next) {
   aidZoom = Math.max(0.45, Math.min(2.4, next));
   var page = document.querySelector(".aid-page");
@@ -10225,7 +10356,7 @@ function closeAidShow() {
   stage.querySelectorAll("video").forEach(function (v) { try { v.pause(); } catch (e) {} });
   stage.innerHTML = "";
   stage.classList.remove("is-quote");
-  document.getElementById("aidShow").classList.remove("is-open");
+  document.getElementById("aidShow").classList.remove("is-open", "can-print-aid");
   if (typeof syncOverlayLock === "function") syncOverlayLock();
   mountDafNotes();
 }
@@ -10248,12 +10379,178 @@ window.addEventListener("mouseup", function () {
   var page = document.querySelector(".aid-page");
   if (page) page.classList.remove("is-panning");
 });
+
+function normalizeHttpUrl(raw) {
+  var url = String(raw || "").replace(/[\u200e\u200f\u202a-\u202e]/g, "").trim();
+  if (!url) return "";
+  if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(url)) url = "https://" + url;
+  try {
+    var u = new URL(url);
+    if (u.protocol !== "http:" && u.protocol !== "https:") return "";
+    return u.href;
+  } catch (e) { return ""; }
+}
+function urlHost(url) {
+  try { return new URL(url).hostname.replace(/^www\./, ""); } catch (e) { return ""; }
+}
+function pickIndexLocal(names) {
+  var lower = names.map(function (n) { return n.toLowerCase(); });
+  var exact = ["index.html", "index.htm"];
+  for (var i = 0; i < exact.length; i++) {
+    var at = lower.indexOf(exact[i]);
+    if (at >= 0) return names[at];
+  }
+  var nested = names.filter(function (n) { return /\/index\.html?$/i.test(n); }).sort(function (a, b) { return a.length - b.length; });
+  if (nested.length) return nested[0];
+  var htmls = names.filter(function (n) { return /\.html?$/i.test(n); });
+  return htmls[0] || "";
+}
+function mimeForName(name) {
+  var ext = String(name || "").toLowerCase().replace(/^.*\./, "");
+  return ({
+    html: "text/html", htm: "text/html", css: "text/css", js: "text/javascript",
+    json: "application/json", svg: "image/svg+xml", png: "image/png",
+    jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif", webp: "image/webp",
+    woff: "font/woff", woff2: "font/woff2", ttf: "font/ttf", mp3: "audio/mpeg",
+    mp4: "video/mp4", webm: "video/webm", txt: "text/plain", ico: "image/x-icon"
+  })[ext] || "";
+}
+function rewritePackageHtml(html, blobs, baseDir) {
+  function resolve(src) {
+    if (!src || /^(https?:|data:|blob:|mailto:|javascript:|#)/i.test(src)) return src;
+    var path = src.split("?")[0].split("#")[0];
+    var joined = (baseDir ? baseDir + "/" : "") + path;
+    var parts = [];
+    joined.replace(/\\/g, "/").split("/").forEach(function (part) {
+      if (part === "." || part === "") return;
+      if (part === "..") parts.pop();
+      else parts.push(part);
+    });
+    var key = parts.join("/");
+    return blobs[key] || src;
+  }
+  return html.replace(/(src|href|poster)=(["'])(.*?)\2/gi, function (m, attr, q, val) {
+    return attr + "=" + q + resolve(val) + q;
+  }).replace(/url\((['"]?)(.*?)\1\)/gi, function (m, q, val) {
+    return "url(" + (q || '"') + resolve(val) + (q || '"') + ")";
+  });
+}
+function openZipLomda(blob) {
+  if (!window.JSZip) {
+    showToast("לא ניתן לפתוח ארכיון ZIP בדפדפן הזה");
+    return Promise.resolve();
+  }
+  return JSZip.loadAsync(blob).then(function (zip) {
+    var names = [];
+    var jobs = [];
+    var blobs = {};
+    zip.forEach(function (rel, entry) {
+      if (entry.dir) return;
+      var clean = String(rel || "").replace(/\\/g, "/").replace(/^\/+/, "");
+      if (!clean || clean.indexOf("..") !== -1 || /(^|\/)(__MACOSX|\.)/.test(clean)) return;
+      names.push(clean);
+      jobs.push(entry.async("blob").then(function (b) {
+        var typ = mimeForName(clean);
+        blobs[clean] = URL.createObjectURL(typ ? b.slice(0, b.size, typ) : b);
+      }));
+    });
+    return Promise.all(jobs).then(function () {
+      var entry = pickIndexLocal(names);
+      if (!entry) {
+        showToast("לא נמצא קובץ HTML בארכיון");
+        return;
+      }
+      var base = entry.indexOf("/") >= 0 ? entry.replace(/\/[^/]+$/, "") : "";
+      if (/\.html?$/i.test(entry)) {
+        return fetch(blobs[entry]).then(function (r) { return r.text(); }).then(function (html) {
+          var page = URL.createObjectURL(new Blob([rewritePackageHtml(html, blobs, base)], { type: "text/html;charset=utf-8" }));
+          var win = window.open(page, "_blank", "noopener");
+          if (!win) showToast("יש לאפשר חלון חדש כדי לפתוח את הלומדה");
+        });
+      }
+      var win = window.open(blobs[entry], "_blank", "noopener");
+      if (!win) showToast("יש לאפשר חלון חדש כדי לפתוח את הלומדה");
+    });
+  }).catch(function () { showToast("פתיחת הארכיון נכשלה"); });
+}
+function openAidLinkOrLomda(row) {
+  if (!row) return false;
+  if (row.type === "link" || (row.type === "lomda" && row.url && !row.file && !row.fileBlob)) {
+    var url = normalizeHttpUrl(row.url);
+    if (!url) { showToast("הקישור אינו תקין"); return true; }
+    var win = window.open(url, "_blank", "noopener");
+    if (!win) showToast("יש לאפשר חלון חדש");
+    return true;
+  }
+  if (row.type !== "lomda") return false;
+  var src = row.file || "";
+  var isZip = /\.zip($|\?)/i.test(src) || (row.fileBlob && /zip/i.test(row.fileBlob.type || ""));
+  if (isZip) {
+    var job = row.fileBlob ? Promise.resolve(row.fileBlob) : fetch(src).then(function (r) { return r.blob(); });
+    job.then(openZipLomda).catch(function () { showToast("פתיחת הלומדה נכשלה"); });
+    return true;
+  }
+  if (src) {
+    var win = window.open(src, "_blank", "noopener");
+    if (!win) showToast("יש לאפשר חלון חדש כדי לפתוח את הלומדה");
+    return true;
+  }
+  showToast("אין קובץ או קישור ללומדה");
+  return true;
+}
+function addUrlAid(type, titleSel, urlSel) {
+  var user = currentUser();
+  if (!user) {
+    showToast("צריך להתחבר כמורה");
+    return;
+  }
+  if (!quizSugya) {
+    showToast("פתחו סוגיא קודם");
+    return;
+  }
+  var url = normalizeHttpUrl(document.getElementById(urlSel).value);
+  if (!url) {
+    showToast("יש להדביק כתובת אתר שמתחילה ב-https");
+    return;
+  }
+  var title = String(document.getElementById(titleSel).value || "").trim() || urlHost(url) || (type === "lomda" ? "לומדה" : "קישור");
+  var item = {
+    id: type + "-" + user + "-" + Date.now(),
+    username: user,
+    name: title,
+    role: type === "lomda" ? "לומדות" : "עזרים",
+    kind: type === "lomda" ? "לומדה" : "קישור לאתר",
+    type: type,
+    url: url,
+    sugya: quizSugya,
+    personal: true
+  };
+  writeLocalLinks(readLocalLinks().concat([item]));
+  document.getElementById(urlSel).value = "";
+  document.getElementById(titleSel).value = "";
+  sessionItems.push(item);
+  var save = window.TefillinAccounts ? TefillinAccounts.saveFile(item) : Promise.resolve();
+  save.then(function () {
+    if (isAdmin() && window.TefillinStore && TefillinStore.canSave() && TefillinStore.addUrlItem) {
+      return TefillinStore.addUrlItem(quizSugya, url, title, type).catch(function () {});
+    }
+  }).then(function () {
+    showToast("נשמר");
+    renderAids();
+  }).catch(function () {
+    showToast("נשמר במכשיר");
+    renderAids();
+  });
+}
+
 function openAid(row) {
+  if (openAidLinkOrLomda(row)) return;
   viewingAid = row;
   var stage = document.getElementById("aidShowStage");
   document.getElementById("aidShowTitle").textContent = row.name || "עזר";
   stage.innerHTML = "";
   stage.classList.toggle("is-quote", row.type === "quote");
+  syncPrintButton(row);
   if (row.type === "quote") {
     aidZoom = 1;
     var board = document.createElement("div");
@@ -10772,6 +11069,17 @@ function renderAids() {
         preview.className = "aid-quote-preview";
         preview.textContent = row.text || "";
         card.appendChild(preview);
+      } else if (row.type === "link" || row.type === "lomda") {
+        var box = document.createElement("div");
+        box.className = "aid-icon aid-icon-" + row.type;
+        box.innerHTML = row.type === "lomda"
+          ? '<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M10 12l5-3-5-3v6"/></svg>'
+          : '<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 3.5 6 3.5 9s-1 6-3.5 9M12 3c-2.5 3-3.5 6-3.5 9s1 6 3.5 9"/></svg>';
+        var host = document.createElement("span");
+        host.className = "aid-icon-host";
+        host.textContent = urlHost(row.url) || (row.type === "lomda" ? "לומדה" : "קישור");
+        box.appendChild(host);
+        card.appendChild(box);
       } else if (row.pages && row.pages[0]) {
         var img = document.createElement("img");
         img.alt = "";
@@ -10802,8 +11110,8 @@ function renderAids() {
           done();
           return;
         }
-        if (row.youtubeId) {
-          writeLocalLinks(readLocalLinks().filter(function (x) { return x.id !== row.id && x.youtubeId !== row.youtubeId; }));
+        if (row.youtubeId || row.type === "link" || row.type === "lomda") {
+          writeLocalLinks(readLocalLinks().filter(function (x) { return x.id !== row.id && !(row.youtubeId && x.youtubeId === row.youtubeId); }));
         }
         if (row.personal || (row.username && row.username === currentUser())) {
           if (window.TefillinAccounts) {
@@ -10836,14 +11144,19 @@ function hideKindPick() {
   var el = document.getElementById("kindPick");
   if (el) el.hidden = true;
 }
+function isLomdaFile(f) {
+  var type = (f.type || "").toLowerCase();
+  var name = (f.name || "").toLowerCase();
+  return type === "text/html" || type.indexOf("zip") !== -1 || /\.(html?|zip)$/i.test(name);
+}
 function askKind(files) {
   var list = Array.from(files || []).filter(function (f) {
     var type = (f.type || "").toLowerCase();
     var name = (f.name || "").toLowerCase();
-    return type.indexOf("image/") === 0 || type.indexOf("video/") === 0 || type.indexOf("pdf") !== -1 || name.slice(-4) === ".pdf";
+    return type.indexOf("image/") === 0 || type.indexOf("video/") === 0 || type.indexOf("pdf") !== -1 || name.slice(-4) === ".pdf" || isLomdaFile(f);
   });
   if (!list.length) {
-    showToast("אפשר לגרור תמונות, סרטונים או קובצי PDF");
+    showToast("אפשר לגרור תמונות, סרטונים, קובצי PDF, או HTML/ZIP של לומדה");
     return;
   }
   pendingFiles = list;
@@ -10868,14 +11181,18 @@ function addFiles(files, kind) {
   var chain = Promise.resolve();
   list.forEach(function (file) {
     chain = chain.then(function () {
-      return TefillinAccounts.fileToPages(file).then(function (parsed) {
+      if (kind !== "לומדה" && isLomdaFile(file)) {
+        return Promise.reject(new Error("pick-lomda"));
+      }
+      return TefillinAccounts.fileToPages(file, kind === "לומדה" ? { lomda: true } : null).then(function (parsed) {
+        var typ = kind === "לומדה" ? "lomda" : (parsed.type === "video" ? "video" : (parsed.type === "pages" ? "pages" : "file"));
         var row = {
           id: "u-" + user + "-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7),
           username: user,
           name: file.name,
           role: aidRole,
           kind: kind,
-          type: parsed.type === "video" ? "video" : (parsed.type === "pages" ? "pages" : "file"),
+          type: typ,
           sugya: quizSugya,
           pages: parsed.pages,
           fileBlob: parsed.fileBlob,
@@ -10883,7 +11200,7 @@ function addFiles(files, kind) {
         };
         return TefillinAccounts.saveFile(row).then(function () {
           if (isAdmin() && window.TefillinStore && TefillinStore.canSave()) {
-            return TefillinStore.uploadFile(quizSugya, aidRole, file).then(function (saved) {
+            return TefillinStore.uploadFile(quizSugya, aidRole, file, { kind: kind }).then(function (saved) {
               if (saved) sessionItems.push(saved);
             }).catch(function () {});
           }
@@ -10896,7 +11213,8 @@ function addFiles(files, kind) {
     renderAids();
     showToast("נשמר");
   }).catch(function (err) {
-    if (err && err.message === "type") showToast("אפשר לגרור תמונות, סרטונים או קובצי PDF");
+    if (err && err.message === "pick-lomda") showToast("קובץ HTML או ZIP יש לשמור כלומדה");
+    else if (err && err.message === "type") showToast("אפשר לגרור תמונות, סרטונים, קובצי PDF, או HTML/ZIP של לומדה");
     else showToast("השמירה נכשלה");
   });
 }
@@ -10941,6 +11259,17 @@ function addFiles(files, kind) {
       addYoutubeLink(document.getElementById("ytUrl").value);
     }
   });
+  document.getElementById("siteAdd").onclick = function () { addUrlAid("link", "siteTitle", "siteUrl"); };
+  document.getElementById("siteUrl").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") { event.preventDefault(); addUrlAid("link", "siteTitle", "siteUrl"); }
+  });
+  document.getElementById("lomdaAdd").onclick = function () { addUrlAid("lomda", "lomdaTitle", "lomdaUrl"); };
+  document.getElementById("lomdaUrl").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") { event.preventDefault(); addUrlAid("lomda", "lomdaTitle", "lomdaUrl"); }
+  });
+  document.getElementById("aidPrintBtn").onclick = function () {
+    if (isWorksheetAid(viewingAid)) printAid(viewingAid);
+  };
 })();
 fillQuestionSelect(document.getElementById("regQuestion"));
 function bindPinInput(id) {
