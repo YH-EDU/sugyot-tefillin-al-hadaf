@@ -2126,6 +2126,14 @@
       background: #140f0a;
       box-shadow: 0 18px 50px rgba(40, 24, 8, 0.22);
     }
+    .aid-show-stage video.is-vertical {
+      width: auto;
+      height: min(84vh, calc(94vw * 16 / 9));
+      max-width: 94vw;
+      max-height: none;
+      aspect-ratio: 9 / 16;
+      object-fit: contain;
+    }
     .quote-box {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -10578,6 +10586,11 @@ function openAid(row) {
     var video = document.createElement("video");
     video.controls = true;
     video.autoplay = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.preload = "metadata";
+    if (row.vertical) video.classList.add("is-vertical");
+    if (row.poster) video.poster = row.poster;
     video.src = row.file;
     stage.appendChild(video);
   } else {
@@ -11017,6 +11030,7 @@ function loadMaterials() {
     items.forEach(function (row) {
       if (row.pages) row.pages = row.pages.map(function (src) { return typeof src === "string" ? asset(src) : src; });
       if (row.file && typeof row.file === "string") row.file = asset(row.file);
+      if (row.poster && typeof row.poster === "string") row.poster = asset(row.poster);
     });
     if (!window.TefillinAccounts || !user) return Promise.resolve({ items: items });
     return TefillinAccounts.userFiles(user).then(function (personal) {
@@ -11063,6 +11077,9 @@ function renderAids() {
         var media = document.createElement("video");
         media.src = row.file;
         media.muted = true;
+        media.playsInline = true;
+        media.preload = "metadata";
+        if (row.poster) media.poster = row.poster;
         card.appendChild(media);
       } else if (row.type === "quote") {
         var preview = document.createElement("div");
