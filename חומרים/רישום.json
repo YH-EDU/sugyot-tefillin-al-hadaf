@@ -44,6 +44,20 @@
       "sugya": "k",
       "youtubeId": "",
       "url": ""
+    },
+    {
+      "id": "20261117221343-ari-spitz-gidem",
+      "name": "סרטון – גידם: ארי שפיץ (ישראל היום)",
+      "role": "סרטונים",
+      "type": "video",
+      "pages": [],
+      "file": "/חומרים/סוגיא יא/סרטונים/20261117221343-ari-spitz-gidem/ari-spitz-gidem.mp4",
+      "path": "חומרים/סוגיא יא/סרטונים/20261117221343-ari-spitz-gidem",
+      "sugya": "k",
+      "youtubeId": "",
+      "url": "",
+      "vertical": true,
+      "poster": "/חומרים/סוגיא יא/סרטונים/20261117221343-ari-spitz-gidem/poster.jpg"
     }
   ]
 }

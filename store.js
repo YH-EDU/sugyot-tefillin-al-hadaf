@@ -255,7 +255,9 @@
       path: rel,
       sugya: meta.sugya || "",
       youtubeId: meta.youtubeId || "",
-      url: meta.url || ""
+      url: meta.url || "",
+      vertical: !!meta.vertical,
+      poster: meta.poster ? "/" + rel + "/" + meta.poster : ""
     };
   }
 
